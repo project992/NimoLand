@@ -1,12 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 
 // SSR is required: rate limiting and HTTP-only session cookies need a server.
-// The previous static build had no place to put /api/auth/* at all.
+// Vercel deployment uses the @astrojs/vercel adapter.
 export default defineConfig({
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   vite: { plugins: [tailwindcss()] },
 });

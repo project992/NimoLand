@@ -1,4 +1,4 @@
-# Nimo Group
+# nz
 
 Platform pemesanan tiket wisata alam — Astro 5 (SSR) + Tailwind v4 + Supabase.
 
