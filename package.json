@@ -6,9 +6,21 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "test": "node --test src/lib/*.test.mjs",
+    "icons": "node scripts/gen-icons.mjs",
+    "seed:employees": "node --env-file=.env scripts/seed-employees.mjs"
   },
   "dependencies": {
-    "astro": "^5.1.0"
+    "@astrojs/node": "^9.5.5",
+    "@lucide/astro": "^1.28.0",
+    "@supabase/supabase-js": "^2.112.0",
+    "astro": "^5.1.0",
+    "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3"
   }
 }

@@ -1,0 +1,162 @@
+---
+import IdCard from '@lucide/astro/icons/id-card';
+import LogIn from '@lucide/astro/icons/log-in';
+import LogOut from '@lucide/astro/icons/log-out';
+import Search from '@lucide/astro/icons/search';
+import BadgeCheck from '@lucide/astro/icons/badge-check';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+
+/* Employee Self-Service: login modal, dashboard overlay, verify confirmation.
+
+   Login now POSTs to /api/ess/login (rate limited, scrypt-hashed, HTTP-only
+   session cookie). The old flow compared a plain-text password column in the
+   browser using the public anon key. */
+
+const employee = Astro.locals.isEmployee ? Astro.locals.user : null;
+
+const stats = [
+  { id: 'essStatTotal',   label: 'Total',    tone: 'bg-paper border-line text-ink' },
+  { id: 'essStatLunas',   label: 'LUNAS',    tone: 'bg-ok-tint border-ok/25 text-ok' },
+  { id: 'essStatUsed',    label: 'TERPAKAI', tone: 'bg-info-tint border-info/25 text-info' },
+  { id: 'essStatExpired', label: 'EXPIRED',  tone: 'bg-danger-tint border-danger/25 text-danger' },
+];
+
+const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', 'Expired', 'Qty', 'Total', 'Status', 'Aksi'];
+---
+<!-- ============ LOGIN ESS ============ -->
+<div id="essLoginModal" class="hidden fixed inset-0 z-96 bg-bark/50 p-0 sm:p-4 overflow-y-auto"
+     role="dialog" aria-modal="true" aria-labelledby="essLoginTitle">
+  <div class="bg-surface sm:rounded-2xl w-full sm:max-w-md mx-auto min-h-full sm:min-h-0 sm:my-10 sm:shadow-lg overflow-hidden">
+    {/* Solid header — was a two-stop gradient. */}
+    <div class="bg-bark px-6 py-6">
+      <div class="flex items-center gap-2">
+        <span class="font-heading font-bold text-white text-lg tracking-wide">NIMO</span>
+        <span class="text-white/60 text-[10px] font-medium uppercase tracking-widest border-l border-white/25 pl-2.5">Highland</span>
+      </div>
+      <h3 id="essLoginTitle" class="font-heading font-bold text-white text-xl mt-3 flex items-center gap-2">
+        <IdCard class="w-5 h-5" /> Portal ESS Karyawan
+      </h3>
+      <p class="text-white/65 text-xs mt-1">Employee Self-Service · Masuk untuk mengelola tiket</p>
+    </div>
+
+    <form id="essLoginForm" class="px-6 py-6" novalidate>
+      <label for="essNik" class="label">NIK Karyawan</label>
+      <input type="text" id="essNik" name="nik" autocomplete="username" placeholder="Masukkan NIK" class="field mb-4" />
+
+      <label for="essPassword" class="label">Password</label>
+      <input type="password" id="essPassword" name="password" autocomplete="current-password"
+             placeholder="Masukkan password" class="field mb-3" />
+
+      <p id="essLoginError" class="hidden note-error mb-4" role="alert"></p>
+
+      <button type="submit" id="essLoginBtn" class="btn-primary w-full py-3.5">
+        <LogIn class="w-4 h-4" /> Masuk Portal
+      </button>
+      <button type="button" data-close-ess class="btn-outline w-full mt-3 py-3.5">Batal</button>
+
+      <p class="flex items-start gap-2 text-[11px] text-muted mt-4">
+        <ShieldCheck class="w-4 h-4 shrink-0 mt-px text-sage" />
+        Percobaan masuk dibatasi 5 kali per menit. Password diverifikasi di server.
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ESS ============ -->
+<div id="essDashboard" class:list={['fixed inset-0 z-97 bg-canvas overflow-y-auto', !employee && 'hidden']}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-2">
+        <span class="font-heading font-bold text-ink text-lg tracking-wide">NIMO</span>
+        <span class="text-sage-deep text-[10px] font-medium uppercase tracking-widest border-l border-line pl-2">ESS Dashboard</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="hidden sm:inline text-xs text-muted">Sesi aktif sebagai</span>
+        <div class="flex items-center gap-2.5 card rounded-full pl-1.5 pr-4 py-1.5">
+          <div id="essAvatar" class="w-8 h-8 rounded-full bg-sage text-white flex items-center justify-center font-heading font-bold text-sm">
+            {employee ? employee.name.trim().charAt(0).toUpperCase() : '—'}
+          </div>
+          <div class="leading-tight">
+            <p id="essProfileName" class="font-heading font-semibold text-ink text-sm">{employee?.name ?? '—'}</p>
+            <p id="essProfileMeta" class="text-[11px] text-muted">
+              {employee ? `${employee.nik} · ${employee.role}` : '—'}
+            </p>
+          </div>
+        </div>
+        <button type="button" id="essLogoutBtn"
+                class="inline-flex items-center gap-2 border border-danger/30 text-danger font-heading font-semibold text-xs px-4 py-2.5 rounded-full hover:bg-danger-tint transition-colors">
+          <LogOut class="w-3.5 h-3.5" /> Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="card p-6 mt-6">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="font-heading font-bold text-ink text-2xl">Monitor Tiket Pelanggan</h2>
+          <p class="text-xs text-muted mt-1">Pantau, cari, dan validasi tiket orderan.</p>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+          {stats.map(s => (
+            <div class:list={['text-center border rounded-xl px-5 py-3', s.tone]}>
+              <p id={s.id} class="font-heading font-bold text-xl">0</p>
+              <p class="text-[11px] text-muted">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 mt-6">
+        <div class="relative flex-1">
+          <Search class="w-4 h-4 text-muted absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <label for="essSearch" class="sr-only">Cari tiket</label>
+          <input type="search" id="essSearch" placeholder="Cari kode booking / nama pelanggan…" class="field rounded-full pl-11" />
+        </div>
+        <label for="essFilter" class="sr-only">Filter status</label>
+        <select id="essFilter" class="field rounded-full w-auto px-5">
+          <option value="SEMUA">Semua Status</option>
+          <option value="LUNAS">LUNAS</option>
+          <option value="TERPAKAI">TERPAKAI (USED)</option>
+          <option value="EXPIRED">EXPIRED</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card mt-5 overflow-hidden p-0">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="bg-paper text-muted text-[11px] uppercase tracking-wider">
+              {columns.map(c => <th scope="col" class="px-4 py-3 font-heading font-semibold whitespace-nowrap">{c}</th>)}
+            </tr>
+          </thead>
+          <tbody id="essTicketBody" class="divide-y divide-line-soft"></tbody>
+        </table>
+      </div>
+      <p id="essTicketEmpty" class="hidden text-center text-muted text-sm py-12">Belum ada tiket ditemukan.</p>
+    </div>
+
+    <p id="essSyncNote" class="text-center text-[11px] text-muted mt-5" aria-live="polite"></p>
+  </div>
+</div>
+
+<!-- ============ KONFIRMASI VERIFIKASI ============ -->
+<div id="essVerifyModal" class="hidden fixed inset-0 z-98 flex items-center justify-center p-4 bg-bark/50"
+     role="dialog" aria-modal="true" aria-labelledby="essVerifyTitle">
+  <div class="bg-surface rounded-2xl w-full max-w-sm p-6 text-center shadow-lg">
+    <div class="w-14 h-14 rounded-full bg-sage-tint flex items-center justify-center mx-auto mb-4">
+      <BadgeCheck class="w-7 h-7 text-sage-deep" />
+    </div>
+    <h3 id="essVerifyTitle" class="font-heading font-bold text-ink text-lg">Verifikasi Tiket</h3>
+    <p class="text-sm text-muted leading-relaxed mt-2">
+      Ubah status tiket <strong id="essVerifyCode" class="text-ink">—</strong> milik
+      <strong id="essVerifyName" class="text-ink">—</strong> dari <strong>LUNAS</strong> menjadi
+      <strong>TERPAKAI (USED)</strong>?
+    </p>
+    <div class="flex gap-3 mt-6">
+      <button type="button" id="essVerifyCancel" class="btn-outline flex-1">Batal</button>
+      <button type="button" id="essVerifyConfirm" class="btn-primary flex-1">Ya, Verifikasi</button>
+    </div>
+  </div>
+</div>

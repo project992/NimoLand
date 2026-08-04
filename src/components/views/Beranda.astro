@@ -1,0 +1,286 @@
+---
+import ChevronLeft from '@lucide/astro/icons/chevron-left';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Sunrise from '@lucide/astro/icons/sunrise';
+import Ticket from '@lucide/astro/icons/ticket';
+import Sparkles from '@lucide/astro/icons/sparkles';
+import RatingBadge from '../RatingBadge.astro';
+import { HERO_SLIDES } from '../../lib/data.js';
+
+const { ratings = {} } = Astro.props;
+const headline = ratings['nimo-highland'] ?? null;
+
+const facilitiesTop = [
+  'Restaurant', 'Sky Bridge', 'Bean Bag & Net Area', 'Glass Sky Bridge',
+  'Flying Fox', 'F&B Stand', 'Souvenir Shop',
+];
+const facilitiesBottom = [
+  'Nimo Zoo', 'Food Court', 'Souvenir Shop', 'Musholla',
+  'Playground', 'Parkir', 'Toilet', 'Shuttle lokal',
+];
+
+const priceTables = [
+  {
+    label: 'Domestik',
+    rows: [
+      ['Dewasa · Weekday', 'Rp 40.000'], ['Dewasa · Weekend', 'Rp 45.000'],
+      ['Anak · Weekday', 'Rp 45.000'],   ['Anak · Weekend', 'Rp 35.000'],
+    ],
+  },
+  {
+    label: 'Mancanegara',
+    rows: [
+      ['Dewasa · Weekday', 'Rp 80.000'], ['Dewasa · Weekend', 'Rp 90.000'],
+      ['Anak · Weekday', 'Rp 60.000'],   ['Anak · Weekend', 'Rp 70.000'],
+    ],
+  },
+  {
+    label: 'Nimo Eye · Bianglala',
+    rows: [
+      ['Regular · Weekday', 'Rp 55.000'], ['Regular · Weekend', 'Rp 60.000'],
+      ['Sunrise · Weekday', 'Rp 60.000'],
+    ],
+    note: 'Kabin 4 pax, 1 putaran ± 10 menit. Bianglala tertinggi di Indonesia (rekor MURI).',
+  },
+];
+---
+<div class="view" data-view="beranda">
+
+  <!-- ============ HERO ============ -->
+  <section class="relative min-h-[100svh] flex items-end overflow-hidden bg-bark">
+    <div id="heroTrack" class="absolute inset-0">
+      {HERO_SLIDES.map((s, i) => (
+        <div class:list={['hero-slide absolute inset-0', i === 0 && 'active']}>
+          <div class="img-shell absolute inset-0">
+            <img class="w-full h-full object-cover" alt={s.alt} src={s.img} data-fallback={s.fb}
+                 fetchpriority={i === 0 ? 'high' : undefined} />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Flat scrim instead of the old three-stop gradient. */}
+    <div class="absolute inset-0 bg-bark/55 pointer-events-none"></div>
+
+    <button id="heroPrev" type="button" aria-label="Slide sebelumnya"
+            class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors">
+      <ChevronLeft class="w-5 h-5" />
+    </button>
+    <button id="heroNext" type="button" aria-label="Slide berikutnya"
+            class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors">
+      <ChevronRight class="w-5 h-5" />
+    </button>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pb-16 lg:pb-24 w-full">
+      <p class="eyebrow text-white/80 mb-4">
+        <MapPin class="w-4 h-4" /> Pangalengan · Bandung
+      </p>
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">
+        Nimo Group
+      </h1>
+
+      <div class="flex flex-wrap items-center gap-4 mt-3">
+        <p class="font-heading text-white/85 text-lg sm:text-2xl italic">Embrace the Serene Breeze</p>
+        <RatingBadge rating={headline} size="md" tone="light" />
+      </div>
+
+      <p class="text-white/80 text-sm sm:text-base leading-relaxed max-w-xl mt-6">
+        Destinasi kebun teh di Pangalengan, Bandung, dengan daya tarik utama Sky Bridge berbentuk U
+        yang membentang di atas hamparan kebun teh — panorama 360° yang jarang ditemui di tempat lain.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-4 mt-8">
+        <button type="button" data-open-booking="ticket" class="btn-accent px-7 py-3.5 sm:text-base">
+          <Ticket class="w-4 h-4" /> Beli Tiket Sekarang
+          <ArrowRight class="w-4 h-4" />
+        </button>
+        <a href="#/hotels" data-route="hotels"
+           class="inline-flex items-center gap-2 text-white/90 font-heading text-sm sm:text-base border-b border-white/40 hover:border-white pb-1 transition-colors">
+          Lihat Penginapan
+        </a>
+      </div>
+      <div id="heroDots" class="flex items-center gap-2 mt-10"></div>
+    </div>
+  </section>
+
+  <!-- ============ TENTANG ============ -->
+  <section id="tentang" class="bg-surface py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="reveal">
+          <p class="eyebrow text-sage-deep mb-4">
+            <span class="w-6 h-px bg-sage"></span> Tentang Destinasi
+          </p>
+          <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
+            Kebun Teh dengan Panorama 360°
+          </h2>
+
+          {headline && (
+            <div class="flex items-center gap-3 mt-5">
+              <RatingBadge rating={headline} size="lg" />
+              {headline.source && (
+                <span class="text-xs text-muted">Rating resmi · {headline.source}</span>
+              )}
+            </div>
+          )}
+
+          <p class="text-muted text-sm sm:text-base leading-relaxed mt-6 max-w-lg">
+            Saat malam surut, selimut kabut tipis menyapu kebun teh dan menciptakan suasana yang terasa
+            seperti mimpi. Cakrawala kemudian menyala dalam warna amber dan merah — golden hour dalam
+            bentuknya yang paling murni.
+          </p>
+          <p class="text-muted text-sm sm:text-base leading-relaxed mt-4 max-w-lg">
+            Daya tarik utamanya adalah <span class="text-ink font-semibold">Sky Bridge berbentuk U</span>
+            yang menjulang di atas hamparan hijau. Di momen-momen sunyi itu, hanya kicau burung pagi
+            yang menemani.
+          </p>
+
+          <div class="grid grid-cols-3 gap-4 mt-10 max-w-md">
+            <div class="border-l-2 border-sage pl-4">
+              <p class="font-heading font-bold text-ink text-2xl">360<span class="text-sm">°</span></p>
+              <p class="text-xs text-muted mt-1">Panorama Sky Bridge</p>
+            </div>
+            <div class="border-l-2 border-sage pl-4">
+              <p class="font-heading font-bold text-ink text-2xl">12+</p>
+              <p class="text-xs text-muted mt-1">Wahana &amp; aktivitas</p>
+            </div>
+            <div class="border-l-2 border-sage pl-4">
+              <p class="font-heading font-bold text-ink text-2xl">05.00</p>
+              <p class="text-xs text-muted mt-1">Buka akhir pekan</p>
+            </div>
+          </div>
+
+          <a href="#/destinations" data-route="destinations"
+             class="inline-flex items-center gap-2 font-heading font-semibold text-sage-deep text-sm mt-10 border-b-2 border-sage pb-1 hover:gap-3 transition-all">
+            Jelajahi destinasi lain
+            <ArrowRight class="w-4 h-4" />
+          </a>
+        </div>
+
+        <div class="relative reveal">
+          <div id="momentSlider" class="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-2xl overflow-hidden img-shell"></div>
+          <div class="hidden sm:flex absolute -bottom-6 -left-6 card px-5 py-4 items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-sage-tint flex items-center justify-center shrink-0">
+              <Sunrise class="w-5 h-5 text-sage-deep" />
+            </div>
+            <div>
+              <p class="font-heading font-bold text-ink text-sm">Buka setiap hari</p>
+              <p class="text-xs text-muted">Sabtu &amp; Minggu dari 05.00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WAHANA ============ -->
+  <section id="wahana" class="bg-paper py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 reveal">
+        <div>
+          <p class="eyebrow text-sage-deep mb-4">
+            <span class="w-6 h-px bg-sage"></span> Wahana &amp; Aktivitas
+          </p>
+          <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
+            Satu Bukit, Segudang Cerita
+          </h2>
+        </div>
+        <p class="text-muted text-sm max-w-sm">
+          Pilih kategori untuk menyaring daftar wahana. Semua tersedia di area Nimo Group.
+        </p>
+      </div>
+
+      <div id="filterTabs" class="flex flex-wrap gap-3 mb-4" role="group" aria-label="Filter kategori wahana"></div>
+      <p id="filterCount" class="text-xs text-muted mb-8" aria-live="polite"></p>
+      <div id="wahanaGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+      <p id="wahanaEmpty" class="hidden text-center text-muted text-sm py-12">Belum ada wahana pada kategori ini.</p>
+    </div>
+  </section>
+
+  <!-- ============ TIKET ============ -->
+  <section id="tiket" class="bg-bark py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="max-w-2xl mb-14 reveal">
+        <p class="eyebrow text-white/70 mb-4">
+          <span class="w-6 h-px bg-white/40"></span> Tickets &amp; Promotions
+        </p>
+        <h2 class="font-heading font-bold text-white text-3xl sm:text-4xl lg:text-5xl leading-tight">Harga Tiket Masuk</h2>
+        <p class="text-white/65 text-sm sm:text-base mt-4">
+          Pemesanan online dilakukan minimal H-1 sebelum kedatangan, dan tiket berlaku maksimal 3 hari
+          sejak tanggal kedatangan yang dipilih.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {priceTables.map(t => (
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-7">
+            <p class="text-white/70 font-heading font-medium uppercase text-xs tracking-widest mb-4">{t.label}</p>
+            <ul class="text-sm divide-y divide-white/10">
+              {t.rows.map(([name, price]) => (
+                <li class="flex justify-between py-2.5">
+                  <span class="text-white/60">{name}</span>
+                  <span class="text-white font-medium">{price}</span>
+                </li>
+              ))}
+            </ul>
+            {t.note && <p class="text-xs text-white/45 mt-4 leading-relaxed">{t.note}</p>}
+          </div>
+        ))}
+      </div>
+
+      <div class="flex justify-center mt-12">
+        <button type="button" data-open-booking="ticket" class="btn-accent px-8 py-3.5 sm:text-base">
+          <Ticket class="w-4 h-4" /> Pesan Tiket Online
+          <ArrowRight class="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FASILITAS ============ -->
+  <section id="fasilitas" class="bg-canvas py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="mb-12 reveal">
+        <p class="eyebrow text-sage-deep mb-4">
+          <span class="w-6 h-px bg-sage"></span> Fasilitas
+        </p>
+        <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
+          Area Atas &amp; Area Bawah Bukit
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {[['Area Atas Bukit', facilitiesTop, 'bg-sage'], ['Area Bawah Bukit', facilitiesBottom, 'bg-clay']].map(
+          ([title, items, dot]) => (
+            <div class="card p-7 reveal">
+              <h3 class="font-heading font-semibold text-ink text-lg mb-5">{title}</h3>
+              <ul class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm text-muted">
+                {items.map(f => (
+                  <li class="flex items-center gap-2">
+                    <span class:list={['w-1.5 h-1.5 rounded-full shrink-0', dot]}></span>{f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ),
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" class="bg-surface py-20 lg:py-28">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="text-center mb-12 reveal">
+        <p class="eyebrow text-sage-deep mb-4 justify-center">
+          <Sparkles class="w-4 h-4" /> FAQ
+        </p>
+        <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight">
+          Pertanyaan Umum
+        </h2>
+      </div>
+      <div id="faqList" class="space-y-3"></div>
+    </div>
+  </section>
+</div>

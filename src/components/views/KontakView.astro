@@ -1,0 +1,89 @@
+---
+import Clock from '@lucide/astro/icons/clock';
+import MapPin from '@lucide/astro/icons/map-pin';
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import BrandIcon from '../BrandIcon.astro';
+
+const hours = [
+  ['Senin – Jumat', '08.00–17.00'],
+  ['Sabtu', '05.00–17.00'],
+  ['Minggu', '05.00–17.00'],
+];
+---
+<div class="view" data-view="kontak">
+  <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <p class="eyebrow text-white/70 mb-4">
+        <span class="w-6 h-px bg-white/40"></span> Kontak
+      </p>
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight">
+        Rencanakan Kunjunganmu
+      </h1>
+    </div>
+  </section>
+
+  <section class="bg-canvas py-14 lg:py-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="grid lg:grid-cols-3 gap-6">
+
+        <div class="card p-7">
+          <div class="w-11 h-11 rounded-full bg-sage-tint flex items-center justify-center mb-5">
+            <Clock class="w-5 h-5 text-sage-deep" />
+          </div>
+          <h3 class="font-heading font-semibold text-ink text-lg mb-5">Jam Operasional</h3>
+          <ul class="text-sm divide-y divide-line-soft">
+            {hours.map(([day, time]) => (
+              <li class="flex justify-between py-2.5">
+                <span class="text-muted">{day}</span>
+                <span class="text-ink font-medium">{time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="card p-7">
+          <div class="w-11 h-11 rounded-full bg-sage-tint flex items-center justify-center mb-5">
+            <MessageCircle class="w-5 h-5 text-sage-deep" />
+          </div>
+          <h3 class="font-heading font-semibold text-ink text-lg mb-3">Kontak &amp; Reservasi</h3>
+          <p class="text-muted text-sm leading-relaxed mb-4">
+            Hubungi tim reservasi untuk rombongan, perubahan jadwal, atau pertanyaan lain.
+          </p>
+          <a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 text-sage-deep font-heading font-semibold text-sm border-b-2 border-sage pb-1">
+            <BrandIcon name="whatsapp" class="w-4 h-4" /> 0811-1112-1162
+          </a>
+          <div class="flex items-center gap-3 mt-6">
+            <a href="https://www.instagram.com/nimohighland/" target="_blank" rel="noopener"
+               aria-label="Instagram Nimo Group"
+               class="w-9 h-9 rounded-full border border-line flex items-center justify-center text-muted hover:bg-sage hover:border-sage hover:text-white transition-colors">
+              <BrandIcon name="instagram" class="w-4 h-4" />
+            </a>
+            <a href="https://www.tiktok.com/@nimohighland" target="_blank" rel="noopener"
+               aria-label="TikTok Nimo Group"
+               class="w-9 h-9 rounded-full border border-line flex items-center justify-center text-muted hover:bg-sage hover:border-sage hover:text-white transition-colors">
+              <BrandIcon name="tiktok" class="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+
+        <div class="card overflow-hidden flex flex-col p-0">
+          <div class="p-7 pb-4">
+            <div class="w-11 h-11 rounded-full bg-sage-tint flex items-center justify-center mb-5">
+              <MapPin class="w-5 h-5 text-sage-deep" />
+            </div>
+            <h3 class="font-heading font-semibold text-ink text-lg mb-2">Lokasi</h3>
+            <p class="text-muted text-sm leading-relaxed">
+              Banjarsari, Pangalengan, Kabupaten Bandung, Jawa Barat 40378
+            </p>
+          </div>
+          <div class="mt-auto h-44">
+            <iframe src="https://www.google.com/maps?q=-7.219462,107.57742&z=17&output=embed"
+                    class="w-full h-full" style="border:0" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade" title="Peta Nimo Group"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

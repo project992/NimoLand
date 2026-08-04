@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import ArrowLeft from '@lucide/astro/icons/arrow-left';
+import Ticket from '@lucide/astro/icons/ticket';
+import BedDouble from '@lucide/astro/icons/bed-double';
+import LogOut from '@lucide/astro/icons/log-out';
+import { supabase } from '../lib/supabase.js';
+import { rupiah } from '../lib/data.js';
+
+export const prerender = false;
+
+/* Middleware guarantees a signed-in customer here (PROTECTED_PAGES). */
+const user = Astro.locals.user;
+
+// Scoped to this customer's id — the session is the only thing that decides
+// whose bookings are visible.
+const [tickets, rooms] = supabase
+  ? await Promise.all([
+      supabase.from('tickets')
+        .select('booking_code, ticket_type, quantity, total_price, visit_date, expiry_date, status')
+        .eq('customer_id', user.id).order('created_at', { ascending: false }).limit(50),
+      supabase.from('room_bookings')
+        .select('booking_code, hotel_name, room_name, check_in, check_out, nights, rooms, guests, total_price, status')
+        .eq('customer_id', user.id).order('created_at', { ascending: false }).limit(50),
+    ])
+  : [{ data: [] }, { data: [] }];
+
+const ticketRows = tickets.data ?? [];
+const roomRows = rooms.data ?? [];
+
+const fmt = iso => new Date(iso + 'T00:00:00').toLocaleDateString('id-ID', {
+  day: 'numeric', month: 'short', year: 'numeric',
+});
+
+const statusTone = {
+  LUNAS: 'bg-ok-tint text-ok border-ok/25',
+  TERPAKAI: 'bg-info-tint text-info border-info/25',
+  EXPIRED: 'bg-danger-tint text-danger border-danger/25',
+  DIKONFIRMASI: 'bg-ok-tint text-ok border-ok/25',
+};
+---
+<Base title="Pesanan Saya — Nimo Group" description="Riwayat pemesanan tiket dan kamar Nimo Group.">
+  <div class="min-h-screen bg-canvas">
+    <div class="max-w-4xl mx-auto px-5 sm:px-8 py-12">
+
+      <a href="/" class="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8">
+        <ArrowLeft class="w-4 h-4" /> Kembali ke beranda
+      </a>
+
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 class="font-heading font-bold text-ink text-3xl">Pesanan Saya</h1>
+          <p class="text-muted text-sm mt-1.5">{user.name} · {user.email}</p>
+        </div>
+        <button type="button" data-logout
+                class="inline-flex items-center gap-2 border border-line text-muted hover:text-danger hover:border-danger/30 font-heading font-semibold text-sm px-4 py-2.5 rounded-full transition-colors">
+          <LogOut class="w-4 h-4" /> Keluar
+        </button>
+      </div>
+
+      <!-- Tiket -->
+      <h2 class="flex items-center gap-2 font-heading font-semibold text-ink text-lg mt-10 mb-4">
+        <Ticket class="w-5 h-5 text-sage-deep" /> Tiket Masuk
+      </h2>
+      {ticketRows.length === 0 ? (
+        <div class="card p-8 text-center">
+          <p class="text-sm text-muted">Belum ada pemesanan tiket.</p>
+          <a href="/" class="btn-accent mt-5">Pesan tiket sekarang</a>
+        </div>
+      ) : (
+        <div class="space-y-3">
+          {ticketRows.map(t => (
+            <div class="card p-5 flex flex-wrap items-center justify-between gap-4">
+              <div class="min-w-0">
+                <p class="font-heading font-bold text-ink">{t.booking_code}</p>
+                <p class="text-sm text-muted mt-0.5">{t.ticket_type}</p>
+                <p class="text-xs text-muted mt-1.5">
+                  Kunjungan {fmt(t.visit_date)} · berlaku s/d {fmt(t.expiry_date)} · {t.quantity} orang
+                </p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-heading font-bold text-ink">{rupiah(Number(t.total_price))}</p>
+                <span class:list={['inline-flex mt-1.5 text-[11px] font-heading font-semibold border px-2.5 py-1 rounded-full',
+                                   statusTone[t.status] ?? 'bg-paper text-muted border-line']}>
+                  {t.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <!-- Kamar -->
+      <h2 class="flex items-center gap-2 font-heading font-semibold text-ink text-lg mt-10 mb-4">
+        <BedDouble class="w-5 h-5 text-sage-deep" /> Menginap
+      </h2>
+      {roomRows.length === 0 ? (
+        <div class="card p-8 text-center">
+          <p class="text-sm text-muted">Belum ada pemesanan kamar.</p>
+        </div>
+      ) : (
+        <div class="space-y-3">
+          {roomRows.map(r => (
+            <div class="card p-5 flex flex-wrap items-center justify-between gap-4">
+              <div class="min-w-0">
+                <p class="font-heading font-bold text-ink">{r.booking_code}</p>
+                <p class="text-sm text-muted mt-0.5">{r.room_name} · {r.hotel_name}</p>
+                <p class="text-xs text-muted mt-1.5">
+                  {fmt(r.check_in)} – {fmt(r.check_out)} · {r.nights} malam · {r.rooms} kamar · {r.guests} tamu
+                </p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-heading font-bold text-ink">{rupiah(Number(r.total_price))}</p>
+                <span class:list={['inline-flex mt-1.5 text-[11px] font-heading font-semibold border px-2.5 py-1 rounded-full',
+                                   statusTone[r.status] ?? 'bg-paper text-muted border-line']}>
+                  {r.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('[data-logout]').forEach(b =>
+      b.addEventListener('click', async () => {
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+        window.location.href = '/';
+      }));
+  </script>
+</Base>

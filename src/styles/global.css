@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   Nimo Group — design tokens
+
+   Rules this palette enforces:
+   - No gradients anywhere. Depth comes from solid tints, hairline borders
+     and a single soft shadow scale.
+   - Every surface is a flat, desaturated colour: sage green, muted clay,
+     off-white paper, slate-green ink.
+   - Dark sections use `bark`, never black.
+   ===================================================================== */
+@theme {
+  /* Surfaces */
+  --color-canvas:     #FBFAF7;  /* page background, warm off-white */
+  --color-surface:    #FFFFFF;  /* cards */
+  --color-paper:      #F3F1EB;  /* recessed panels, table headers */
+
+  /* Dark sections (replaces the old near-black #1B3B2B) */
+  --color-bark:       #333D37;
+  --color-bark-soft:  #46524A;
+
+  /* Primary interactive — soft sage */
+  --color-sage:       #7E9B85;
+  --color-sage-deep:  #5E7A66;
+  --color-sage-tint:  #EBF1EC;
+
+  /* Accent — muted earth / clay. Replaces the saturated gold #D9A441. */
+  --color-clay:       #B08D65;
+  --color-clay-deep:  #94734E;
+  --color-clay-tint:  #F5EEE5;
+
+  /* Text */
+  --color-ink:        #2B322D;
+  --color-muted:      #6E7B72;
+
+  /* Lines */
+  --color-line:       #E4E1D9;
+  --color-line-soft:  #EFEDE7;
+
+  /* Status — desaturated to sit beside the soft palette */
+  --color-ok:         #4F7A5C;
+  --color-ok-tint:    #EDF3EE;
+  --color-info:       #5A7183;
+  --color-info-tint:  #EDF1F4;
+  --color-warn:       #A0743C;
+  --color-warn-tint:  #F7EFE3;
+  --color-danger:     #A35A52;
+  --color-danger-tint:#F7EDEC;
+
+  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* One soft shadow scale — no heavy drop shadows */
+  --shadow-soft:  0 1px 2px rgba(43, 50, 45, .04), 0 4px 12px rgba(43, 50, 45, .05);
+  --shadow-lift:  0 2px 4px rgba(43, 50, 45, .05), 0 12px 28px rgba(43, 50, 45, .08);
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+  }
+  .font-heading { font-family: var(--font-heading); }
+
+  /* Consistent focus ring, palette-matched */
+  :focus-visible {
+    outline: 2px solid var(--color-sage-deep);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* ---- Buttons: solid fills only, no gradients ----
+     Tailwind v4 cannot `@apply` a custom class, so the shared base is a
+     selector list rather than `.btn-primary { @apply btn }`. */
+  .btn, .btn-primary, .btn-accent, .btn-dark, .btn-outline, .btn-ghost-light {
+    @apply inline-flex items-center justify-center gap-2 font-heading font-semibold
+           text-sm rounded-full px-6 py-3 transition-colors;
+  }
+  .btn:disabled, .btn-primary:disabled, .btn-accent:disabled,
+  .btn-dark:disabled, .btn-outline:disabled {
+    @apply opacity-40 cursor-not-allowed;
+  }
+
+  .btn-primary { @apply bg-sage text-white; }
+  .btn-primary:not(:disabled):hover { @apply bg-sage-deep; }
+
+  .btn-accent { @apply bg-clay text-white; }
+  .btn-accent:not(:disabled):hover { @apply bg-clay-deep; }
+
+  .btn-dark { @apply bg-bark text-white; }
+  .btn-dark:not(:disabled):hover { @apply bg-bark-soft; }
+
+  .btn-outline { @apply border border-line text-ink bg-surface; }
+  .btn-outline:not(:disabled):hover { @apply bg-paper; }
+
+  .btn-ghost-light { @apply border border-white/25 text-white; }
+  .btn-ghost-light:hover { @apply bg-white/10; }
+
+  /* ---- Cards ---- */
+  .card {
+    @apply bg-surface rounded-2xl border border-line-soft;
+    box-shadow: var(--shadow-soft);
+  }
+  .card-hover { @apply transition-shadow duration-300; }
+  .card-hover:hover { box-shadow: var(--shadow-lift); }
+
+  /* ---- Form fields ---- */
+  .field {
+    @apply w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm
+           text-ink placeholder:text-muted/70 transition-colors;
+  }
+  .field:focus { @apply outline-none border-sage ring-2 ring-sage/25; }
+  .field-error { @apply border-danger; }
+
+  .label { @apply block font-heading text-sm font-semibold text-ink mb-1.5; }
+
+  /* ---- Inline messages ---- */
+  .note, .note-error, .note-warn, .note-info {
+    @apply flex gap-2.5 text-xs leading-relaxed rounded-lg border px-3 py-2.5;
+  }
+  .note-error { @apply bg-danger-tint border-danger/25 text-danger; }
+  .note-warn  { @apply bg-warn-tint   border-warn/25   text-warn; }
+  .note-info  { @apply bg-sage-tint   border-sage/25   text-sage-deep; }
+
+  /* ---- Filter pills ---- */
+  .pill {
+    @apply font-heading text-sm font-medium px-5 py-2.5 rounded-full border
+           border-line bg-surface text-ink transition-colors;
+  }
+  .pill:hover { @apply bg-paper; }
+  .pill[aria-pressed="true"] { @apply bg-sage border-sage text-white; }
+  .pill[aria-pressed="true"]:hover { @apply bg-sage-deep border-sage-deep; }
+
+  /* ---- Image placeholder: flat tint, not a gradient ---- */
+  .img-shell { @apply bg-paper; }
+
+  /* ---- Section eyebrow ---- */
+  .eyebrow {
+    @apply font-heading text-xs sm:text-sm tracking-[0.28em] uppercase
+           flex items-center gap-3;
+  }
+}
+
+/* =====================================================================
+   Component behaviour
+   ===================================================================== */
+
+/* ---- Navbar: flat translucent, no gradient ---- */
+#navbar {
+  background: rgba(51, 61, 55, .32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background .3s ease, box-shadow .3s ease;
+}
+#navbar.scrolled,
+#navbar.solid {
+  background: rgba(251, 250, 247, .94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 var(--color-line);
+}
+.nav-link { color: rgba(255, 255, 255, .88); }
+#navbar.scrolled .nav-link,
+#navbar.solid .nav-link { color: var(--color-muted); }
+#navbar.scrolled .nav-link:hover,
+#navbar.solid .nav-link:hover,
+#navbar.scrolled .nav-link.active,
+#navbar.solid .nav-link.active { color: var(--color-sage-deep); }
+.nav-link.active { color: #fff; }
+
+.brand-main { color: #fff; }
+#navbar.scrolled .brand-main,
+#navbar.solid .brand-main { color: var(--color-ink); }
+.brand-sub { color: rgba(255, 255, 255, .72); border-color: rgba(255, 255, 255, .3); }
+#navbar.scrolled .brand-sub,
+#navbar.solid .brand-sub { color: var(--color-sage-deep); border-color: var(--color-line); }
+.burger { color: #fff; }
+#navbar.scrolled .burger,
+#navbar.solid .burger { color: var(--color-ink); }
+
+/* ---- Dropdown ---- */
+.has-dropdown:hover .dropdown-panel,
+.has-dropdown:focus-within .dropdown-panel {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+.dropdown-panel {
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+
+/* ---- SPA views ---- */
+.view { display: none; }
+.view.active { display: block; animation: viewIn .4s ease both; }
+@keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ---- FAQ ---- */
+.faq-panel {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height .35s cubic-bezier(.4, 0, .2, 1), opacity .25s ease;
+}
+.faq-panel.open { opacity: 1; }
+.faq-chevron { transition: transform .3s ease; }
+
+/* ---- Hero ---- */
+.hero-slide { opacity: 0; transition: opacity .9s ease; }
+.hero-slide.active { opacity: 1; }
+
+#toast { transition: transform .35s cubic-bezier(.4, 0, .2, 1), opacity .35s ease; }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .view.active { animation: none; }
+  html { scroll-behavior: auto; }
+  .hero-slide { transition: none; }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
+
+/* ---- E-ticket print ---- */
+@media print {
+  body.printing #navbar,
+  body.printing #appRoot,
+  body.printing footer,
+  body.printing #bookingModal,
+  body.printing #destModal,
+  body.printing #successModal,
+  body.printing #eticketModal .eticket-chrome,
+  body.printing #toast,
+  body.printing .fixed { display: none !important; }
+  body.printing { background: #fff; }
+  body.printing #eticketModal {
+    position: static !important;
+    display: block !important;
+    background: #fff;
+    padding: 0;
+    overflow: visible;
+  }
+  body.printing #eticketModal > div {
+    max-width: 100% !important;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    background: #fff;
+    min-height: 0;
+  }
+  body.printing #ticketCard { box-shadow: none; border: none; }
+}

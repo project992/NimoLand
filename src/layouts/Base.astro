@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import { jsonForScript } from '../lib/serialize.js';
+
+const { title, description } = Astro.props;
+const user = Astro.locals.user;
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <meta name="referrer" content="no-referrer" />
+  <title>{title}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  {/* The signed-in user, handed to the client so it can render auth state on
+      first paint. The session cookie itself is HTTP-only and never exposed.
+      jsonForScript, not JSON.stringify: a name containing "</script>" would
+      otherwise break out of this element. */}
+  <script type="application/json" id="session-data" set:html={jsonForScript(user)} is:inline />
+</head>
+<body class="bg-canvas text-ink">
+  <slot />
+
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="fixed left-1/2 -translate-x-1/2 bottom-8 z-[99] opacity-0 translate-y-4 pointer-events-none
+           bg-bark text-white text-sm font-heading px-5 py-3 rounded-full shadow-lg"
+  >
+  </div>
+</body>
+</html>

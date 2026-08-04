@@ -1,0 +1,37 @@
+---
+import Search from '@lucide/astro/icons/search';
+---
+<div class="view" data-view="destinations">
+  <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <p class="eyebrow text-white/70 mb-4">
+        <span class="w-6 h-px bg-white/40"></span> Katalog Destinasi
+      </p>
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-2xl">
+        Semua Destinasi Nimo
+      </h1>
+      <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+        Dari kebun teh di ketinggian hingga taman air dan kebun binatang. Saring berdasarkan jenis atau
+        wilayah, lalu buka detailnya tanpa keluar dari halaman ini.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-canvas py-14 lg:py-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-5 mb-6">
+        <div class="relative flex-1 max-w-sm">
+          <Search class="w-4 h-4 text-muted absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <label for="destSearch" class="sr-only">Cari destinasi</label>
+          <input type="search" id="destSearch" placeholder="Cari destinasi…" class="field rounded-full pl-11" />
+        </div>
+        <div id="destFilters" class="flex flex-wrap gap-3" role="group" aria-label="Filter jenis destinasi"></div>
+      </div>
+      <p id="destCount" class="text-xs text-muted mb-8" aria-live="polite"></p>
+      <div id="destGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <p id="destEmpty" class="hidden text-center text-muted text-sm py-16">
+        Tidak ada destinasi yang cocok dengan pencarian.
+      </p>
+    </div>
+  </section>
+</div>

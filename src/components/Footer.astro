@@ -1,0 +1,45 @@
+---
+import IdCard from '@lucide/astro/icons/id-card';
+---
+<footer class="bg-bark pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+      <div class="lg:col-span-2">
+        <a href="#/beranda" data-route="beranda" class="flex items-center gap-2 font-heading font-bold text-white text-xl mb-4">
+          NIMO <span class="text-white/60 text-sm font-medium tracking-widest uppercase">Highland</span>
+        </a>
+        <p class="text-white/55 text-sm leading-relaxed max-w-xs">
+          Perusahaan pariwisata yang berfokus pada dampak sosial, UMKM, dan energi terbarukan.
+        </p>
+      </div>
+      <div>
+        <p class="font-heading text-white text-sm font-semibold uppercase tracking-widest mb-5">Jelajah</p>
+        <ul class="space-y-3 text-sm text-white/55">
+          <li><a href="#/beranda" data-route="beranda" class="hover:text-white transition-colors">Beranda</a></li>
+          <li><a href="#/destinations" data-route="destinations" class="hover:text-white transition-colors">Destinations</a></li>
+          <li><a href="#/hotels" data-route="hotels" class="hover:text-white transition-colors">Hotels</a></li>
+          <li><a href="#/galeri" data-route="galeri" class="hover:text-white transition-colors">Galeri</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-heading text-white text-sm font-semibold uppercase tracking-widest mb-5">Informasi</p>
+        <ul class="space-y-3 text-sm text-white/55">
+          <li><a href="#/beranda" data-route="beranda" data-scroll="tiket" class="hover:text-white transition-colors">Harga Tiket</a></li>
+          <li><a href="#/beranda" data-route="beranda" data-scroll="faq" class="hover:text-white transition-colors">FAQ</a></li>
+          <li><a href="#/kontak" data-route="kontak" class="hover:text-white transition-colors">Kontak</a></li>
+          <li><button type="button" data-open-ess class="hover:text-white transition-colors">Portal ESS (Karyawan)</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-6 text-xs text-white/45 font-heading tracking-wide">
+      <span>© 2026 Nimo Land. All rights reserved.</span>
+      <span class="flex items-center gap-3">
+        <span>Pangalengan, Bandung — Jawa Barat</span>
+        <button type="button" data-open-ess
+                class="inline-flex items-center gap-1.5 text-white/60 hover:text-white transition-colors border border-white/15 rounded-full px-3 py-1">
+          <IdCard class="w-3.5 h-3.5" /> Portal ESS
+        </button>
+      </span>
+    </div>
+  </div>
+</footer>
