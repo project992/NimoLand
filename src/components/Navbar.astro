@@ -3,7 +3,6 @@ import ChevronDown from '@lucide/astro/icons/chevron-down';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Menu from '@lucide/astro/icons/menu';
 import X from '@lucide/astro/icons/x';
-import IdCard from '@lucide/astro/icons/id-card';
 import Ticket from '@lucide/astro/icons/ticket';
 import User from '@lucide/astro/icons/user';
 import LogIn from '@lucide/astro/icons/log-in';
@@ -12,21 +11,23 @@ import { DESTINATIONS, HOTELS } from '../lib/data.js';
 
 const user = Astro.locals.user;
 const isCustomer = Astro.locals.isCustomer;
+const { active = '' } = Astro.props;
+const navActive = route => (active === route ? ' active' : '');
 ---
 <header id="navbar" class="fixed top-0 inset-x-0 z-50">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
     <div class="flex items-center justify-between h-20">
 
-      <a href="#/beranda" data-route="beranda" class="flex items-center gap-2 font-heading">
+      <a href="/" data-route="beranda" class="flex items-center gap-2 font-heading">
         <span class="brand-main text-xl lg:text-2xl font-bold tracking-wide transition-colors">NIMO</span>
-        <span class="brand-sub text-xs lg:text-sm font-medium uppercase tracking-widest border-l pl-2 transition-colors">Highland</span>
+        <span class="brand-sub text-xs lg:text-sm font-medium uppercase tracking-widest border-l pl-2 transition-colors">Land Group</span>
       </a>
 
       <nav class="hidden lg:flex items-center gap-7 font-heading text-sm font-medium">
-        <a href="#/beranda" data-route="beranda" class="nav-link transition-colors">Beranda</a>
+        <a href="/" data-route="beranda" class={"nav-link transition-colors" + navActive('beranda')}>Beranda</a>
 
         <div class="has-dropdown relative">
-          <a href="#/destinations" data-route="destinations" class="nav-link flex items-center gap-1 transition-colors">
+          <a href="/destinasi" data-route="destinations" class={"nav-link flex items-center gap-1 transition-colors" + navActive('destinations')}>
             Destinations
             <ChevronDown class="w-3.5 h-3.5" />
           </a>
@@ -36,14 +37,14 @@ const isCustomer = Astro.locals.isCustomer;
               <ul class="max-h-80 overflow-y-auto divide-y divide-line-soft">
                 {DESTINATIONS.map(d => (
                   <li>
-                    <a href="#/destinations" data-route="destinations" data-dest={d.id}
+                    <a href={`/destinasi/${d.id}`}
                        class="block px-5 py-2.5 text-sm text-ink hover:bg-paper hover:text-sage-deep transition-colors">
                       {d.name}
                     </a>
                   </li>
                 ))}
               </ul>
-              <a href="#/destinations" data-route="destinations"
+              <a href="/destinasi" data-route="destinations"
                  class="flex items-center gap-2 px-5 py-3 text-sm font-heading font-semibold text-sage-deep bg-paper hover:bg-sage-tint transition-colors">
                 Lihat semua destinasi
                 <ArrowRight class="w-4 h-4" />
@@ -53,7 +54,7 @@ const isCustomer = Astro.locals.isCustomer;
         </div>
 
         <div class="has-dropdown relative">
-          <a href="#/hotels" data-route="hotels" class="nav-link flex items-center gap-1 transition-colors">
+          <a href="/penginapan" data-route="hotels" class={"nav-link flex items-center gap-1 transition-colors" + navActive('hotels')}>
             Hotels
             <ChevronDown class="w-3.5 h-3.5" />
           </a>
@@ -63,14 +64,14 @@ const isCustomer = Astro.locals.isCustomer;
               <ul class="divide-y divide-line-soft">
                 {HOTELS.map(h => (
                   <li>
-                    <a href="#/hotels" data-route="hotels" data-hotel={h.id}
+                    <a href={`/penginapan/${h.id}`}
                        class="block px-5 py-2.5 text-sm text-ink hover:bg-paper hover:text-sage-deep transition-colors">
                       {h.name}<span class="block text-xs text-muted">{h.area}</span>
                     </a>
                   </li>
                 ))}
               </ul>
-              <a href="#/hotels" data-route="hotels"
+              <a href="/penginapan" data-route="hotels"
                  class="flex items-center gap-2 px-5 py-3 text-sm font-heading font-semibold text-sage-deep bg-paper hover:bg-sage-tint transition-colors">
                 Lihat semua penginapan
                 <ArrowRight class="w-4 h-4" />
@@ -79,9 +80,9 @@ const isCustomer = Astro.locals.isCustomer;
           </div>
         </div>
 
-        <a href="#/galeri" data-route="galeri" class="nav-link transition-colors">Galeri</a>
-        <a href="#/beranda" data-route="beranda" data-scroll="tiket" class="nav-link transition-colors">Tiket</a>
-        <a href="#/kontak" data-route="kontak" class="nav-link transition-colors">Kontak</a>
+        <a href="/galeri" data-route="galeri" class={"nav-link transition-colors" + navActive('galeri')}>Galeri</a>
+        <a href="/" data-route="beranda" data-scroll="tiket" class="nav-link transition-colors">Tiket</a>
+        <a href="/kontak" data-route="kontak" class={"nav-link transition-colors" + navActive('kontak')}>Kontak</a>
       </nav>
 
       <div class="flex items-center gap-2.5">
@@ -133,7 +134,7 @@ const isCustomer = Astro.locals.isCustomer;
   <!-- Mobile panel -->
   <div id="mobileMenu" class="lg:hidden hidden bg-surface border-t border-line-soft shadow-lg max-h-[80vh] overflow-y-auto">
     <nav class="px-5 py-4 flex flex-col gap-1 font-heading text-sm text-ink">
-      <a href="#/beranda" data-route="beranda" class="py-3 border-b border-line-soft">Beranda</a>
+      <a href="/" data-route="beranda" class="py-3 border-b border-line-soft">Beranda</a>
 
       <details class="border-b border-line-soft">
         <summary class="py-3 cursor-pointer list-none flex items-center justify-between">
@@ -141,7 +142,7 @@ const isCustomer = Astro.locals.isCustomer;
         </summary>
         <ul class="pb-2 pl-3 flex flex-col gap-1 text-muted">
           {DESTINATIONS.map(d => (
-            <li><a href="#/destinations" data-route="destinations" data-dest={d.id} class="block py-2">{d.name}</a></li>
+            <li><a href={`/destinasi/${d.id}`} class="block py-2">{d.name}</a></li>
           ))}
         </ul>
       </details>
@@ -152,14 +153,14 @@ const isCustomer = Astro.locals.isCustomer;
         </summary>
         <ul class="pb-2 pl-3 flex flex-col gap-1 text-muted">
           {HOTELS.map(h => (
-            <li><a href="#/hotels" data-route="hotels" data-hotel={h.id} class="block py-2">{h.name}</a></li>
+            <li><a href={`/penginapan/${h.id}`} class="block py-2">{h.name}</a></li>
           ))}
         </ul>
       </details>
 
-      <a href="#/galeri" data-route="galeri" class="py-3 border-b border-line-soft">Galeri</a>
-      <a href="#/beranda" data-route="beranda" data-scroll="tiket" class="py-3 border-b border-line-soft">Tiket</a>
-      <a href="#/kontak" data-route="kontak" class="py-3 border-b border-line-soft">Kontak</a>
+      <a href="/galeri" data-route="galeri" class="py-3 border-b border-line-soft">Galeri</a>
+      <a href="/" data-route="beranda" data-scroll="tiket" class="py-3 border-b border-line-soft">Tiket</a>
+      <a href="/kontak" data-route="kontak" class="py-3 border-b border-line-soft">Kontak</a>
 
       {isCustomer ? (
         <>
@@ -172,9 +173,6 @@ const isCustomer = Astro.locals.isCustomer;
 
       <button type="button" data-open-booking="ticket" class="mt-2 btn-accent">
         <Ticket class="w-4 h-4" /> Beli Tiket Sekarang
-      </button>
-      <button type="button" data-open-ess class="mt-2 btn-outline text-muted">
-        <IdCard class="w-4 h-4" /> Portal ESS (Karyawan)
       </button>
     </nav>
   </div>

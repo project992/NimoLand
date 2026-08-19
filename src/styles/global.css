@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* =====================================================================
-   Nimo Group — design tokens
+   Nimo Land Group — design tokens
 
    Rules this palette enforces:
    - No gradients anywhere. Depth comes from solid tints, hairline borders
@@ -252,3 +252,9 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
   }
   body.printing #ticketCard { box-shadow: none; border: none; }
 }
+
+/* Portal ESS (route /ess): sembunyikan chrome publik — halaman ini hanya
+   menampilkan overlay login/dashboard ESS. */
+body.ess-only header,
+body.ess-only footer,
+body.ess-only #appRoot { display: none; }

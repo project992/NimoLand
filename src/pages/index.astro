@@ -1,51 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
-import FloatingActions from '../components/FloatingActions.astro';
-import Beranda from '../components/views/Beranda.astro';
-import DestinationsView from '../components/views/DestinationsView.astro';
-import HotelsView from '../components/views/HotelsView.astro';
-import GaleriView from '../components/views/GaleriView.astro';
-import KontakView from '../components/views/KontakView.astro';
-import BookingModal from '../components/modals/BookingModal.astro';
-import AuthGateModal from '../components/modals/AuthGateModal.astro';
-import ETicketModal from '../components/modals/ETicketModal.astro';
-import MiscModals from '../components/modals/MiscModals.astro';
-import EssPortal from '../components/ess/EssPortal.astro';
+import Shell from '../components/Shell.astro';
 import { getRatings } from '../lib/ratings.js';
-import { jsonForScript } from '../lib/serialize.js';
+import { getVideos } from '../lib/videos.js';
+import { organization } from '../lib/seo.js';
+import { HERO_SLIDES } from '../lib/data.js';
 
 export const prerender = false;
 
-// Official ratings, fetched once per request (5-minute cache in ratings.js) and
-// handed to the SPA below so JS-rendered cards show the same numbers.
+// Official ratings + promo videos, fetched once per request (cached in the
+// libs) and handed to the client so JS-rendered cards show the same numbers.
 const ratings = await getRatings();
+const videos = await getVideos();
+const heroImage = HERO_SLIDES[0].fb;
 ---
 <Base
-  title="Nimo Group — Embrace the Serene Breeze"
-  description="Nimo Group Pangalengan — kebun teh, Sky Bridge 360°, destinasi & penginapan. Pesan tiket dan kamar online."
+  title="Nimo Land Group — Embrace the Serene Breeze"
+  description="Nimo Land Group — destinasi kebun teh, Sky Bridge 360°, Nimo Eye, destinasi & penginapan di seluruh Indonesia. Pesan tiket dan kamar online."
+  canonical="/"
+  jsonLd={[organization()]}
+  preloads={[heroImage]}
 >
-  <script type="application/json" id="ratings-data" set:html={jsonForScript(ratings)} is:inline />
-
-  <Navbar />
-
-  <main id="appRoot">
-    <Beranda ratings={ratings} />
-    <DestinationsView />
-    <HotelsView />
-    <GaleriView />
-    <KontakView />
-  </main>
-
-  <Footer />
-  <FloatingActions />
-
-  <BookingModal />
-  <AuthGateModal />
-  <ETicketModal />
-  <MiscModals />
-  <EssPortal />
-
-  <script src="../scripts/app.js"></script>
+  <Shell active="beranda" ratings={ratings} videos={videos} />
 </Base>

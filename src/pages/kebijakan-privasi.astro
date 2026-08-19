@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  {
+    id: 'data',
+    title: 'Data yang Kami Kumpulkan',
+    body: 'Saat Anda membuat akun atau melakukan pemesanan, kami memproses: nama, alamat email, nomor WhatsApp, tanggal kedatangan, jumlah pengunjung, riwayat pemesanan, dan nomor identitas bila diperlukan. Kata sandi disimpan dalam bentuk ter-hash dan tidak pernah disimpan sebagai teks biasa.',
+  },
+  {
+    id: 'tujuan',
+    title: 'Tujuan Penggunaan Data',
+    body: 'Data digunakan untuk memproses pemesanan dan menerbitkan e-tiket, memverifikasi tiket saat masuk, memberi layanan pelanggan, mencegah penyalahgunaan, serta meningkatkan kualitas layanan kami.',
+  },
+  {
+    id: 'penyimpanan',
+    title: 'Penyimpanan & Keamanan',
+    body: 'Data disimpan secara aman dan hanya diakses oleh pihak yang berwenang. Kami menerapkan langkah teknis yang wajar untuk melindungi data, termasuk enkripsi kata sandi dan kontrol akses berbasis peran.',
+  },
+  {
+    id: 'jangka',
+    title: 'Jangka Waktu Penyimpanan',
+    body: 'Data disimpan selama diperlukan untuk keperluan di atas serta kepatuhan terhadap ketentuan perundang-undangan yang berlaku di Republik Indonesia (antara lain Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi).',
+  },
+  {
+    id: 'hak',
+    title: 'Hak Anda',
+    body: 'Anda berhak mengakses, memperbaiki, dan meminta penghapusan data pribadi Anda, serta menarik persetujuan pemrosesan yang telah diberikan. Permintaan dapat diajukan ke alamat email resmi kami dengan menyertakan email terdaftar.',
+  },
+  {
+    id: 'kontak',
+    title: 'Menghubungi Kami',
+    body: 'Pertanyaan atau permintaan terkait data pribadi dapat dikirim ke official@nimoenterprise.com dengan subjek "Privasi Data". Kami menindaklanjuti permintaan dalam waktu yang wajar dan maksimal 30 hari kalender.',
+  },
+];
+---
+<Base
+  title="Kebijakan Privasi — Nimo Land Group"
+  description="Kebijakan privasi dan pelindungan data pribadi di situs Nimo Land Group."
+>
+  <Navbar />
+  <main>
+    <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+        <p class="eyebrow text-white/70 mb-4">
+          <span class="w-6 h-px bg-white/40"></span> Legal
+        </p>
+        <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl">
+          Kebijakan Privasi
+        </h1>
+        <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+          Bagaimana Nimo Land Group mengumpulkan, menggunakan, dan melindungi data pribadi Anda.
+          Terakhir diperbarui: <span class="text-warn">[ISI TANGGAL]</span>.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-canvas py-14 lg:py-20">
+      <div class="max-w-3xl mx-auto px-5 sm:px-8 lg:px-10 space-y-9">
+        {
+          sections.map((s) => (
+            <div id={`priv-${s.id}`}>
+              <h2 class="font-heading font-semibold text-ink text-xl mb-2">{s.title}</h2>
+              <p class="text-muted text-sm leading-relaxed">{s.body}</p>
+            </div>
+          ))
+        }
+        <div class="bg-warn-tint border-l-4 border-warn rounded-r-lg p-5 text-sm text-ink/80 leading-relaxed">
+          <strong class="font-heading">Draf internal.</strong> Halaman ini perlu direview tim legal
+          sebelum ditampilkan ke publik. Nama badan hukum pemroses data, alamat, dan saluran pengaduan
+          resmi wajib dilengkapi sesuai struktur perusahaan.
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <script src="../scripts/site.js"></script>
+</Base>

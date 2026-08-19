@@ -90,6 +90,17 @@ create table if not exists destination_ratings (
   updated_at     timestamptz not null default now()
 );
 
+-- ---------- VIDEO DESTINASI ----------
+-- URL video (mp4/webm) untuk kartu destinasi. NULL = tidak ada video sehingga
+-- kartu tetap memakai gambar. HANYA karyawan yang bisa mengisi/mengubah lewat
+-- POST /api/ess/videos (dilindungi middleware EMPLOYEE_API); semua pengunjung
+-- membacanya lewat rute server (`src/lib/videos.js`), bukan policy publik.
+create table if not exists destination_videos (
+  destination_id text primary key,      -- cocokkan dengan id di src/lib/data.js
+  video_url      text not null,
+  updated_at     timestamptz not null default now()
+);
+
 
 -- =====================================================================
 -- BAGIAN 2 — MIGRASI
@@ -199,6 +210,7 @@ alter table employees            enable row level security;
 alter table tickets              enable row level security;
 alter table room_bookings        enable row level security;
 alter table destination_ratings  enable row level security;
+alter table destination_videos   enable row level security;
 
 -- Hapus policy publik dari skema lama.
 -- Ini yang dulu membuat seluruh password karyawan dan seluruh nama serta
@@ -250,9 +262,111 @@ on conflict (destination_id) do update
 
 
 -- =====================================================================
+-- BAGIAN 6 — FASE 3: PEMBAYARAN NYATA + QR DATABASE + KUOTA + LOG
+-- =====================================================================
+
+-- ---------- payments (Midtrans) ----------
+create table if not exists payments (
+  id                   uuid primary key default gen_random_uuid(),
+  order_id             text unique not null,       -- order id di Midtrans
+  booking_code         text not null,              -- tiket kaitannya (booking_code)
+  amount               numeric not null,
+  currency             text not null default 'IDR',
+  method               text,                       -- qris / bank_transfer / echannel / dll (dari webhook)
+  status               text not null default 'PENDING',
+  midtrans_status      text,                       -- settlement / capture / deny / cancel / expire
+  midtrans_transaction_id text,
+  raw_fields          jsonb,                       -- snapshot isi webhook utk audit
+  paid_at             timestamptz,
+  created_at          timestamptz not null default now()
+);
+
+-- ---------- Kuota harian (admin set dari ESS) ----------
+-- quota NULL = tanpa batas (unlimited). Ini jumlah tiket maksimum per tanggal.
+create table if not exists daily_quotas (
+  visit_date date primary key,
+  quota      integer,                              -- NULL = tidak dibatasi
+  note       text,
+  updated_at timestamptz not null default now()
+);
+
+-- ---------- Penghitung slot yang sudah dipesan (reservasi atomik) ----------
+create table if not exists daily_slots (
+  visit_date date primary key,
+  used       integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+-- Reservasi atomik dan anti-overbooking. Satu pemanggilan = satu transaksi:
+--   _quota NULL   -> selalu diterima, hitung digunakan
+--   _quota angka  -> ditolak bila used + qty > quota (update tak menyentuh baris)
+-- Pakai RPC dari server: supabase.rpc('reserve_daily_slot', {_date, _qty, _quota}).
+create or replace function reserve_daily_slot(_date date, _qty integer, _quota integer)
+returns table (used bigint)
+language sql
+as $$
+  insert into daily_slots (visit_date, used) values (_date, 0)
+  on conflict (visit_date) do nothing;
+  update daily_slots
+     set used = used + _qty, updated_at = now()
+   where visit_date = _date
+     and (_quota is null or used + _qty <= _quota)
+  returning used;
+$$;
+
+-- ---------- Log aktivitas (siapa verifikasi tiket apa & kapan) ----------
+create table if not exists activity_log (
+  id          uuid primary key default gen_random_uuid(),
+  actor_nik   text not null,
+  actor_name  text,
+  action      text not null,      -- MISAL 'VERIFY_OK','VERIFY_REUSE','VERIFY_EXPIRED','LOGIN','QUOTA_SET','PAYMENT'
+  booking_code text,
+  meta        jsonb,
+  created_at  timestamptz not null default now()
+);
+
+-- ---------- MIGRASI kolom baru tickets ----------
+alter table tickets add column if not exists customer_email text;
+alter table tickets add column if not exists paid_at       timestamptz;
+alter table tickets add column if not exists payment_method text;   -- 'midtrans' | null
+alter table tickets add column if not exists order_id       text;   -- order_id Midtrans utk pembayarannya
+
+-- Status baru: PENDING (belum bayar) dan CANCELED (gagal/batal). Ditambahkan
+-- dengan drop+add supaya aman dijalankan berulang (PG tidak punya alter).
+alter table tickets drop constraint if exists tickets_status_valid;
+alter table tickets add  constraint tickets_status_valid
+  check (status in ('PENDING','LUNAS','TERPAKAI','EXPIRED','CANCELED')) not valid;
+
+-- ---------- Foreign key & index ----------
+alter table payments drop constraint if exists payments_booking_fkey;
+alter table payments add  constraint payments_booking_fkey
+  foreign key (booking_code) references tickets (booking_code) on delete cascade;
+
+create index if not exists idx_tickets_order_id    on tickets (order_id);
+create index if not exists idx_payments_order      on payments (order_id);
+create index if not exists idx_payments_status     on payments (status);
+create index if not exists idx_activity_created    on activity_log (created_at desc);
+create index if not exists idx_activity_actor      on activity_log (actor_nik);
+
+-- ---------- Row Level Security ----------
+alter table payments      enable row level security;
+alter table daily_quotas  enable row level security;
+alter table daily_slots   enable row level security;
+alter table activity_log  enable row level security;
+
+-- Semua tabel tetap tanpa policy: server memakai SERVICE ROLE, dan
+-- RLS aktif tanpa policy berarti anon/authenticated tidak punya akses.
+
+
+-- =====================================================================
 -- CATATAN
 -- 1. Realtime tidak lagi dipakai. Dashboard ESS menarik data lewat
 --    GET /api/ess/tickets (butuh sesi karyawan) dan me-refresh berkala.
 -- 2. Anon key TIDAK lagi dipakai di mana pun. Server memakai
 --    SUPABASE_SERVICE_ROLE_KEY (lihat .env.example).
+-- 3. FASE 3:
+--    - Status tiket sekarang meliputi PENDING (belum bayar) dan CANCELED.
+--    - Kode unik tiket = booking_code (tersimpan, unik, menjadi isi QR).
+--    - Pembayaran nyata lewat Midtrans: /api/payments/notification.
+--    - Kuota harian: daily_quotas + daily_slots (reservasi atomik).
 -- =====================================================================

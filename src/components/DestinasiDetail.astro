@@ -1,0 +1,112 @@
+---
+import MapPin from '@lucide/astro/icons/map-pin';
+import Clock from '@lucide/astro/icons/clock';
+import Ticket from '@lucide/astro/icons/ticket';
+import ArrowLeft from '@lucide/astro/icons/arrow-left';
+import RatingBadge from './RatingBadge.astro';
+import BrandIcon from './BrandIcon.astro';
+import NimoImage from './NimoImage.astro';
+import { SITE } from '../lib/site.js';
+
+/* Server-rendered detail view for /destinasi/[slug]. The `.view` + data-view
+   contract lets the client Router keep navigating the whole app from here. */
+const { d, ratings = {} } = Astro.props;
+const rating = ratings[d.id] ?? null;
+const flagship = d.id === 'nimo-highland';
+---
+<div class="view active" data-view="item-detail">
+  <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <a href="/destinasi" data-route="destinations"
+         class="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-heading mb-8 transition-colors">
+        <ArrowLeft class="w-4 h-4" /> Semua destinasi
+      </a>
+      <div class="flex flex-wrap items-center gap-4">
+        <p class="eyebrow text-white/70 mb-0">
+          <span class="w-6 h-px bg-white/40"></span> {d.area}
+        </p>
+        {d.tag && <span class="bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">{d.tag}</span>}
+        <RatingBadge rating={rating} size="md" tone="light" />
+      </div>
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4">
+        {d.name}
+      </h1>
+      <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+        {d.desc}
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-canvas py-14 lg:py-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 grid lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 space-y-9">
+        <div>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-3">Sorotan</h2>
+          <div class="flex flex-wrap gap-2">
+            {d.highlights.map(h => (
+              <span class="text-xs bg-paper border border-line-soft text-muted px-3 py-1.5 rounded-full">{h}</span>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-4">Galeri</h2>
+          <div class="grid grid-cols-2 gap-3">
+            {d.gallery.map((src, i) => (
+              <div class="aspect-[4/3] rounded-xl overflow-hidden img-shell">
+                <NimoImage remote={src} alt={`${d.name} — galeri ${i + 1}`} fill
+                           sizes="(min-width:1024px) 40vw, 100vw" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {flagship && (
+          <div class="card p-6">
+            <h2 class="font-heading font-semibold text-ink text-lg mb-4">Jam Operasional</h2>
+            <ul class="text-sm divide-y divide-line-soft">
+              <li class="flex justify-between py-2.5">
+                <span class="text-muted">Senin – Jumat</span>
+                <span class="text-ink font-medium">08.00–17.00</span>
+              </li>
+              <li class="flex justify-between py-2.5">
+                <span class="text-muted">Sabtu &amp; Minggu</span>
+                <span class="text-ink font-medium">05.00–17.00</span>
+              </li>
+            </ul>
+            <p class="text-xs text-muted mt-3 flex items-center gap-1.5">
+              <Clock class="w-3.5 h-3.5" /> Akhir pekan buka lebih awal untuk mengejar sunrise.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <aside class="space-y-5 lg:sticky lg:top-28 lg:self-start">
+        <div class="relative aspect-[16/10] rounded-2xl overflow-hidden img-shell">
+          <NimoImage remote={d.img} alt={d.name} fill eager sizes="(min-width:1024px) 30vw, 100vw" />
+        </div>
+        <div class="card p-6">
+          <p class="font-heading font-semibold text-sm text-muted">Tiket Masuk</p>
+          <p class="font-heading font-bold text-ink text-2xl mt-1">{d.price}</p>
+          <div class="mt-5 flex flex-col gap-3">
+            {d.bookable ? (
+              <button type="button" data-open-booking="ticket" class="btn-accent w-full py-3.5">
+                <Ticket class="w-4 h-4" /> Beli Tiket {d.name}
+              </button>
+            ) : (
+              <a href="https://wa.me/6281111121162" target="_blank" rel="noopener" class="btn-accent w-full py-3.5">
+                <BrandIcon name="whatsapp" class="w-4 h-4" /> Tanya Ketersediaan
+              </a>
+            )}
+            <a href="/penginapan" data-route="hotels" class="btn-outline w-full py-3.5">Lihat Penginapan di Sini</a>
+          </div>
+          {flagship && (
+            <p class="text-xs text-muted mt-4 leading-relaxed">
+              <MapPin class="w-3.5 h-3.5 inline -mt-px" /> {SITE.addressHighland}
+            </p>
+          )}
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>

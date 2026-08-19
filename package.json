@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "prebuild": "node scripts/validate-pricing.mjs",
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",
     "test": "node --test src/lib/*.test.mjs",
     "icons": "node scripts/gen-icons.mjs",
+    "images:lista": "node scripts/images-seed.mjs",
+    "images:seed": "node scripts/images-seed.mjs --download",
     "seed:employees": "node --env-file=.env scripts/seed-employees.mjs"
   },
   "dependencies": {
@@ -22,6 +25,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "lighthouse": "^13.4.1",
     "tailwindcss": "^4.3.3"
   }
 }

@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const stats = [
+  { value: '2020', label: 'Berdiri' },
+  { value: '10+', label: 'Destinasi & kolaborasi' },
+  { value: '5', label: 'Hotel & resort' },
+  { value: '100%', label: 'Fokus dampak sosial & alam' },
+];
+---
+<Base
+  title="Tentang Kami — Nimo Land Group"
+  description="Tentang Nimo Land Group — perusahaan pariwisata yang berfokus pada dampak sosial, UMKM, dan energi terbarukan."
+>
+  <Navbar />
+  <main>
+    <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+        <p class="eyebrow text-white/70 mb-4">
+          <span class="w-6 h-px bg-white/40"></span> Perusahaan
+        </p>
+        <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl">
+          Nimo Land Group
+        </h1>
+        <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+          A Tourism Company That Focuses On Social Impact, MSME &amp; Renewable Energy.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface py-14 lg:py-20 border-y border-line-soft">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {
+          stats.map((s) => (
+            <div>
+              <p class="font-heading font-bold text-sage-deep text-3xl">{s.value}</p>
+              <p class="text-muted text-sm mt-1">{s.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-canvas py-14 lg:py-20">
+      <div class="max-w-3xl mx-auto px-5 sm:px-8 lg:px-10 space-y-9">
+        <div>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-2">Kisah Kami</h2>
+          <p class="text-muted text-sm leading-relaxed">
+            Nimo Land Group adalah perusahaan pariwisata yang didirikan pada tahun 2020. Kami membangun dan
+            mengelola destinasi wisata di Indonesia dengan satu prinsip: pariwisata harus memberi dampak
+            positif bagi alam, budaya, dan masyarakat sekitar.
+          </p>
+        </div>
+        <div>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-2">Fokus Kami</h2>
+          <ul class="space-y-2 text-muted text-sm leading-relaxed list-disc pl-5">
+            <li>Dampak Sosial — membuka lapangan kerja dan memberdayakan masyarakat lokal di sekitar destinasi.</li>
+            <li>UMKM — menghadirkan ruang bagi pelaku usaha kecil dan menengah untuk tumbuh bersama pariwisata.</li>
+            <li>Energi Terbarukan &amp; Alam — menjaga kelestarian alam dan mengusung konsep sadar lingkungan di setiap kawasan.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-2">Destinasi Utama</h2>
+          <p class="text-muted text-sm leading-relaxed">
+            Nimo Highland, di kawasan kebun teh Pegunungan Pangalengan, menjadi destinasi utama kami. Di dalamnya
+            terdapat Nimo Eye, Sky Bridge, dan beragam wahana seputar kebun teh. Kami juga menghadirkan beragam
+            destinasi lain dan pilihan penginapan — dari hotel, resort, hingga glamping — di berbagai wilayah
+            Indonesia, sebagai bagian dari keluarga besar Nimo Land Group.
+          </p>
+        </div>
+        <div>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-2">Hubungi Kami</h2>
+          <p class="text-muted text-sm leading-relaxed">
+            Kantor Bandung: Komplek Ruko Buahbatu Square Blk. A No.09, Cipagalo, Bojongsoang, Kabupaten Bandung 40267.<br />
+            Kantor Jakarta: Sequis Center Lt. 8 Kav 814, Jl. Jendral Sudirman No. 71, Senayan, Jakarta Selatan.<br />
+            Email: <a href="mailto:official@nimoenterprise.com" class="text-sage-deep font-medium hover:underline">official@nimoenterprise.com</a>
+          </p>
+        </div>
+        <div class="bg-warn-tint border-l-4 border-warn rounded-r-lg p-5 text-sm text-ink/80 leading-relaxed">
+          <strong class="font-heading">Draf internal.</strong> Nama badan hukum resmi, susunan direksi,
+          dan legalitas perusahaan (contoh: akta pendirian dan NIB) wajib dilengkapi sebelum halaman ini
+          dipublikasikan.
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <script src="../scripts/site.js"></script>
+</Base>

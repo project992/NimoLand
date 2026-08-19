@@ -9,8 +9,9 @@ const hours = [
   ['Sabtu', '05.00–17.00'],
   ['Minggu', '05.00–17.00'],
 ];
+const { class: cls = 'view' } = Astro.props;
 ---
-<div class="view" data-view="kontak">
+<div class={cls} data-view="kontak">
   <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
       <p class="eyebrow text-white/70 mb-4">
@@ -55,12 +56,12 @@ const hours = [
           </a>
           <div class="flex items-center gap-3 mt-6">
             <a href="https://www.instagram.com/nimohighland/" target="_blank" rel="noopener"
-               aria-label="Instagram Nimo Group"
+               aria-label="Instagram Nimo Land Group"
                class="w-9 h-9 rounded-full border border-line flex items-center justify-center text-muted hover:bg-sage hover:border-sage hover:text-white transition-colors">
               <BrandIcon name="instagram" class="w-4 h-4" />
             </a>
             <a href="https://www.tiktok.com/@nimohighland" target="_blank" rel="noopener"
-               aria-label="TikTok Nimo Group"
+               aria-label="TikTok Nimo Land Group"
                class="w-9 h-9 rounded-full border border-line flex items-center justify-center text-muted hover:bg-sage hover:border-sage hover:text-white transition-colors">
               <BrandIcon name="tiktok" class="w-4 h-4" />
             </a>
@@ -80,7 +81,7 @@ const hours = [
           <div class="mt-auto h-44">
             <iframe src="https://www.google.com/maps?q=-7.219462,107.57742&z=17&output=embed"
                     class="w-full h-full" style="border:0" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade" title="Peta Nimo Group"></iframe>
+                    referrerpolicy="no-referrer-when-downgrade" title="Peta Nimo Highland"></iframe>
           </div>
         </div>
       </div>

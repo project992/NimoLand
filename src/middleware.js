@@ -8,17 +8,31 @@
       handler so a new booking route can't be added without protection by
       forgetting a guard. */
 import { defineMiddleware } from 'astro:middleware';
-import { readSession, clearSessionCookie, SESSION_COOKIE } from './lib/session.js';
+import { readSession, clearSessionCookie, SESSION_COOKIE, createSession, setSessionCookie, ESS_SESSION_TTL } from './lib/session.js';
 import { safeNext } from './lib/redirect.js';
 
 /** Pages that require a signed-in customer. Prefix match. */
-const PROTECTED_PAGES = ['/booking', '/akun'];
+const PROTECTED_PAGES = ['/booking', '/akun', '/pesanan'];
 
 /** API routes that require a signed-in customer. Prefix match. */
-const PROTECTED_API = ['/api/bookings'];
+const PROTECTED_API = ['/api/bookings', '/api/my', '/api/payments/'];
+
+/** Pages that require a signed-in employee (Portal ESS terpisah). Prefix match.
+    Dikosongkan: /ess menyajikan form login sendiri, jadi tidak di-redirect. */
+const PROTECTED_EMPLOYEE_PAGES = [];
 
 /** API routes that require a signed-in employee. Prefix match. */
-const EMPLOYEE_API = ['/api/ess/tickets', '/api/ess/verify'];
+const EMPLOYEE_API = ['/api/ess/tickets', '/api/ess/verify', '/api/ess/videos'];
+
+/** API routes that require a SUPERVISOR (laporan + pengaturan kuota). */
+const SUPERVISOR_API = ['/api/ess/reports', '/api/ess/quota'];
+
+/** Role yang boleh variasi kuota & membaca laporan. */
+const SUPERVISOR_ROLES = ['Supervisor', 'Manager', 'Admin', 'Owner', 'Direktur'];
+
+/** Endpoint yang dieksklusi dari gate pelanggan (dipanggil pihak ketiga,
+    misalnya webhook Midtrans dengan signature sendiri). */
+const CUSTOMER_GATE_EXEMPT = ['/api/payments/notification'];
 
 const startsWithAny = (path, prefixes) => prefixes.some(p => path === p || path.startsWith(p + '/'));
 
@@ -51,8 +65,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return json({ error: 'Sesi karyawan diperlukan.' }, 401);
   }
 
+  // ---- Supervisor-only API (laporan & kuota) ----
+  if (startsWithAny(path, SUPERVISOR_API) && (!locals.isEmployee || !SUPERVISOR_ROLES.includes(locals.user.role))) {
+    return json({ error: 'Akses khusus supervisor.' }, 403);
+  }
+
   // ---- Customer-only API ----
-  if (startsWithAny(path, PROTECTED_API) && !locals.isCustomer) {
+  if (startsWithAny(path, PROTECTED_API) && !CUSTOMER_GATE_EXEMPT.includes(path) && !locals.isCustomer) {
     return json({ error: 'Silakan masuk terlebih dahulu.', loginUrl: '/login' }, 401);
   }
 
@@ -62,9 +81,27 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return context.redirect(`/login?next=${encodeURIComponent(next)}`, 302);
   }
 
+  // ---- Employee-only pages (Portal ESS terpisah) ----
+  if (startsWithAny(path, PROTECTED_EMPLOYEE_PAGES) && !locals.isEmployee) {
+    return context.redirect('/login', 302);
+  }
+
+  // ---- Auto-logout karyawan: sesi sliding 30 menit ----
+  // Setiap request dari karyawan yang valid memperbarui cookie sesi, sehingga
+  // 30 menit tanpa aktivitas apa pun membuat cookie kedaluwarsa dan ESS tak
+  // lagi bisa diakses.
+  if (locals.isEmployee && claims) {
+    setSessionCookie(context.cookies, createSession(locals.user, ESS_SESSION_TTL), ESS_SESSION_TTL);
+  }
+
   // ---- Already signed in? Don't show the login/register forms again ----
   if ((path === '/login' || path === '/register') && locals.isCustomer) {
     return context.redirect(safeNext(url.searchParams.get('next')), 302);
+  }
+
+  // ---- Legacy path routing: /beranda is the same page as / (canonical) ----
+  if (path === '/beranda') {
+    return context.redirect('/', 301);
   }
 
   const response = await next();

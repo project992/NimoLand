@@ -7,9 +7,10 @@
    If Supabase is unreachable or unconfigured, this returns {} and every rating
    badge simply doesn't render — a missing rating must never be faked, and a
    database blip must never take down the homepage. */
-import { supabase } from './supabase.js';
+import { supabase, withTimeout } from './supabase.js';
 
 const CACHE_MS = 5 * 60 * 1000;
+const DB_TIMEOUT_MS = 1500;
 let cache = { at: 0, data: null };
 
 /**
@@ -21,9 +22,20 @@ export async function getRatings() {
 
   if (!supabase) return {};
 
-  const { data, error } = await supabase
-    .from('destination_ratings')
-    .select('destination_id, rating, review_count, source');
+  let result;
+  try {
+    result = await withTimeout(
+      supabase.from('destination_ratings').select('destination_id, rating, review_count, source'),
+      DB_TIMEOUT_MS,
+    );
+  } catch (err) {
+    console.error('[ratings] load failed (timeout or network):', err.message);
+    // Negative cache: don't hammer an unreachable database on every pageview.
+    cache = { at: Date.now(), data: cache.data ?? {} };
+    return cache.data;
+  }
+
+  const { data, error } = result;
 
   if (error) {
     console.error('[ratings] load failed:', error.message);

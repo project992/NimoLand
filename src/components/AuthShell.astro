@@ -2,6 +2,7 @@
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
 import { IMG } from '../lib/data.js';
+import NimoImage from './NimoImage.astro';
 
 /* Shared frame for /login and /register. */
 const { title, subtitle } = Astro.props;
@@ -17,7 +18,7 @@ const { title, subtitle } = Astro.props;
 
       <div class="flex items-center gap-2 mb-8">
         <span class="font-heading font-bold text-ink text-xl tracking-wide">NIMO</span>
-        <span class="text-sage-deep text-xs font-medium uppercase tracking-widest border-l border-line pl-2.5">Highland</span>
+        <span class="text-sage-deep text-xs font-medium uppercase tracking-widest border-l border-line pl-2.5">Land Group</span>
       </div>
 
       <h1 class="font-heading font-bold text-ink text-3xl leading-tight">{title}</h1>
@@ -35,8 +36,9 @@ const { title, subtitle } = Astro.props;
 
   {/* Right: photo. Flat scrim, no gradient. */}
   <div class="hidden lg:block relative img-shell">
-    <img src={IMG.mist} alt="Kabut pagi di kebun teh Nimo Group" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="absolute inset-0 bg-bark/50"></div>
+    <NimoImage remote={IMG.mist} alt="Kabut pagi di kebun teh Nimo Highland" fill eager
+               sizes="50vw" class="absolute inset-0" />
+    <div class="absolute inset-0 bg-bark/55"></div>
     <div class="absolute bottom-12 left-12 right-12">
       <p class="font-heading text-white/70 text-xs tracking-[0.28em] uppercase mb-3">Pangalengan · Bandung</p>
       <p class="font-heading font-bold text-white text-3xl leading-tight max-w-sm">

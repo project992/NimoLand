@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { getRatings } from '../lib/ratings.js';
+import { breadcrumbs, organization } from '../lib/seo.js';
+
+const ratings = await getRatings();
+
+const jsonLd = [
+  organization(),
+  breadcrumbs([{ name: 'Beranda', path: '/' }, { name: 'Destinasi', path: '/destinasi' }]),
+];
+---
+<Base
+  title="Destinasi — Nimo Land Group"
+  description="Semua destinasi Nimo Land Group: kebun teh Nimo Highland, Nimo Eye, taman air, dan destinasi lain di seluruh Indonesia."
+  canonical="/destinasi"
+  jsonLd={jsonLd}
+>
+  <Shell active="destinations" ratings={ratings} />
+</Base>

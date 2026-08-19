@@ -1,8 +1,27 @@
 /* Content + pricing data, shared by the server and the client SPA.
 
-   Pricing lives here specifically so the booking endpoint can recompute totals
-   server-side. The browser's number is a display convenience; the server's is
-   the one that gets charged. */
+   ALL prices live in src/data/pricing.json (single source of truth),
+   imported below. Nothing is ever hard-coded here or in any component.
+   The booking endpoint recomputes totals server-side using the same data;
+   the browser's numbers are a display convenience, the server's are the
+   ones that get charged. */
+
+import pricing from '../data/pricing.json' with { type: 'json' };
+
+const PRICE = pricing.destinations;
+const HOTEL_RATES = pricing.hotel_rates;
+
+/** Master switch for the whole situs: while true, every "simulation / demo /
+ *  placeholder" notice is shown (payment not connected, tariff not final,
+ *  e-ticket simulated, badge name not filed). Flip to false on production. */
+export const IS_DEMO_MODE = true;
+
+/** Company details single source: the fill-in badges in the UI read from here
+ *  instead of hard-coded strings, so going live is a one-line edit. */
+export const COMPANY = {
+  legalName: '[ISI DI SINI — contoh: PT Nimo Land Nusantara (sesuai akta perusahaan)]',
+  email: 'official@nimoenterprise.com',
+};
 
 const G = 'https://lh3.googleusercontent.com/sitesv/';
 
@@ -50,6 +69,13 @@ export const FB = {
   villa:   U('1571003123894-1f0594d2b5d9'),
 };
 
+/* Reverse URL -> key so <NimoImage> can find the local copy of any image in
+   src/assets/nimo/ (see scripts/images-seed.mjs) by URL alone. FB keys are
+   prefixed "fb-" to stay unique against the Google IMG set. */
+export const IMG_KEYS = {};
+for (const [k, v] of Object.entries(IMG)) IMG_KEYS[v] = k;
+for (const [k, v] of Object.entries(FB)) IMG_KEYS[v] = 'fb-' + k;
+
 /* ---- Destinations ---- */
 export const DEST_FILTERS = [
   { id: 'semua',    label: 'Semua',              icon: 'sparkles' },
@@ -59,17 +85,17 @@ export const DEST_FILTERS = [
 ];
 
 export const DESTINATIONS = [
-  { id:'nimo-highland', name:'Nimo Group', type:'alam', area:'Pangalengan, Bandung',
+  { id:'nimo-highland', name:'Nimo Highland', type:'alam', area:'Pangalengan, Bandung',
     tag:'Unggulan', img:IMG.hero, fb:FB.tea,
     desc:'Kebun teh dengan Sky Bridge berbentuk U dan panorama 360°. Datang subuh untuk menyaksikan kabut yang perlahan larut oleh matahari terbit.',
     highlights:['Glass Sky Bridge','Sunrise Point','ATV & Flying Fox','Nimo Zoo'],
-    gallery:[IMG.hero, IMG.mist, IMG.light, IMG.epic], price:'Mulai Rp 40.000', bookable:true },
+    gallery:[IMG.hero, IMG.mist, IMG.light, IMG.epic], price:PRICE['nimo-highland'], bookable:true },
 
   { id:'nimo-eye', name:'Nimo Eye', type:'alam', area:'Pangalengan, Bandung',
     tag:'Rekor MURI', img:IMG.eye, fb:FB.peak,
     desc:'Bianglala tertinggi di Indonesia pada ketinggian sekitar 1.400 mdpl, dengan pemandangan kebun teh dari ketinggian ekstrem.',
     highlights:['Kabin Regular & VIP','Karaoke in the Sky','Dine in the Sky','360° view'],
-    gallery:[IMG.eye, IMG.eyeCabin], price:'Mulai Rp 55.000', bookable:true },
+    gallery:[IMG.eye, IMG.eyeCabin], price:PRICE['nimo-eye'], bookable:true },
 
   { id:'nimo-water-forest', name:'Nimo Water Forest', type:'air', area:'Jawa Barat',
     img:FB.water, fb:FB.water,
@@ -96,11 +122,11 @@ export const DESTINATIONS = [
     desc:'Destinasi di kawasan kaldera Danau Toba dengan panorama danau vulkanik terbesar di dunia.',
     highlights:['Pemandangan danau','Spot foto','Udara sejuk'], gallery:[FB.lake, FB.peak], price:'Info di lokasi' },
 
-  { id:'nimo-zoo', name:'Nimo Zoo', type:'keluarga', area:'Area Nimo Land',
+  { id:'nimo-zoo', name:'Nimo Zoo', type:'keluarga', area:'Area Nimo Highland',
     img:IMG.zoo, fb:FB.forest,
     desc:'Area edukasi satwa dengan interactive storytelling dan sesi feeding time yang aman untuk anak.',
     highlights:['Interactive storytelling','Feeding time','Edukasi satwa'],
-    gallery:[IMG.zoo, IMG.zooFun], price:'Mulai Rp 25.000' },
+    gallery:[IMG.zoo, IMG.zooFun], price:PRICE['nimo-zoo'] },
 
   { id:'punceling-park', name:'Punceling Park', type:'air', area:'Ciwidey, Bandung',
     img:FB.trail, fb:FB.trail,
@@ -109,64 +135,103 @@ export const DESTINATIONS = [
 
   { id:'nimo-ecomarine', name:'Nimo Ecomarine', type:'air', area:'Bali',
     img:FB.water, fb:FB.water,
-    desc:'Petualangan air terbaru di Bali sebagai bagian dari keluarga besar Nimo.',
-    highlights:['Wahana air','Area pantai','Baru dibuka'], gallery:[FB.water, FB.lake], price:'Info di lokasi' },
-
-  { id:'maros-highland', name:'Maros Highland', type:'alam', area:'Maros, Sulsel',
-    img:FB.valley, fb:FB.valley,
-    desc:'Perosotan pelangi terpanjang di Indonesia dengan latar sunset dan panorama kota Makassar.',
-    highlights:['Rainbow slide','Sunset point','Spot foto'], gallery:[FB.valley, FB.sunrise], price:'Info di lokasi' },
+    desc:'Petualangan air terbaru di Bali sebagai bagian dari keluarga besar Nimo Land Group.',
+    highlights:['Wahana air','Area pantai','Baru dibuka'], gallery:[FB.water, FB.lake], price:PRICE['nimo-ecomarine'] },
 ];
 
 /* ---- Accommodation ----
-   NOTE: nightly rates are not officially published. The figures below are
-   placeholders — confirm with the reservations team before going live. */
+   ROOM LISTS & DESCRIPTIONS follow the official site (nimoland.com).
+   NIGHTLY RATES are not officially published yet: existing placeholder figures
+   are kept in pricing.json (see IS_DEMO_MODE above) and marked for confirmation
+   with the reservations team; rooms without an official rate use null and show
+   "Hubungi reservasi". */
 export const HOTELS = [
   {
     id:'nimo-tea-resort', name:'Nimo Tea Resort', area:'Gunung Nini, Pangalengan',
-    desc:'Kamar berbalkon dengan pemandangan 360° kebun teh dan pegunungan. Titik terbaik untuk sunrise maupun sunset, tepat di dalam kawasan Nimo Group.',
-    facilities:['Restoran semi-outdoor','Balkon pribadi','Air panas','Wi-Fi','Parkir','Akses langsung Nimo Group'],
+    img:IMG.fac2, fb:FB.villa,
+    desc:'Kamar berbalkon dengan pemandangan 360° kebun teh dan pegunungan. Titik terbaik untuk sunrise maupun sunset, tepat di dalam kawasan Nimo Highland.',
+    facilities:['Restoran semi-outdoor','Balkon pribadi','Air panas','Wi-Fi','Parkir','Akses langsung Nimo Highland'],
     rooms:[
-      { id:'lavaza', type:'Villa', name:'Lavaza Room', cap:6, rate:2500000,
-        desc:'Villa 2 lantai berkonsep kayu futuristik dengan sentuhan mewah dan pemandangan kebun teh.',
+      { id:'lavaza', type:'Villa', name:'Lavaza Room', cap:6, rate:HOTEL_RATES['lavaza'],
+        desc:'Villa 2 lantai berkonsep kayu futuristik dengan sentuhan mewah, 65 m², dan pemandangan kebun teh.',
         img:IMG.fac2, fb:FB.villa },
-      { id:'arjuna', type:'Villa', name:'Arjuna Room', cap:6, rate:2250000,
-        desc:'Villa kayu 2 lantai dengan suasana hangat dan panorama pegunungan kebun teh.',
+      { id:'arjuna', type:'Villa', name:'Arjuna Room', cap:6, rate:HOTEL_RATES['arjuna'],
+        desc:'Villa kayu 2 lantai seluas 65 m² dengan suasana hangat dan panorama pegunungan kebun teh.',
         img:IMG.fac3, fb:FB.cabin },
-      { id:'tea-cabin', type:'Cabin', name:'Tea Cabin', cap:2, rate:1200000,
-        desc:'Cabin kompak untuk pasangan, berbalkon langsung menghadap perkebunan.',
-        img:IMG.fac4, fb:FB.cabin },
     ]
   },
   {
-    id:'nimoza-glamping', name:'Nimoza Glamping', area:'Kawasan Nimo Land',
-    desc:'Menginap di tenda mewah tanpa repot menyiapkan perlengkapan kemah. Cocok untuk yang ingin dekat dengan alam tapi tetap nyaman.',
+    id:'nimo-resort-ciater', name:'Nimo Resort Ciater', area:'Ciater, Subang',
+    img:IMG.fac1, fb:FB.villa,
+    desc:'Resort pertama di Ciater dengan konsep Nordic European yang elegan dan estetik, dilengkapi kolam renang air panas.',
+    facilities:['Kolam air panas','Restoran','Area bermain anak','Parkir luas','Wi-Fi'],
+    rooms:[
+      { id:'ciat-superior', type:'Room', name:'Superior Room', cap:2, rate:HOTEL_RATES['ciat-superior'],
+        desc:'Kamar 16 m² untuk 2 tamu.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-standard', type:'Room', name:'Standard Room', cap:2, rate:HOTEL_RATES['ciat-standard'],
+        desc:'Kamar 16 m² untuk 2 tamu.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-deluxe-pool', type:'Room', name:'Deluxe Room Pool View', cap:2, rate:HOTEL_RATES['ciat-deluxe-pool'],
+        desc:'Kamar 29 m² dengan pemandangan kolam.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-deluxe-triple', type:'Room', name:'Deluxe Triple Room', cap:3, rate:HOTEL_RATES['ciat-deluxe-triple'],
+        desc:'Kamar 32 m² untuk 3 tamu.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-deluxe-queen', type:'Room', name:'Deluxe Room Double Queen', cap:4, rate:HOTEL_RATES['ciat-deluxe-queen'],
+        desc:'Kamar 37 m² untuk 4 tamu dengan dua tempat tidur queen.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-exec-suite', type:'Suite', name:'Executive Suite 2 Bedroom', cap:4, rate:HOTEL_RATES['ciat-exec-suite'],
+        desc:'Suite 35 m² dengan 2 kamar tidur.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-family-3', type:'Room', name:'Family Room 3', cap:6, rate:HOTEL_RATES['ciat-family-3'],
+        desc:'Kamar keluarga 52 m² untuk 6 tamu.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-family-4', type:'Room', name:'Family Room 4', cap:8, rate:HOTEL_RATES['ciat-family-4'],
+        desc:'Kamar keluarga 80 m² untuk 8 tamu.', img:IMG.fac1, fb:FB.villa },
+      { id:'ciat-family-5', type:'Room', name:'Family Room 5', cap:10, rate:HOTEL_RATES['ciat-family-5'],
+        desc:'Kamar keluarga 90 m² untuk 10 tamu.', img:IMG.fac1, fb:FB.villa },
+    ]
+  },
+  {
+    id:'nimoza-glamping', name:'Glamping Nimoza', area:'Kawasan Nimo Highland, Pangalengan',
+    img:IMG.fac5, fb:FB.camp,
+    desc:'Glamping dalam area Nimo Tea Resort — menginap di tenda mewah tanpa repot menyiapkan perlengkapan kemah.',
     facilities:['Tenda ber-AC','Kamar mandi dalam','Api unggun','Sarapan','Wi-Fi area umum'],
     rooms:[
-      { id:'lux-camp', type:'Luxury Camp', name:'Luxury Camp Deluxe', cap:4, rate:1500000,
+      { id:'lux-camp', type:'Luxury Camp', name:'Luxury Camp Deluxe', cap:4, rate:HOTEL_RATES['lux-camp'],
         desc:'Tenda glamping ukuran besar dengan ranjang king dan teras pribadi menghadap bukit.',
         img:IMG.fac5, fb:FB.camp },
-      { id:'std-camp', type:'Luxury Camp', name:'Camp Standard', cap:2, rate:950000,
+      { id:'std-camp', type:'Luxury Camp', name:'Camp Standard', cap:2, rate:HOTEL_RATES['std-camp'],
         desc:'Tenda glamping untuk dua orang, lengkap dengan kamar mandi dalam.',
         img:IMG.fac6, fb:FB.camp },
     ]
   },
   {
-    id:'nimo-resort-ciater', name:'Nimo Resort Ciater', area:'Ciater, Subang',
-    desc:'Resort di kawasan Ciater yang dikenal dengan sumber air panas alaminya, dikelilingi kebun teh dan udara sejuk.',
-    facilities:['Kolam air panas','Restoran','Area bermain anak','Parkir luas','Wi-Fi'],
+    id:'new-dgyp-resort', name:'New Dgyp Resort Ciater', area:'Ciater, Subang',
+    img:IMG.fac6, fb:FB.cabin,
+    desc:'Resort di Ciater dengan konsep vila bambu yang memadukan keindahan alam dan kenyamanan desain modern woody, satu kawasan dengan Pinaru Park.',
+    facilities:['Area cottage rustic','Jakuzi','Aviary','Mini zoo','Water slide','ATV','Akses Pinaru Park'],
+    rooms:[]
+  },
+  {
+    id:'savia-hotel-resort', name:'Savia Hotel & Resort', area:'Ciater, Subang',
+    img:IMG.fac4, fb:FB.villa,
+    desc:'Hidden hillside resort di tengah sejuknya alam Ciater dengan perpaduan rustic villa, hotel building, dan modern cabin. Cocok untuk family getaway, honeymoon, hingga corporate gathering.',
+    facilities:['Area meeting','Outbound','Ruang terbuka luas','Restoran','Parkir'],
     rooms:[
-      { id:'ciater-villa', type:'Villa', name:'Ciater Family Villa', cap:8, rate:2800000,
-        desc:'Villa keluarga dengan beberapa kamar dan ruang berkumpul yang lapang.',
-        img:IMG.fac1, fb:FB.villa },
-      { id:'ciater-cabin', type:'Cabin', name:'Hot Spring Cabin', cap:3, rate:1100000,
-        desc:'Cabin dengan akses langsung ke area kolam air panas.',
-        img:IMG.act7, fb:FB.cabin },
+      { id:'savia-superior-room', type:'Room', name:'Superior Room', cap:2, rate:HOTEL_RATES['savia-superior-room'],
+        desc:'Kamar bergaya hotel seluas 24 m² untuk 2 tamu.', img:IMG.fac1, fb:FB.villa },
+      { id:'savia-superior-cabin', type:'Cabin', name:'Superior Cabin', cap:2, rate:HOTEL_RATES['savia-superior-cabin'],
+        desc:'Cabin modern 30 m² dengan kaca depan luas yang menyatu dengan alam.', img:IMG.fac4, fb:FB.cabin },
+      { id:'savia-deluxe-cottage', type:'Cottage', name:'Deluxe Cottage', cap:4, rate:HOTEL_RATES['savia-deluxe-cottage'],
+        desc:'Cottage rustic dengan desain mezzanine seluas 29 m² untuk 4 tamu.', img:IMG.act1, fb:FB.cabin },
+      { id:'savia-executive-cabin', type:'Cabin', name:'Executive Cabin', cap:4, rate:HOTEL_RATES['savia-executive-cabin'],
+        desc:'Cabin modern 46 m² untuk 4 tamu, dilengkapi bathtub.', img:IMG.fac6, fb:FB.cabin },
+      { id:'savia-suite-cabin', type:'Suite', name:'Suite Cabin', cap:4, rate:HOTEL_RATES['savia-suite-cabin'],
+        desc:'Cabin eksklusif 46 m² dengan 2 kamar tidur untuk 4 tamu.', img:IMG.fac2, fb:FB.cabin },
+      { id:'savia-grand-deluxe', type:'Suite', name:'Grand Deluxe', cap:5, rate:HOTEL_RATES['savia-grand-deluxe'],
+        desc:'Kamar berdesain mezzanine seluas 55 m² hingga 5 tamu.', img:IMG.fac3, fb:FB.villa },
+      { id:'savia-junior-suite', type:'Suite', name:'Junior Suite', cap:4, rate:HOTEL_RATES['savia-junior-suite'],
+        desc:'Kamar keluarga seluas 42 m² untuk 4 tamu.', img:IMG.fac5, fb:FB.villa },
     ]
   },
 ];
 
-export const ROOM_TYPES = ['Semua', 'Villa', 'Cabin', 'Luxury Camp'];
+export const ROOM_TYPES = ['Semua', 'Villa', 'Room', 'Cabin', 'Cottage', 'Suite', 'Luxury Camp'];
 
 /** Flat list of every room with its parent hotel folded in. */
 export function allRooms() {
@@ -205,9 +270,9 @@ export const WAHANA = [
 ];
 
 export const HERO_SLIDES = [
-  { img:IMG.hero,    fb:FB.tea,     alt:'Panorama kebun teh Nimo Group' },
+  { img:IMG.hero,    fb:FB.tea,     alt:'Panorama kebun teh Nimo Highland' },
   { img:IMG.mist,    fb:FB.mist,    alt:'Kabut pagi menyelimuti kebun teh' },
-  { img:IMG.light,   fb:FB.sunrise, alt:'Golden hour di puncak Nimo Group' },
+  { img:IMG.light,   fb:FB.sunrise, alt:'Golden hour di puncak Nimo Highland' },
   { img:IMG.sunrise, fb:FB.peak,    alt:'Sunrise di atas hamparan kebun teh' },
 ];
 
@@ -228,23 +293,14 @@ export const GALLERY = [
   { title:'Nimo Zoo',           img:IMG.zooFun,   fb:FB.forest },
 ];
 
-/* ---- Ticket pricing (source: official site) ----
-   Each price is [weekday, weekend]. */
-export const PACKAGES = [
-  { id:'regular', name:'Tiket Masuk Regular',
-    desc:'Akses area kebun teh, Sky Bridge, dan spot foto.',
-    price:{ domestik:{ adult:[40000,45000], child:[45000,35000] },
-            manca:   { adult:[80000,90000], child:[60000,70000] } } },
-  { id:'combo', name:'Tiket Premium / Wahana Combo',
-    desc:'Tiket masuk + akses wahana pilihan (ATV, Flying Fox, Paintball).',
-    // Combo rates are not officially published — placeholder.
-    price:{ domestik:{ adult:[95000,110000], child:[75000,85000] },
-            manca:   { adult:[190000,220000], child:[140000,160000] } } },
-  { id:'eye', name:'Tiket Nimo Eye (Bianglala)',
-    desc:'Kabin regular 4 pax, 1 putaran ± 10 menit.',
-    price:{ domestik:{ adult:[55000,60000], child:[55000,60000] },
-            manca:   { adult:[55000,60000], child:[55000,60000] } } },
-];
+/* ---- Ticket pricing ----
+   Read from src/data/pricing.json (single source of truth).
+   The old "combo" package was removed: it is not listed on the official
+   site. Each price value is [weekday, weekend]. */
+export const PACKAGES = pricing.packs;
+
+/* Nimo Eye display tariffs, taken from the official site (pricing.json). */
+export const EYE_TARIFFS = pricing.eye_tariffs;
 
 export const FAQ_DATA = [
   { q:'Apakah saya bisa membeli tiket untuk hari ini juga?',
@@ -254,12 +310,12 @@ export const FAQ_DATA = [
   { q:'Berapa lama tiket berlaku setelah dibeli?',
     a:'Tiket berlaku maksimal 3 hari sejak tanggal kedatangan yang dipilih. Contoh: memilih kedatangan tanggal 11, maka tiket masih bisa dipakai sampai tanggal 14.' },
   { q:'Apa saja pilihan paket tiketnya?',
-    a:'Ada tiga: Tiket Masuk Regular, Tiket Premium/Wahana Combo, dan Tiket Nimo Eye untuk naik bianglala tertinggi di Indonesia.' },
+    a:'Ada dua: Tiket Masuk Regular untuk akses kebun teh, Sky Bridge, dan spot foto; serta Tiket Nimo Eye untuk naik bianglala tertinggi di Indonesia.' },
   { q:'Bagaimana cara memesan kamar untuk menginap?',
     a:'Buka menu Hotels, pilih tipe kamar yang diinginkan, lalu klik "Booking Kamar". Form pemesanan kamar akan terbuka langsung di halaman ini dengan pilihan tanggal check-in, check-out, dan jumlah tamu.' },
   { q:'Bagaimana harga weekday dan weekend dihitung?',
     a:'Sabtu dan Minggu dihitung sebagai weekend, hari lainnya weekday. Kalkulator pada form pemesanan menyesuaikan tarif otomatis begitu tanggal kedatangan dipilih.' },
-  { q:'Jam berapa Nimo Group buka?',
+  { q:'Jam berapa Nimo Highland buka?',
     a:'Senin sampai Jumat buka 08.00–17.00. Sabtu dan Minggu buka lebih awal, mulai 05.00–17.00, supaya pengunjung bisa mengejar sunrise di puncak.' },
 ];
 

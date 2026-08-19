@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { breadcrumbs, organization } from '../lib/seo.js';
+
+const jsonLd = [
+  organization(),
+  breadcrumbs([{ name: 'Beranda', path: '/' }, { name: 'Galeri', path: '/galeri' }]),
+];
+---
+<Base
+  title="Galeri Momen Nimo Highland — Nimo Land Group"
+  description="Galeri foto kebun teh Nimo Highland: kabut pagi, sunrise, Sky Bridge, Nimo Eye, dan momen-momen di kawasan Nimo Land Group."
+  canonical="/galeri"
+  jsonLd={jsonLd}
+>
+  <Shell active="galeri" />
+</Base>

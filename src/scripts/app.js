@@ -1,10 +1,10 @@
 /* =====================================================================
-   Nimo Group — client SPA
+   Nimo Land Group — client SPA
 
    00. State      — session + data injected by the server
    01. Utilities  — image fallback, dates, toast, reveal
    02. Auth       — session state, logout, the booking auth gate
-   03. Router     — hash routing (#/beranda …)
+   03. Router     — path routing (/destinasi, /penginapan/…)
    04. Navbar     — scroll state + mobile menu
    05. Hero / MomentSlider
    06. Wahana / Destinations / Hotels / Gallery / FAQ
@@ -34,6 +34,7 @@ const readJsonScript = id => {
 const State = {
   user: readJsonScript('session-data'),
   ratings: readJsonScript('ratings-data') ?? {},
+  videos: readJsonScript('videos-data') ?? {},
 };
 
 const isCustomer = () => State.user?.kind === 'customer';
@@ -48,11 +49,19 @@ const esc = value =>
 /* ------------------------------------------------------------------
    01. UTILITIES
 ------------------------------------------------------------------ */
+/** Smaller-and-compressed copy of an Unsplash URL for card-sized renderings.
+    Leaves third-party/S3 URLs untouched. */
+function scaled(url, w = 500, q = 75) {
+  return String(url).includes('images.unsplash.com')
+    ? String(url).replace(/w=\d+/, `w=${w}`).replace(/q=\d+/, `q=${q}`)
+    : url;
+}
+
 const ImageFallback = {
   bind(img) {
     img.addEventListener('error', () => {
       const fb = img.dataset.fallback;
-      if (fb && img.src !== fb) img.src = fb;
+      if (fb && img.src !== fb) img.src = scaled(fb);
       else img.style.visibility = 'hidden';
     });
   },
@@ -118,6 +127,18 @@ async function api(url, options = {}) {
   let data = null;
   try { data = await res.json(); } catch { /* empty or non-JSON body */ }
   return { ok: res.ok, status: res.status, data };
+}
+
+/** Cover media for a destination: pull the employee-set video when present,
+    otherwise fall back to the static image (with its Unsplash fallback). */
+function coverMedia(d, className) {
+  const src = State.videos[d.id];
+  if (src) {
+    return `<video class="${className}" src="${esc(src)}" muted playsinline loop autoplay
+                   preload="metadata" aria-label="Video ${esc(d.name)}"></video>`;
+  }
+  return `<img src="${d.img}" data-fallback="${d.fb}" alt="${esc(d.name)}"
+               class="${className}" ${className.includes('w-full') ? 'loading="lazy"' : ''}>`;
 }
 
 /** Star row for rating badges built in template strings. */
@@ -220,8 +241,24 @@ const Auth = {
 };
 
 /* ------------------------------------------------------------------
-   03. ROUTER
+   03. ROUTER — path routing. Real URLs (/destinasi, /penginapan/…),
+   SPA-fast switching via history.pushState, and legacy #/… links are
+   migrated to their real paths on first load.
 ------------------------------------------------------------------ */
+const ROUTE_PATHS = { beranda: '/', destinations: '/destinasi', hotels: '/penginapan', galeri: '/galeri', kontak: '/kontak' };
+const LEGACY_HASHES = { beranda: '/', destinations: '/destinasi', hotels: '/penginapan', galeri: '/galeri', kontak: '/kontak' };
+const DETAIL_RE = /^\/(destinasi|penginapan)\//;
+
+/* Display titles for SPA navigation (server-rendered head already has the
+   right one on first paint; this keeps it correct after pushState). */
+const TITLES = {
+  beranda: 'Nimo Land Group — Embrace the Serene Breeze',
+  destinations: 'Destinasi — Nimo Land Group',
+  hotels: 'Hotels & Penginapan — Nimo Land Group',
+  galeri: 'Galeri — Nimo Land Group',
+  kontak: 'Kontak — Nimo Land Group',
+};
+
 const Router = {
   routes: ['beranda', 'destinations', 'hotels', 'galeri', 'kontak'],
 
@@ -232,29 +269,52 @@ const Router = {
       e.preventDefault();
       this.go(el.dataset.route, el.dataset.scroll);
     });
-    window.addEventListener('hashchange', () => this.render());
+    window.addEventListener('popstate', () => this.render());
+
+    // Old bookmarks / shared links still point at #/beranda, #/hotels, …
+    this.migrateLegacyHash();
     this.render();
+  },
+
+  migrateLegacyHash() {
+    const m = /^#\/(beranda|destinations|hotels|galeri|kontak)(\?.*)?$/.exec(location.hash);
+    if (!m) return;
+    history.replaceState(null, '', LEGACY_HASHES[m[1]]);
   },
 
   go(route, scrollTo) {
     const target = this.routes.includes(route) ? route : 'beranda';
     this.pendingScroll = scrollTo || null;
-    const hash = '#/' + target;
-    if (location.hash === hash) this.render();
-    else location.hash = hash;
+    const path = ROUTE_PATHS[target];
+    if (location.pathname === path) this.render();
+    else {
+      history.pushState({}, '', path);
+      this.render();
+    }
+  },
+
+  routeFor(path) {
+    if (DETAIL_RE.test(path)) {
+      return { route: path.startsWith('/penginapan') ? 'hotels' : 'destinations', detail: true };
+    }
+    const hit = Object.entries(ROUTE_PATHS).find(([, p]) => p === path);
+    return { route: hit ? hit[0] : 'beranda', detail: false };
   },
 
   render() {
-    const name = (location.hash.replace('#/', '') || 'beranda').split('?')[0];
-    const route = this.routes.includes(name) ? name : 'beranda';
+    const { route, detail } = this.routeFor(location.pathname);
     this.current = route;
 
-    document.querySelectorAll('.view').forEach(v =>
-      v.classList.toggle('active', v.dataset.view === route));
+    document.querySelectorAll('.view').forEach(v => {
+      const active = detail ? v.dataset.view === 'item-detail' : v.dataset.view === route;
+      v.classList.toggle('active', active);
+    });
 
     document.getElementById('navbar').classList.toggle('solid', route !== 'beranda');
     document.querySelectorAll('.nav-link[data-route]').forEach(a =>
       a.classList.toggle('active', a.dataset.route === route));
+
+    if (!detail) document.title = TITLES[route] ?? TITLES.beranda;
 
     const scrollTo = this.pendingScroll;
     this.pendingScroll = null;
@@ -304,14 +364,6 @@ const Navbar = {
 
     menu.addEventListener('click', e => {
       if (e.target.closest('[data-route], [data-open-booking], [data-open-ess], [data-logout]')) close();
-    });
-
-    // Dropdown items deep-link into a destination or hotel.
-    document.addEventListener('click', e => {
-      const d = e.target.closest('[data-dest]');
-      if (d) setTimeout(() => Destinations.openDetail(d.dataset.dest), 120);
-      const h = e.target.closest('[data-hotel]');
-      if (h) setTimeout(() => Hotels.focusHotel(h.dataset.hotel), 200);
     });
   },
 };
@@ -454,19 +506,40 @@ const Destinations = {
 
   init() {
     const filtersWrap = document.getElementById('destFilters');
-    const grid = document.getElementById('destGrid');
 
     filtersWrap.innerHTML = DEST_FILTERS.map(f => `
       <button type="button" data-dfilter="${f.id}" aria-pressed="false" class="pill inline-flex items-center gap-2">
         ${icon(f.icon, 'w-4 h-4')}${esc(f.label)}
       </button>`).join('');
 
+    this.renderGrid();
+
+    filtersWrap.querySelectorAll('[data-dfilter]').forEach(t =>
+      t.addEventListener('click', () => { this.filter = t.dataset.dfilter; this.apply(); }));
+
+    document.getElementById('destSearch').addEventListener('input', e => {
+      this.query = e.target.value.trim().toLowerCase();
+      this.apply();
+    });
+
+    const modal = document.getElementById('destModal');
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.closest('[data-close-dest]')) this.closeDetail();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) this.closeDetail();
+    });
+
+    this.apply();
+  },
+
+  renderGrid() {
+    const grid = document.getElementById('destGrid');
     grid.innerHTML = DESTINATIONS.map(d => `
       <article class="dest-card group card card-hover overflow-hidden flex flex-col"
                data-type="${d.type}" data-name="${esc(d.name.toLowerCase())}" data-area="${esc(d.area.toLowerCase())}">
         <div class="relative aspect-[16/10] img-shell overflow-hidden">
-          <img src="${d.img}" data-fallback="${d.fb}" alt="${esc(d.name)}" loading="lazy"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          ${coverMedia(d, 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-500')}
           ${d.tag ? `<span class="absolute top-3 left-3 bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">${esc(d.tag)}</span>` : ''}
         </div>
         <div class="p-5 flex flex-col flex-1">
@@ -488,27 +561,13 @@ const Destinations = {
         </div>
       </article>`).join('');
     ImageFallback.bindAll(grid);
-
-    filtersWrap.querySelectorAll('[data-dfilter]').forEach(t =>
-      t.addEventListener('click', () => { this.filter = t.dataset.dfilter; this.apply(); }));
-
-    document.getElementById('destSearch').addEventListener('input', e => {
-      this.query = e.target.value.trim().toLowerCase();
-      this.apply();
-    });
-
     grid.querySelectorAll('[data-dest-detail]').forEach(b =>
       b.addEventListener('click', () => this.openDetail(b.dataset.destDetail)));
-
-    const modal = document.getElementById('destModal');
-    modal.addEventListener('click', e => {
-      if (e.target === modal || e.target.closest('[data-close-dest]')) this.closeDetail();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !modal.classList.contains('hidden')) this.closeDetail();
-    });
-
     this.apply();
+  },
+
+  refresh() {
+    this.renderGrid();
   },
 
   apply() {
@@ -537,7 +596,7 @@ const Destinations = {
 
     body.innerHTML = `
       <div class="relative aspect-[16/9] img-shell">
-        <img src="${d.img}" data-fallback="${d.fb}" alt="${esc(d.name)}" class="w-full h-full object-cover">
+        ${coverMedia(d, 'w-full h-full object-cover')}
         <div class="absolute inset-0 bg-bark/45"></div>
         <button type="button" data-close-dest aria-label="Tutup"
                 class="absolute top-4 right-4 w-9 h-9 rounded-full bg-bark/50 hover:bg-bark/70 flex items-center justify-center text-white">
@@ -627,7 +686,7 @@ const Hotels = {
 
   renderRooms() {
     const grid = document.getElementById('roomGrid');
-    grid.innerHTML = allRooms().map(r => `
+    const roomCards = allRooms().map(r => `
       <article class="room-card card card-hover overflow-hidden flex flex-col"
                data-type="${esc(r.type)}" data-hotel="${r.hotelId}">
         <div class="aspect-[16/10] img-shell overflow-hidden">
@@ -655,16 +714,44 @@ const Hotels = {
 
           <div class="mt-auto pt-5 flex items-end justify-between gap-3">
             <div>
-              <p class="font-heading font-bold text-ink text-lg">${rupiah(r.rate)}</p>
-              <p class="text-xs text-muted">per kamar / malam</p>
+              ${r.rate
+                ? `<p class="font-heading font-bold text-ink text-lg">${rupiah(r.rate)}</p>
+                   <p class="text-xs text-muted">per kamar / malam</p>`
+                : `<p class="font-heading font-bold text-ink text-base">Hubungi reservasi</p>
+                   <p class="text-xs text-muted">tarif belum dipublikasikan</p>`}
             </div>
-            <button type="button" data-book-room="${r.id}"
-                    class="bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">
-              Booking Kamar
-            </button>
+            ${r.rate
+              ? `<button type="button" data-book-room="${r.id}"
+                         class="bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">Booking Kamar</button>`
+              : `<a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
+                    class="inline-flex items-center gap-2 border border-line text-sage-deep font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">Hubungi WhatsApp</a>`}
           </div>
         </div>
       </article>`).join('');
+
+    const hotelCards = HOTELS.filter(h => !h.rooms.length).map(h => `
+      <article class="room-card card card-hover overflow-hidden flex flex-col"
+               data-type="Semua" data-hotel="${h.id}">
+        <div class="aspect-[16/10] img-shell overflow-hidden">
+          <img src="${h.img}" data-fallback="${h.fb}" alt="${esc(h.name)}" loading="lazy"
+               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <p class="font-heading font-bold text-ink text-base">${esc(h.name)}</p>
+          <p class="text-xs text-muted mt-0.5">${esc(h.area)}</p>
+          <p class="text-sm text-muted leading-relaxed mt-3">${esc(h.desc)}</p>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            ${h.facilities.slice(0, 3).map(f =>
+              `<span class="text-[11px] bg-paper border border-line-soft text-muted px-2.5 py-1 rounded-full">${esc(f)}</span>`).join('')}
+          </div>
+          <div class="mt-auto pt-5">
+            <a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">Hubungi Tim Reservasi</a>
+          </div>
+        </div>
+      </article>`).join('');
+
+    grid.innerHTML = roomCards + hotelCards;
 
     ImageFallback.bindAll(grid);
     grid.querySelectorAll('[data-book-room]').forEach(b =>
@@ -682,7 +769,7 @@ const Hotels = {
       c.classList.toggle('hidden', !show);
       if (show) visible++;
     });
-    document.getElementById('roomCount').textContent = `Menampilkan ${visible} dari ${cards.length} pilihan kamar`;
+    document.getElementById('roomCount').textContent = `Menampilkan ${visible} dari ${cards.length} pilihan`;
   },
 
   focusHotel(hotelId) {
@@ -1049,10 +1136,89 @@ const Booking = {
       return;
     }
 
+    // FASE 3: dengan gateway pembayaran, tiket dibuat PENDING dan user
+    // membayar lewat Snap sebelum e-tiket (LUNAS) muncul.
+    if (data.payment?.midtrans) {
+      const paid = await this.payViaSnap(data.payment);
+      if (paid) {
+        const fresh = await this.fetchTicketByOrder(data.payment.order_id);
+        this.renderEticket(fresh ?? data.booking);
+        loading.classList.add('hidden');
+        body.classList.remove('hidden');
+        Toast.show('Pembayaran berhasil — tiket digital diterbitkan');
+        return;
+      }
+      // Belum/ gagal bayar: kembali ke form, beri tahu status.
+      modal.classList.add('hidden');
+      lockScroll(false);
+      this.open('ticket', { skipGate: true });
+      errEl.textContent = 'Pembayaran belum selesai. Anda dapat mencoba lagi; pesanan yang belum dibayar akan dibatalkan otomatis.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
     this.renderEticket(data.booking);
     loading.classList.add('hidden');
     body.classList.remove('hidden');
     Toast.show('Pembayaran berhasil — tiket digital diterbitkan');
+  },
+
+  /* ============ SNAP (MIDTRANS) ============ */
+  _snapReady: null,
+
+  async ensureSnap(base, clientKey) {
+    if (window.snap) return;
+    if (this._snapReady) return this._snapReady;
+    this._snapReady = new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = `${base}/snap/snap.js?client_key=${encodeURIComponent(clientKey)}`;
+      s.async = true;
+      s.onload = res;
+      s.onerror = () => { this._snapReady = null; rej(new Error('snap load failed')); };
+      document.head.appendChild(s);
+    });
+    return this._snapReady;
+  },
+
+  /** Buka Snap, lalu tunggu sampai webhook melunasi tiketnya. */
+  async payViaSnap(p) {
+    try {
+      await this.ensureSnap(p.snap_base, p.client_key);
+    } catch (err) {
+      console.error('[pay] snap load failed:', err);
+      return false;
+    }
+    return new Promise(resolve => {
+      let settled = false;
+      const done = v => { if (!settled) { settled = true; resolve(v); } };
+      window.snap.pay(p.token, {
+        onSuccess: () => done(this.waitTicketPaid(p.order_id)),
+        onPending: () => done(this.waitTicketPaid(p.order_id)),
+        onError: () => done(this.waitTicketPaid(p.order_id, 8)),
+        onClose: () => done(this.waitTicketPaid(p.order_id, 8)),
+      });
+      // Pengaman: kalau callback Snap tak pernah datang, putuskan setelah 90 dtk.
+      setTimeout(() => done(this.waitTicketPaid(p.order_id, 6)), 90_000);
+    });
+  },
+
+  async fetchTicketByOrder(orderId) {
+    const { ok, data } = await api(`/api/payments/${encodeURIComponent(orderId)}/status`);
+    return ok ? data.ticket : null;
+  },
+
+  /** Polling status pembayaran sampai lunas / batal / habis percobaan. */
+  waitTicketPaid(orderId, tries = 30, delay = 2000) {
+    return new Promise(resolve => {
+      const poll = async (n) => {
+        const { ok, data } = await api(`/api/payments/${encodeURIComponent(orderId)}/status`);
+        if (ok && data.ticket?.status === 'LUNAS') return resolve(true);
+        if (ok && ['CANCELED', 'EXPIRED', 'FAILED'].includes(data.payment?.status)) return resolve(false);
+        if (n <= 0) return resolve(false);
+        setTimeout(() => poll(n - 1), delay);
+      };
+      poll(tries);
+    });
   },
 
   renderEticket(b) {
@@ -1114,7 +1280,7 @@ const Booking = {
   shareWhatsApp() {
     const get = id => document.getElementById(id).textContent;
     const lines = [
-      'Halo Nimo Group! Berikut tiket digital saya:',
+      'Halo Nimo Land Group! Berikut tiket digital saya:',
       '',
       `*Kode Booking:* ${get('ticketCode')}`,
       `*Nama:* ${get('ticketName')}`,
@@ -1173,6 +1339,31 @@ const Booking = {
     const stayError = document.getElementById('stayError');
     const capWarn = document.getElementById('capacityWarn');
     const capSpacer = document.getElementById('capacitySpacer');
+
+    if (!room.rate) {
+      document.getElementById('roomMeta').textContent =
+        `${room.hotelName} · ${room.area} · kapasitas ${room.cap} orang · tarif belum dipublikasikan`;
+      document.getElementById('roomRateLabel').textContent = 'Hubungi tim reservasi untuk tarif kamar';
+      document.getElementById('guestCapLabel').textContent = `Kapasitas total ${room.cap * s.rooms} orang`;
+      document.getElementById('roomsCount').textContent = s.rooms;
+      document.getElementById('guestsCount').textContent = s.guests;
+      document.querySelectorAll('[data-rstep]').forEach(btn => { btn.disabled = true; });
+      capWarn.classList.add('hidden');
+      capSpacer.classList.remove('hidden');
+      stayError.textContent = 'Tarif kamar ini belum dipublikasikan. Hubungi tim reservasi untuk pemesanan.';
+      stayError.classList.remove('hidden');
+      document.getElementById('rsumHotel').textContent = room.hotelName;
+      document.getElementById('rsumRoom').textContent = `${room.name} · ${room.type}`;
+      document.getElementById('rsumIn').textContent = 'Tidak tersedia';
+      document.getElementById('rsumOut').textContent = 'Tidak tersedia';
+      document.getElementById('rsumNights').textContent = '—';
+      document.getElementById('rsumGuests').textContent = '—';
+      document.getElementById('rsumCalc').textContent = '—';
+      document.getElementById('rsumTotal').textContent = 'Rp 0';
+      document.getElementById('roomPayButton').disabled = true;
+      this._room = { valid: false };
+      return;
+    }
 
     document.getElementById('roomMeta').textContent =
       `${room.hotelName} · ${room.area} · kapasitas ${room.cap} orang · ${rupiah(room.rate)} per malam`;
@@ -1304,32 +1495,46 @@ const ESS = {
   pollTimer: null,
 
   init() {
+    const standalone = !!document.getElementById('essStandalone');
+
     document.querySelectorAll('[data-open-ess]').forEach(b =>
       b.addEventListener('click', () => this.openLogin()));
-    document.querySelectorAll('[data-close-ess]').forEach(b =>
-      b.addEventListener('click', () => this.closeLogin()));
+    document.querySelectorAll('[data-close-ess]').forEach(b => {
+      if (standalone) b.classList.add('hidden');   // tidak ada tombol batal di halaman /ess
+      else b.addEventListener('click', () => this.closeLogin());
+    });
 
     document.getElementById('essLoginForm').addEventListener('submit', e => {
       e.preventDefault();
       this.doLogin();
     });
     document.getElementById('essLoginModal').addEventListener('click', e => {
-      if (e.target === e.currentTarget) this.closeLogin();
+      if (e.target === e.currentTarget && !standalone) this.closeLogin();
     });
     document.getElementById('essSearch').addEventListener('input', () => this.renderTickets());
     document.getElementById('essFilter').addEventListener('change', () => this.renderTickets());
     document.getElementById('essLogoutBtn').addEventListener('click', () => this.logout());
     document.getElementById('essVerifyCancel').addEventListener('click', () => this.closeVerify());
     document.getElementById('essVerifyConfirm').addEventListener('click', () => this.confirmVerify());
+
+    document.getElementById('essVideoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      this.saveVideo();
+    });
+    document.getElementById('essVideoClear').addEventListener('click', () => this.clearVideo());
+    document.getElementById('essVideoDest').addEventListener('change', () => this.previewVideo());
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { this.closeLogin(); this.closeVerify(); }
     });
 
     // The server already rendered the dashboard visible for a signed-in
-    // employee; just start pulling data.
+    // employee; just start pulling data. Di /ess, tampilkan login bila belum
+    // ada sesi karyawan.
     if (State.user?.kind === 'employee') {
       this.user = State.user;
       this.startPolling();
+    } else if (standalone) {
+      this.openLogin();
     }
   },
 
@@ -1523,6 +1728,67 @@ const ESS = {
     this.closeVerify();
     await this.loadTickets();
     Toast.show(`Tiket ${t.booking_code} ditandai TERPAKAI`);
+  },
+
+  /* Video editor: prefill, save, clear. */
+  videoEls() {
+    return {
+      dest: document.getElementById('essVideoDest'),
+      url: document.getElementById('essVideoUrl'),
+      note: document.getElementById('essVideoNote'),
+      err: document.getElementById('essVideoError'),
+    };
+  },
+  previewVideo() {
+    const { dest, url, note, err } = this.videoEls();
+    err.classList.add('hidden');
+    const current = State.videos[dest.value];
+    url.value = current ?? '';
+    note.textContent = current
+      ? 'Saat ini ditampilkan video ini. Ubah URL lalu Simpan untuk menggantinya.'
+      : 'Belum ada video untuk destinasi ini — kartu masih memakai foto.';
+  },
+  async saveVideo() {
+    const { dest, url, note, err } = this.videoEls();
+    err.classList.add('hidden');
+    const destination_id = dest.value;
+    if (!destination_id) {
+      err.textContent = 'Pilih destinasi terlebih dahulu.';
+      err.classList.remove('hidden');
+      return;
+    }
+    const video_url = url.value.trim();
+    if (video_url && !/^https?:\/\/.+/i.test(video_url)) {
+      err.textContent = 'URL video harus dimulai dengan http:// atau https://.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    const { ok, status, data } = await api('/api/ess/videos', {
+      method: 'POST',
+      body: JSON.stringify({ destination_id, video_url }),
+    });
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      err.textContent = data?.error ?? 'Gagal menyimpan video.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    if (video_url) State.videos[destination_id] = video_url;
+    else delete State.videos[destination_id];
+    note.textContent = video_url
+      ? `Tersimpan. Video destinasi ini sekarang tampil untuk semua pengunjung.`
+      : `Dihapus. Destinasi ini kembali memakai foto.`;
+    Toast.show(video_url ? 'Video tersimpan' : 'Video dihapus');
+    Destinations.refresh();
+  },
+
+  async clearVideo() {
+    const { dest, url, note, err } = this.videoEls();
+    if (!dest.value) return;
+    url.value = '';
+    this.saveVideo();
   },
 
   async logout() {

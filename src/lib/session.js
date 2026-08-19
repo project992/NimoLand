@@ -11,6 +11,7 @@ import { createHmac, timingSafeEqual, randomUUID } from 'node:crypto';
 
 export const SESSION_COOKIE = 'nimo_session';
 export const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+export const ESS_SESSION_TTL = 30 * 60;             // karyawan: auto-logout 30 menit tanpa aktivitas
 
 function secret() {
   // Optional chaining because import.meta.env only exists under Vite/Astro —
@@ -33,7 +34,7 @@ const sign = payload => createHmac('sha256', secret()).update(payload).digest('b
  * @param {{id: string, email?: string, nik?: string, name: string, role: string, kind: 'customer'|'employee'}} user
  * @returns {string} signed token
  */
-export function createSession(user) {
+export function createSession(user, ttlSeconds = SESSION_MAX_AGE) {
   const claims = {
     sub: user.id,
     email: user.email ?? null,
@@ -43,7 +44,7 @@ export function createSession(user) {
     kind: user.kind,
     sid: randomUUID(),
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + SESSION_MAX_AGE,
+    exp: Math.floor(Date.now() / 1000) + ttlSeconds,
   };
   const payload = b64url(JSON.stringify(claims));
   return `${payload}.${sign(payload)}`;
@@ -89,8 +90,8 @@ function cookieOptions() {
 }
 
 /** @param {import('astro').AstroCookies} cookies */
-export function setSessionCookie(cookies, token) {
-  cookies.set(SESSION_COOKIE, token, { ...cookieOptions(), maxAge: SESSION_MAX_AGE });
+export function setSessionCookie(cookies, token, maxAge = SESSION_MAX_AGE) {
+  cookies.set(SESSION_COOKIE, token, { ...cookieOptions(), maxAge });
 }
 
 /** @param {import('astro').AstroCookies} cookies */

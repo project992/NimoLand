@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { breadcrumbs, organization } from '../lib/seo.js';
+
+const jsonLd = [
+  organization(),
+  breadcrumbs([{ name: 'Beranda', path: '/' }, { name: 'Kontak', path: '/kontak' }]),
+];
+---
+<Base
+  title="Kontak & Reservasi — Nimo Land Group"
+  description="Jam operasional, alamat, dan kontak resmi Nimo Land Group. Hubungi tim reservasi via WhatsApp 0811-1112-1162."
+  canonical="/kontak"
+  jsonLd={jsonLd}
+>
+  <Shell active="kontak" />
+</Base>

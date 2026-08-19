@@ -1,8 +1,9 @@
 import { handler, json, readJson, HttpError } from '../../../lib/http.js';
 import { verifyPassword } from '../../../lib/password.js';
-import { createSession, setSessionCookie } from '../../../lib/session.js';
+import { createSession, setSessionCookie, ESS_SESSION_TTL } from '../../../lib/session.js';
 import { requireSupabase } from '../../../lib/supabase.js';
 import * as rateLimit from '../../../lib/rateLimit.js';
+import { logActivity } from '../../../lib/payments.js';
 
 export const prerender = false;
 
@@ -60,9 +61,10 @@ export const POST = handler(async ({ request, cookies, clientAddress }) => {
     kind: 'employee',
   };
 
-  setSessionCookie(cookies, createSession(user));
+  setSessionCookie(cookies, createSession(user, ESS_SESSION_TTL), ESS_SESSION_TTL);
   rateLimit.reset(`ess:ip:${ip}`);
   rateLimit.reset(`ess:nik:${nik}`);
+  logActivity(db, { actor_nik: user.nik, actor_name: user.name, action: 'LOGIN' });
 
   return json({ user });
 });

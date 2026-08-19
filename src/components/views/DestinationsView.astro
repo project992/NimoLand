@@ -1,7 +1,8 @@
 ---
 import Search from '@lucide/astro/icons/search';
+const { class: cls = 'view' } = Astro.props;
 ---
-<div class="view" data-view="destinations">
+<div class={cls} data-view="destinations">
   <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
       <p class="eyebrow text-white/70 mb-4">

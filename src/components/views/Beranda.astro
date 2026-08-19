@@ -7,9 +7,9 @@ import Sunrise from '@lucide/astro/icons/sunrise';
 import Ticket from '@lucide/astro/icons/ticket';
 import Sparkles from '@lucide/astro/icons/sparkles';
 import RatingBadge from '../RatingBadge.astro';
-import { HERO_SLIDES } from '../../lib/data.js';
+import { HERO_SLIDES, PACKAGES, EYE_TARIFFS, rupiah } from '../../lib/data.js';
 
-const { ratings = {} } = Astro.props;
+const { ratings = {}, class: cls = 'view' } = Astro.props;
 const headline = ratings['nimo-highland'] ?? null;
 
 const facilitiesTop = [
@@ -21,32 +21,34 @@ const facilitiesBottom = [
   'Playground', 'Parkir', 'Toilet', 'Shuttle lokal',
 ];
 
+const regular = PACKAGES.find(p => p.id === 'regular');
 const priceTables = [
   {
     label: 'Domestik',
     rows: [
-      ['Dewasa · Weekday', 'Rp 40.000'], ['Dewasa · Weekend', 'Rp 45.000'],
-      ['Anak · Weekday', 'Rp 45.000'],   ['Anak · Weekend', 'Rp 35.000'],
+      ['Dewasa · Weekday', rupiah(regular.price.domestik.adult[0])],
+      ['Dewasa · Weekend', rupiah(regular.price.domestik.adult[1])],
+      ['Anak · Weekday', rupiah(regular.price.domestik.child[0])],
+      ['Anak · Weekend', rupiah(regular.price.domestik.child[1])],
     ],
   },
   {
     label: 'Mancanegara',
     rows: [
-      ['Dewasa · Weekday', 'Rp 80.000'], ['Dewasa · Weekend', 'Rp 90.000'],
-      ['Anak · Weekday', 'Rp 60.000'],   ['Anak · Weekend', 'Rp 70.000'],
+      ['Dewasa · Weekday', rupiah(regular.price.manca.adult[0])],
+      ['Dewasa · Weekend', rupiah(regular.price.manca.adult[1])],
+      ['Anak · Weekday', rupiah(regular.price.manca.child[0])],
+      ['Anak · Weekend', rupiah(regular.price.manca.child[1])],
     ],
   },
   {
     label: 'Nimo Eye · Bianglala',
-    rows: [
-      ['Regular · Weekday', 'Rp 55.000'], ['Regular · Weekend', 'Rp 60.000'],
-      ['Sunrise · Weekday', 'Rp 60.000'],
-    ],
-    note: 'Kabin 4 pax, 1 putaran ± 10 menit. Bianglala tertinggi di Indonesia (rekor MURI).',
+    rows: EYE_TARIFFS.map(([name, value]) => [name, rupiah(value)]),
+    note: 'Kabin regular 4 pax, 1 putaran ± 10 menit. Bianglala tertinggi di Indonesia (rekor MURI).',
   },
 ];
 ---
-<div class="view" data-view="beranda">
+<div class={cls} data-view="beranda">
 
   <!-- ============ HERO ============ -->
   <section class="relative min-h-[100svh] flex items-end overflow-hidden bg-bark">
@@ -54,8 +56,9 @@ const priceTables = [
       {HERO_SLIDES.map((s, i) => (
         <div class:list={['hero-slide absolute inset-0', i === 0 && 'active']}>
           <div class="img-shell absolute inset-0">
-            <img class="w-full h-full object-cover" alt={s.alt} src={s.img} data-fallback={s.fb}
-                 fetchpriority={i === 0 ? 'high' : undefined} />
+            <img class="w-full h-full object-cover" alt={s.alt}
+                 src={i === 0 ? s.fb : s.img} data-fallback={s.fb}
+                 fetchpriority={i === 0 ? 'high' : undefined} loading={i === 0 ? 'eager' : 'lazy'} />
           </div>
         </div>
       ))}
@@ -78,7 +81,7 @@ const priceTables = [
         <MapPin class="w-4 h-4" /> Pangalengan · Bandung
       </p>
       <h1 class="font-heading font-bold text-white text-4xl sm:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">
-        Nimo Group
+        Nimo Land Group
       </h1>
 
       <div class="flex flex-wrap items-center gap-4 mt-3">
@@ -96,7 +99,7 @@ const priceTables = [
           <Ticket class="w-4 h-4" /> Beli Tiket Sekarang
           <ArrowRight class="w-4 h-4" />
         </button>
-        <a href="#/hotels" data-route="hotels"
+        <a href="/penginapan" data-route="hotels"
            class="inline-flex items-center gap-2 text-white/90 font-heading text-sm sm:text-base border-b border-white/40 hover:border-white pb-1 transition-colors">
           Lihat Penginapan
         </a>
@@ -152,7 +155,7 @@ const priceTables = [
             </div>
           </div>
 
-          <a href="#/destinations" data-route="destinations"
+          <a href="/destinasi" data-route="destinations"
              class="inline-flex items-center gap-2 font-heading font-semibold text-sage-deep text-sm mt-10 border-b-2 border-sage pb-1 hover:gap-3 transition-all">
             Jelajahi destinasi lain
             <ArrowRight class="w-4 h-4" />
@@ -188,7 +191,7 @@ const priceTables = [
           </h2>
         </div>
         <p class="text-muted text-sm max-w-sm">
-          Pilih kategori untuk menyaring daftar wahana. Semua tersedia di area Nimo Group.
+          Pilih kategori untuk menyaring daftar wahana. Semua tersedia di area Nimo Highland.
         </p>
       </div>
 

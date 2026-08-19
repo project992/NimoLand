@@ -11,7 +11,7 @@ export const prerender = false;
 const next = safeNext(Astro.url.searchParams.get('next'));
 const cameFromGate = next !== '/';
 ---
-<Base title="Masuk — Nimo Group" description="Masuk ke akun Nimo Group untuk memesan tiket dan kamar.">
+<Base title="Masuk — Nimo Land Group" description="Masuk ke akun Nimo Land Group untuk memesan tiket dan kamar." noindex>
   <AuthShell
     title="Masuk ke akun Anda"
     subtitle={cameFromGate

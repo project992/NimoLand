@@ -5,6 +5,8 @@ import LogOut from '@lucide/astro/icons/log-out';
 import Search from '@lucide/astro/icons/search';
 import BadgeCheck from '@lucide/astro/icons/badge-check';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
+import Video from '@lucide/astro/icons/video';
+import { DESTINATIONS } from '../../lib/data.js';
 
 /* Employee Self-Service: login modal, dashboard overlay, verify confirmation.
 
@@ -13,6 +15,7 @@ import ShieldCheck from '@lucide/astro/icons/shield-check';
    browser using the public anon key. */
 
 const employee = Astro.locals.isEmployee ? Astro.locals.user : null;
+const standalone = Astro.props.standalone === true;
 
 const stats = [
   { id: 'essStatTotal',   label: 'Total',    tone: 'bg-paper border-line text-ink' },
@@ -24,14 +27,18 @@ const stats = [
 const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', 'Expired', 'Qty', 'Total', 'Status', 'Aksi'];
 ---
 <!-- ============ LOGIN ESS ============ -->
-<div id="essLoginModal" class="hidden fixed inset-0 z-96 bg-bark/50 p-0 sm:p-4 overflow-y-auto"
+<div id="essLoginModal" class:list={[
+  'fixed inset-0 z-96 bg-bark/50 p-0 sm:p-4 overflow-y-auto',
+  !standalone && 'hidden',                    // standalone: tampil sebagai halaman
+  standalone && !employee && 'flex items-center justify-center',
+]}
      role="dialog" aria-modal="true" aria-labelledby="essLoginTitle">
   <div class="bg-surface sm:rounded-2xl w-full sm:max-w-md mx-auto min-h-full sm:min-h-0 sm:my-10 sm:shadow-lg overflow-hidden">
     {/* Solid header — was a two-stop gradient. */}
     <div class="bg-bark px-6 py-6">
       <div class="flex items-center gap-2">
         <span class="font-heading font-bold text-white text-lg tracking-wide">NIMO</span>
-        <span class="text-white/60 text-[10px] font-medium uppercase tracking-widest border-l border-white/25 pl-2.5">Highland</span>
+        <span class="text-white/60 text-[10px] font-medium uppercase tracking-widest border-l border-white/25 pl-2.5">Land Group</span>
       </div>
       <h3 id="essLoginTitle" class="font-heading font-bold text-white text-xl mt-3 flex items-center gap-2">
         <IdCard class="w-5 h-5" /> Portal ESS Karyawan
@@ -135,6 +142,36 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
         </table>
       </div>
       <p id="essTicketEmpty" class="hidden text-center text-muted text-sm py-12">Belum ada tiket ditemukan.</p>
+    </div>
+
+    <!-- ============ EDITOR VIDEO DESTINASI ============ -->
+    <div class="card p-6 mt-5">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
+          <Video class="w-5 h-5 text-sage-deep" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-heading font-bold text-ink text-lg">Video Destinasi</h2>
+          <p class="text-xs text-muted mt-0.5">
+            Ganti foto sampul sebuah destinasi menjadi video (mp4/webm) yang bisa dilihat semua pengunjung.
+            Kosongkan URL lalu simpan untuk kembali ke foto.
+          </p>
+        </div>
+      </div>
+
+      <form id="essVideoForm" class="flex flex-col sm:flex-row gap-3 mt-5" novalidate>
+        <label for="essVideoDest" class="sr-only">Pilih destinasi</label>
+        <select id="essVideoDest" class="field rounded-xl sm:w-64" required>
+          <option value="">Pilih destinasi…</option>
+          {DESTINATIONS.map(d => <option value={d.id}>{d.name}</option>)}
+        </select>
+        <label for="essVideoUrl" class="sr-only">URL video</label>
+        <input type="url" id="essVideoUrl" placeholder="https://…/video.mp4" class="field flex-1" />
+        <button type="submit" class="btn-primary whitespace-nowrap">Simpan Video</button>
+        <button type="button" id="essVideoClear" class="btn-outline whitespace-nowrap">Hapus</button>
+      </form>
+      <p id="essVideoNote" class="text-[11px] text-muted mt-3" aria-live="polite"></p>
+      <p id="essVideoError" class="hidden note-error mt-3 mb-0" role="alert"></p>
     </div>
 
     <p id="essSyncNote" class="text-center text-[11px] text-muted mt-5" aria-live="polite"></p>

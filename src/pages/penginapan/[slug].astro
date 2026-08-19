@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import Shell from '../../components/Shell.astro';
+import PenginapanDetail from '../../components/PenginapanDetail.astro';
+import { HOTELS } from '../../lib/data.js';
+import { getRatings } from '../../lib/ratings.js';
+import { organization, hotel, breadcrumbs } from '../../lib/seo.js';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const h = HOTELS.find(x => x.id === slug);
+if (!h) return Astro.redirect('/penginapan');
+
+const ratings = await getRatings();
+const jsonLd = [
+  organization(),
+  hotel(h, ratings),
+  breadcrumbs([
+    { name: 'Beranda', path: '/' },
+    { name: 'Penginapan', path: '/penginapan' },
+    { name: h.name, path: `/penginapan/${h.id}` },
+  ]),
+];
+---
+<Base
+  title={`${h.name} — Penginapan Nimo Land Group`}
+  description={h.desc}
+  canonical={`/penginapan/${h.id}`}
+  ogImage={h.rooms[0]?.img ?? h.img}
+  ogType="website"
+  jsonLd={jsonLd}
+>
+  <Shell active="hotels" ratings={ratings} detail>
+    <PenginapanDetail slot="detail" h={h} ratings={ratings} />
+  </Shell>
+</Base>

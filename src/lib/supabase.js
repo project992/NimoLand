@@ -28,3 +28,26 @@ export function requireSupabase() {
   }
   return supabase;
 }
+
+/**
+ * Hard timeout for a promise. Everything the public SSR pages await is bounded
+ * by this so a slow or unreachable database can never hold the homepage's
+ * first byte hostage (this happened in the field: an unresponsive Supabase
+ * added ~15 s of TTFB). On timeout the caller just degrades to its fallback.
+ *
+ * @template T
+ * @param {Promise<T>} promise
+ * @param {number} [ms]
+ * @returns {Promise<T>}
+ */
+export async function withTimeout(promise, ms = 2000) {
+  let timer;
+  const guard = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`db timeout after ${ms}ms`)), ms);
+  });
+  try {
+    return await Promise.race([promise, guard]);
+  } finally {
+    clearTimeout(timer);
+  }
+}

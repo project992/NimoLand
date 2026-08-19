@@ -7,7 +7,7 @@ import Plus from '@lucide/astro/icons/plus';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import TriangleAlert from '@lucide/astro/icons/triangle-alert';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
-import { HOTELS, PACKAGES, rupiah } from '../../lib/data.js';
+import { HOTELS, PACKAGES, rupiah, IS_DEMO_MODE } from '../../lib/data.js';
 
 const user = Astro.locals.user;
 
@@ -155,7 +155,9 @@ const roomSummary = [
         <ArrowRight class="w-4 h-4" />
       </button>
       <p class="text-xs text-muted text-center mt-3">
-        Ini simulasi pemesanan. Pembayaran nyata belum terhubung ke payment gateway.
+        {IS_DEMO_MODE
+          ? 'Ini simulasi pemesanan. Pembayaran nyata belum terhubung ke payment gateway.'
+          : 'Pembayaran diproses secara aman melalui payment gateway resmi.'}
       </p>
     </div>
 
@@ -172,10 +174,12 @@ const roomSummary = [
 
       <label for="roomSelect" class="label">1. Pilih Tipe Kamar</label>
       <select id="roomSelect" class="field mb-2">
-        {HOTELS.map(h => (
+        {HOTELS.filter(h => h.rooms.length).map(h => (
           <optgroup label={h.name}>
             {h.rooms.map(r => (
-              <option value={r.id}>{r.name} · {r.type} · {rupiah(r.rate)}/malam</option>
+              <option value={r.id} disabled={!r.rate}>
+                {r.name} · {r.type} · {r.rate ? rupiah(r.rate) + '/malam' : 'Hubungi reservasi'}
+              </option>
             ))}
           </optgroup>
         ))}
@@ -244,10 +248,12 @@ const roomSummary = [
         Lanjutkan Pemesanan Kamar
         <ArrowRight class="w-4 h-4" />
       </button>
-      <p class="flex items-start gap-2 text-xs text-muted mt-3">
-        <TriangleAlert class="w-4 h-4 shrink-0 mt-px" />
-        Tarif kamar masih placeholder — perlu dikonfirmasi ke tim reservasi sebelum dipakai produksi.
-      </p>
+      {IS_DEMO_MODE && (
+        <p class="flex items-start gap-2 text-xs text-muted mt-3">
+          <TriangleAlert class="w-4 h-4 shrink-0 mt-px" />
+          Tarif kamar masih placeholder — perlu dikonfirmasi ke tim reservasi sebelum dipakai produksi.
+        </p>
+      )}
     </div>
   </div>
 </div>

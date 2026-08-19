@@ -1,18 +1,52 @@
 ---
 import '../styles/global.css';
 import { jsonForScript } from '../lib/serialize.js';
+import { SITE, u } from '../lib/site.js';
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  canonical,
+  ogImage = SITE.ogImage,
+  ogType = 'website',
+  jsonLd = [],
+  preloads = [],
+  noindex = false,
+  robots = 'index,follow',
+  bodyClass = '',
+} = Astro.props;
 const user = Astro.locals.user;
+const docTitle = title ?? SITE.title;
+const docDescription = description ?? SITE.description;
+const ogUrl = canonical ?? u(Astro.url.pathname);
 ---
 <!DOCTYPE html>
-<html lang="id">
+<html lang={SITE.lang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content={description} />
+  <meta name="description" content={docDescription} />
   <meta name="referrer" content="no-referrer" />
-  <title>{title}</title>
+  <meta name="robots" content={noindex ? 'noindex,nofollow' : robots} />
+  <title>{docTitle}</title>
+
+  <link rel="canonical" href={ogUrl} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  {/* Open Graph + Twitter — link previews on WhatsApp, Instagram, FB, X */}
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:title" content={docTitle} />
+  <meta property="og:description" content={docDescription} />
+  <meta property="og:url" content={ogUrl} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="id_ID" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={docTitle} />
+  <meta name="twitter:description" content={docDescription} />
+  <meta name="twitter:image" content={ogImage} />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,13 +55,22 @@ const user = Astro.locals.user;
     rel="stylesheet"
   />
 
+  {jsonLd.map(obj => (
+    <script type="application/ld+json" set:html={JSON.stringify(obj)} is:inline />
+  ))}
+
+  {/* Preload the LCP image so its download starts before CSS/JS are done. */}
+  {preloads.map(h => (
+    <link rel="preload" as="image" href={h} fetchpriority="high" />
+  ))}
+
   {/* The signed-in user, handed to the client so it can render auth state on
       first paint. The session cookie itself is HTTP-only and never exposed.
       jsonForScript, not JSON.stringify: a name containing "</script>" would
       otherwise break out of this element. */}
   <script type="application/json" id="session-data" set:html={jsonForScript(user)} is:inline />
 </head>
-<body class="bg-canvas text-ink">
+<body class:list={['bg-canvas text-ink', bodyClass]}>
   <slot />
 
   <div
