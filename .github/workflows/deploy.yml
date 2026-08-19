@@ -1,0 +1,62 @@
+# Deploy produksi ke Vercel setiap perubahan di `main`.
+#
+# Setup sekali:
+#   1. Token deploy:  buat token di https://vercel.com/account/tokens
+#   2. VERCEL_ORG_ID / VERCEL_PROJECT_ID:
+#        npx vercel link   (sekali, dari repo ini) lalu
+#        lihat .vercel/project.json  -> orgId & projectId
+#   3. Tambah repo secrets di GitHub → Settings → Secrets and variables →
+#        Actions (atau gunakan Vercel GitHub Integration di dashboard untuk
+#        bypass workflow ini):
+#        VERCEL_TOKEN  VERCEL_ORG_ID  VERCEL_PROJECT_ID
+#          (+ SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SESSION_SECRET,
+#             MIDTRANS_SERVER_KEY, MIDTRANS_CLIENT_KEY,
+#             MIDTRANS_IS_PRODUCTION, RESEND_API_KEY, RESEND_FROM, SITE_URL,
+#             TRUST_PROXY)
+#
+# Alternatif lebih sederhana: install "Vercel" App di GitHub dan lewat
+# dashboard Vercel (Import Project → NimoLand → Production branch: main).
+# Jika memakai App resmi, HAPUS workflow ini agar tidak double-deploy.
+
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+
+      - name: Pull Vercel config
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
