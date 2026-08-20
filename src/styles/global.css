@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Anti-horizontal-scroll: elemen yang tak sengaja melebar (mis. media besar
+   atau konten 100vw di iOS) tidak boleh menciptakan scroll-samping; scroll
+   vertikal tetap normal. `clip` (tidak seperti `hidden`) tidak membentuk
+   scroll container. */
+html { overflow-x: clip; }
+body { overflow-x: clip; }
+
 /* =====================================================================
    Nimo Land Group — design tokens
 
