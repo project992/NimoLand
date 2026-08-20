@@ -24,3 +24,6 @@ yarn-error.log*
 # editor
 .vscode/
 .idea/
+
+# Footage perusahaan (HD lokal, TIDAK di-deploy)
+/public/videos/company/
