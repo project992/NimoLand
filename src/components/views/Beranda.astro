@@ -7,7 +7,7 @@ import Sunrise from '@lucide/astro/icons/sunrise';
 import Ticket from '@lucide/astro/icons/ticket';
 import Sparkles from '@lucide/astro/icons/sparkles';
 import RatingBadge from '../RatingBadge.astro';
-import { HERO_SLIDES, PACKAGES, EYE_TARIFFS, rupiah } from '../../lib/data.js';
+import { HERO_SLIDES, PACKAGES, EYE_TARIFFS, rupiah, localSrc } from '../../lib/data.js';
 
 const { ratings = {}, class: cls = 'view' } = Astro.props;
 const headline = ratings['nimo-highland'] ?? null;
@@ -57,7 +57,7 @@ const priceTables = [
         <div class:list={['hero-slide absolute inset-0', i === 0 && 'active']}>
           <div class="img-shell absolute inset-0">
             <img class="w-full h-full object-cover" alt={s.alt}
-                 src={i === 0 ? s.fb : s.img} data-fallback={s.fb}
+                 src={i === 0 ? localSrc(s.fb) : localSrc(s.img)} data-fallback={localSrc(s.fb)}
                  fetchpriority={i === 0 ? 'high' : undefined} loading={i === 0 ? 'eager' : 'lazy'} />
           </div>
         </div>

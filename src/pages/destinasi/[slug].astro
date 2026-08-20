@@ -2,9 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import Shell from '../../components/Shell.astro';
 import DestinasiDetail from '../../components/DestinasiDetail.astro';
-import { DESTINATIONS } from '../../lib/data.js';
+import { DESTINATIONS, localSrc } from '../../lib/data.js';
 import { getRatings } from '../../lib/ratings.js';
 import { organization, touristAttraction, breadcrumbs } from '../../lib/seo.js';
+import { u } from '../../lib/site.js';
 
 export const prerender = false;
 
@@ -27,7 +28,7 @@ const jsonLd = [
   title={`${d.name} — Destinasi Nimo Land Group`}
   description={d.desc}
   canonical={`/destinasi/${d.id}`}
-  ogImage={d.gallery[0]}
+  ogImage={u(localSrc(d.gallery[0]))}
   ogType="website"
   jsonLd={jsonLd}
 >

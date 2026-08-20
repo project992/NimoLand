@@ -11,9 +11,9 @@ export const SITE = {
   phoneDisplay: '0811-1112-1162',
   phoneWa: '6281111121162',
   // Absolute URL shown when a page is shared on WhatsApp / Instagram.
-  // TODO: after image migration, replace with `${SITE.url}/images/og.jpg`.
-  ogImage:
-    'https://lh3.googleusercontent.com/sitesv/AG8ngQXtuSJsYKZFz6bbT0yuxXltbqSpRwQLG6VUsIZ5mzRF2_xpk6o-M20YnrPZ19VcqxNloh0sEYqyXfbj9h6DRkm-jOiQGpft_XhHVAgP6AzFpTiMxglpHzNuEugRmXw2CxKHxh_jCcQ-baunoTbj1shUjJC9pMFBzQ-MTZRFHHLMnfV7Y9SJnGOP4AUU4DRtAWNCGk556t6_igc3x7lgIwp1UKBJiblKRvS4WSMQpFo=w1280',
+  // Points at the local copy of the hero photo (mirrored by
+  // scripts/seed-live-assets.mjs into public/aimg/).
+  ogImage: 'https://nimo-land.vercel.app/aimg/tAG8ngQWBpj62NH-sryt3zUUZ3FH7.jpg',
   social: {
     instagram: 'https://www.instagram.com/nimohighland/',
     instagramEye: 'https://www.instagram.com/nimo_eye/',

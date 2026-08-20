@@ -77,6 +77,25 @@ export const IMG_KEYS = {};
 for (const [k, v] of Object.entries(IMG)) IMG_KEYS[v] = k;
 for (const [k, v] of Object.entries(FB)) IMG_KEYS[v] = 'fb-' + k;
 
+/* The lh3.googleusercontent.com/sitesv URLs only serve to a request carrying
+   nimoland.com's own cookies/referer; hotlinked straight into a browser they
+   return 403 (so photos would never render). Astro <NimoImage> already serves
+   the local copy from src/assets; this helper lets every client-rendered
+   <img> (and SSR hero) use the local static copy instead of the dead URL.
+   Local files live at public/aimg/t<token>.jpg (mirrored by
+   scripts/seed-live-assets.mjs). Non-Google URLs pass through untouched. */
+const AIMG_TOKEN = /AG8ngQ[A-Za-z0-9_-]+/;
+export function localSrc(url) {
+  const m = AIMG_TOKEN.exec(String(url ?? ''));
+  return m ? `/aimg/t${m[0].slice(0, 28)}.jpg` : String(url ?? '');
+}
+
+/* Brand photo folders (see scripts/organize-brand-assets.mjs). Each brand keeps
+   its own folder under public/brand/. Files are already local so they are
+   referenced directly; localSrc() passes them through untouched. */
+const NH = n => `/brand/nimo-highland/nh-${String(n).padStart(2, '0')}.jpg`;
+const DG = (facility, n) => `/brand/dgyp/${facility}-${n}.jpg`;
+
 /* ---- Destinations ---- */
 export const DEST_FILTERS = [
   { id: 'semua',    label: 'Semua',              icon: 'sparkles' },
@@ -87,10 +106,10 @@ export const DEST_FILTERS = [
 
 export const DESTINATIONS = [
   { id:'nimo-highland', name:'Nimo Highland', type:'alam', area:'Pangalengan, Bandung',
-    tag:'Unggulan', img:IMG.fac4, fb:IMG.fac4,
+    tag:'Unggulan', img:NH(1), fb:NH(1),
     desc:'Kebun teh dengan Sky Bridge berbentuk U dan panorama 360°. Datang subuh untuk menyaksikan kabut yang perlahan larut oleh matahari terbit.',
     highlights:['Glass Sky Bridge','Sunrise Point','ATV & Flying Fox','Nimo Zoo'],
-    gallery:[IMG.hero, IMG.mist, IMG.light, IMG.epic], price:PRICE['nimo-highland'], bookable:true },
+    gallery:[NH(1), NH(2), NH(3), NH(4)], price:PRICE['nimo-highland'], bookable:true },
 
   { id:'nimo-eye', name:'Nimo Eye', type:'alam', area:'Pangalengan, Bandung',
     tag:'Rekor MURI', img:IMG.eye, fb:IMG.eye,
@@ -206,10 +225,34 @@ export const HOTELS = [
   },
   {
     id:'new-dgyp-resort', name:'New Dgyp Resort Ciater', area:'Ciater, Subang',
-    img:IMG.fac7, fb:IMG.fac7,
+    img:DG('junior-private-pool', 1), fb:DG('junior-private-pool', 1),
     desc:'Resort di Ciater dengan konsep vila bambu yang memadukan keindahan alam dan kenyamanan desain modern woody, satu kawasan dengan Pinaru Park.',
     facilities:['Area cottage rustic','Jakuzi','Aviary','Mini zoo','Water slide','ATV','Akses Pinaru Park'],
-    rooms:[]
+    facilityImages: [
+      { label:'Lobby',          img:DG('lobby', 1),                   fb:DG('lobby', 1) },
+      { label:'Restoran',       img:DG('resto', 1),                   fb:DG('resto', 1) },
+      { label:'Playground',     img:DG('playground', 1),              fb:DG('playground', 1) },
+      { label:'Kolam Renang',   img:DG('swimming-pool', 1),           fb:DG('swimming-pool', 1) },
+      { label:'Swimming Pool',  img:DG('swimming-pool', 2),           fb:DG('swimming-pool', 2) },
+      { label:'Villa Kayu',     img:DG('villa-kayu-exclusive', 1),   fb:DG('villa-kayu-exclusive', 1) },
+    ],
+    rooms:[
+      { id:'junior-suite', type:'Suite', name:'Junior Suite', cap:4, rate:HOTEL_RATES['junior-suite'],
+        desc:'Suite luas untuk keluarga kecil dengan interior hangat bergaya modern woody dan akses mudah ke fasilitas resort.',
+        img:DG('junior-suite', 1), fb:DG('junior-suite', 2) },
+      { id:'standard', type:'Room', name:'Standard Room', cap:2, rate:HOTEL_RATES['standard'],
+        desc:'Kamar standar 24 m² dengan desain sederhana yang nyaman untuk dua tamu.',
+        img:DG('standard', 1), fb:DG('standard', 2) },
+      { id:'villa-kayu-exclusive', type:'Villa', name:'Villa Kayu Exclusive', cap:4, rate:HOTEL_RATES['villa-kayu-exclusive'],
+        desc:'Vila kayu eksklusif dengan area privasi lebih luas, teras pribadi, dan sentuhan mewah di tengah resort.',
+        img:DG('villa-kayu-exclusive', 1), fb:DG('villa-kayu-exclusive', 2) },
+      { id:'villa-kayu-standar', type:'Villa', name:'Villa Kayu Standar', cap:2, rate:HOTEL_RATES['villa-kayu-standar'],
+        desc:'Vila kayu standar yang hangat dan dekat dengan alam, cocok untuk pasangan atau keluarga kecil.',
+        img:DG('villa-kayu-standar', 1), fb:DG('villa-kayu-standar', 2) },
+      { id:'junior-private-pool', type:'Pool Villa', name:'Junior Private Pool', cap:4, rate:HOTEL_RATES['junior-private-pool'],
+        desc:'Vila dengan kolam renang pribadi — pengalaman privat maksimal untuk keluarga atau rombongan kecil.',
+        img:DG('junior-private-pool', 1), fb:DG('junior-private-pool', 2) },
+    ]
   },
   {
     id:'savia-hotel-resort', name:'Savia Hotel & Resort', area:'Ciater, Subang',
@@ -235,7 +278,7 @@ export const HOTELS = [
   },
 ];
 
-export const ROOM_TYPES = ['Semua', 'Villa', 'Room', 'Cabin', 'Cottage', 'Suite', 'Luxury Camp'];
+export const ROOM_TYPES = ['Semua', 'Villa', 'Room', 'Cabin', 'Cottage', 'Suite', 'Luxury Camp', 'Pool Villa'];
 
 /* Footage yang diunduh dari Google Drive (lihat scripts/drive-download.mjs).
    Memetakan destinasi/hotel ke video lokal di /public/videos/<id>/.
@@ -244,7 +287,6 @@ export const ROOM_TYPES = ['Semua', 'Villa', 'Room', 'Cabin', 'Cottage', 'Suite'
 export const FOOTAGE = {
   'nimo-tea-resort':     { aerial: '/videos/nimo-tea-resort/aerial.mp4',     ad: '/videos/nimo-tea-resort/ad.mp4' },
   'nimo-resort-ciater':  { aerial: '/videos/nimo-resort-ciater/aerial.mp4',  ad: '/videos/nimo-resort-ciater/ad.mp4' },
-  'new-dgyp-resort':     { aerial: '/videos/new-dgyp-resort/aerial.mp4',     ad: '/videos/new-dgyp-resort/ad.mp4' },
   'savia-hotel-resort':  { aerial: '/videos/savia-hotel-resort/aerial.mp4' },
   'pinaru-park':         { aerial: '/videos/pinaru-park/aerial.MOV' },
 };
@@ -286,10 +328,10 @@ export const WAHANA = [
 ];
 
 export const HERO_SLIDES = [
-  { img:IMG.hero,    fb:FB.tea,     alt:'Panorama kebun teh Nimo Highland' },
-  { img:IMG.mist,    fb:FB.mist,    alt:'Kabut pagi menyelimuti kebun teh' },
-  { img:IMG.light,   fb:FB.sunrise, alt:'Golden hour di puncak Nimo Highland' },
-  { img:IMG.sunrise, fb:FB.peak,    alt:'Sunrise di atas hamparan kebun teh' },
+  { img:NH(1), fb:NH(1), alt:'Panorama kebun teh Nimo Highland' },
+  { img:NH(2), fb:NH(2), alt:'Kabut pagi menyelimuti kebun teh' },
+  { img:NH(3), fb:NH(3), alt:'Golden hour di puncak Nimo Highland' },
+  { img:NH(4), fb:NH(4), alt:'Sunrise di atas hamparan kebun teh' },
 ];
 
 export const MOMENTS = [

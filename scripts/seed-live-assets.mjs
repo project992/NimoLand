@@ -17,6 +17,7 @@ import {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS = join(ROOT, 'src', 'assets', 'nimo');
 const LIVE = join(ROOT, 'public', 'images', 'live');
+const AIMG = join(ROOT, 'public', 'aimg');
 
 // Normalize live tokens to their source file path.
 const tokenToFile = new Map();
@@ -87,3 +88,15 @@ export const hasNimo = key => key in nimoImages;
 );
 console.log(`images.mjs ditulis (${files.length} file lokal).`);
 if (noLocal.length) console.log('Key tanpa file live (fallback remote): ' + noLocal.join(', '));
+
+// Mirror each unique live photo to public/aimg/t<token>.jpg so client-rendered
+// <img> tags (which can't run through astro:assets) can serve a local copy too.
+mkdirSync(AIMG, { recursive: true });
+let aimgOk = 0, aimgSkip = 0;
+for (const [tok, src] of tokenToFile) {
+  const dest = join(AIMG, 't' + tok + '.jpg');
+  if (existsSync(dest)) { aimgSkip++; continue; }
+  copyFileSync(src, dest);
+  aimgOk++;
+}
+console.log(`public/aimg: ${aimgOk} baru, ${aimgSkip} sudah ada.`);

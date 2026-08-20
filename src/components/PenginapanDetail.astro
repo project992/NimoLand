@@ -112,6 +112,22 @@ const video = FOOTAGE[h.id]?.aerial;
         </aside>
       </div>
 
+      {h.facilityImages?.length > 0 && (
+        <div class="mt-12">
+          <h2 class="font-heading font-semibold text-ink text-xl mb-4">Galeri Fasilitas</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {h.facilityImages.map(f => (
+              <figure class="card overflow-hidden">
+                <div class="aspect-[16/10] img-shell overflow-hidden">
+                  <NimoImage remote={f.img} alt={`${h.name} — ${f.label}`} fill sizes="(min-width:1024px) 30vw, 50vw" />
+                </div>
+                <figcaption class="p-3 text-sm font-heading text-ink">{f.label}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+
       {video && (
         <div class="mt-12">
           <h2 class="font-heading font-semibold text-ink text-xl mb-4">Video / Suasana</h2>

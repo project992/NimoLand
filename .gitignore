@@ -30,3 +30,6 @@ yarn-error.log*
 
 # Foto hasil capture situs live (staging migrasi, lokal saja)
 /public/images/live/
+
+# Unduhan mentah Google Drive (staging konversi, PNG besar — lokal saja)
+/DGYP/

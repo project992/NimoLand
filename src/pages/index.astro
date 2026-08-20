@@ -4,7 +4,7 @@ import Shell from '../components/Shell.astro';
 import { getRatings } from '../lib/ratings.js';
 import { getVideos } from '../lib/videos.js';
 import { organization } from '../lib/seo.js';
-import { HERO_SLIDES } from '../lib/data.js';
+import { HERO_SLIDES, localSrc } from '../lib/data.js';
 
 export const prerender = false;
 
@@ -12,7 +12,7 @@ export const prerender = false;
 // libs) and handed to the client so JS-rendered cards show the same numbers.
 const ratings = await getRatings();
 const videos = await getVideos();
-const heroImage = HERO_SLIDES[0].fb;
+const heroImage = localSrc(HERO_SLIDES[0].fb);
 ---
 <Base
   title="Nimo Land Group — Embrace the Serene Breeze"

@@ -14,7 +14,7 @@
 import {
   DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES, CATEGORIES, WAHANA,
   MOMENTS, GALLERY, PACKAGES, FAQ_DATA, RULES,
-  allRooms, parseISODate, addDays, toISODate, priceTicket, rupiah,
+  allRooms, parseISODate, addDays, toISODate, priceTicket, rupiah, localSrc,
 } from '../lib/data.js';
 import { icon } from '../lib/icons.js';
 
@@ -137,7 +137,7 @@ function coverMedia(d, className) {
     return `<video class="${className}" src="${esc(src)}" muted playsinline loop autoplay
                    preload="metadata" aria-label="Video ${esc(d.name)}"></video>`;
   }
-  return `<img src="${d.img}" data-fallback="${d.fb}" alt="${esc(d.name)}"
+  return `<img src="${localSrc(d.img)}" data-fallback="${localSrc(d.fb)}" alt="${esc(d.name)}"
                class="${className}" ${className.includes('w-full') ? 'loading="lazy"' : ''}>`;
 }
 
@@ -415,7 +415,7 @@ const MomentSlider = {
     wrap.innerHTML = MOMENTS.map((m, i) => `
       <div class="moment-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}">
         <img class="w-full h-full object-cover" alt="${esc(m.eyebrow)} — ${esc(m.title)}"
-             src="${m.img}" data-fallback="${m.fb}" loading="lazy">
+             src="${localSrc(m.img)}" data-fallback="${localSrc(m.fb)}" loading="lazy">
         <div class="absolute inset-0 bg-bark/45 flex items-end p-8">
           <div>
             <p class="font-heading text-white/75 text-xs uppercase tracking-widest mb-1">${esc(m.eyebrow)}</p>
@@ -462,7 +462,7 @@ const WahanaFilter = {
     grid.innerHTML = WAHANA.map(w => `
       <article class="wahana-card group card card-hover overflow-hidden" data-cat="${w.cat}">
         <div class="aspect-[4/3] img-shell overflow-hidden">
-          <img src="${w.img}" data-fallback="${w.fb}" alt="${esc(w.name)}" loading="lazy"
+          <img src="${localSrc(w.img)}" data-fallback="${localSrc(w.fb)}" alt="${esc(w.name)}" loading="lazy"
                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         </div>
         <div class="p-4">
@@ -633,7 +633,7 @@ const Destinations = {
         <div class="grid grid-cols-2 gap-3">
           ${d.gallery.map((g, i) => `
             <div class="aspect-[4/3] rounded-xl overflow-hidden img-shell">
-              <img src="${g}" data-fallback="${d.fb}" alt="${esc(d.name)} ${i + 1}" loading="lazy"
+              <img src="${localSrc(g)}" data-fallback="${localSrc(d.fb)}" alt="${esc(d.name)} ${i + 1}" loading="lazy"
                    class="w-full h-full object-cover">
             </div>`).join('')}
         </div>
@@ -690,7 +690,7 @@ const Hotels = {
       <article class="room-card card card-hover overflow-hidden flex flex-col"
                data-type="${esc(r.type)}" data-hotel="${r.hotelId}">
         <div class="aspect-[16/10] img-shell overflow-hidden">
-          <img src="${r.img}" data-fallback="${r.fb}" alt="${esc(r.name)}" loading="lazy"
+          <img src="${localSrc(r.img)}" data-fallback="${localSrc(r.fb)}" alt="${esc(r.name)}" loading="lazy"
                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
         </div>
         <div class="p-5 flex flex-col flex-1">
@@ -733,7 +733,7 @@ const Hotels = {
       <article class="room-card card card-hover overflow-hidden flex flex-col"
                data-type="Semua" data-hotel="${h.id}">
         <div class="aspect-[16/10] img-shell overflow-hidden">
-          <img src="${h.img}" data-fallback="${h.fb}" alt="${esc(h.name)}" loading="lazy"
+          <img src="${localSrc(h.img)}" data-fallback="${localSrc(h.fb)}" alt="${esc(h.name)}" loading="lazy"
                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
         </div>
         <div class="p-5 flex flex-col flex-1">
@@ -796,7 +796,7 @@ const Gallery = {
     grid.innerHTML = GALLERY.map((g, i) => `
       <button type="button" data-index="${i}"
               class="gallery-item group relative aspect-square rounded-xl overflow-hidden img-shell">
-        <img src="${g.img}" data-fallback="${g.fb}" alt="${esc(g.title)}" loading="lazy"
+        <img src="${localSrc(g.img)}" data-fallback="${localSrc(g.fb)}" alt="${esc(g.title)}" loading="lazy"
              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         <span class="absolute inset-0 bg-bark/0 group-hover:bg-bark/40 transition-colors flex items-center justify-center">
           <span class="opacity-0 group-hover:opacity-100 transition-opacity text-white">
@@ -810,8 +810,8 @@ const Gallery = {
 
     const render = () => {
       const item = GALLERY[current];
-      lbImg.src = item.img;
-      lbImg.dataset.fallback = item.fb;
+      lbImg.src = localSrc(item.img);
+      lbImg.dataset.fallback = localSrc(item.fb);
       lbImg.alt = item.title;
       lbImg.style.visibility = '';
       document.getElementById('lightboxTitle').textContent = item.title;
