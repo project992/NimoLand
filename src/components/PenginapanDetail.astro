@@ -7,7 +7,7 @@ import MessageCircle from '@lucide/astro/icons/message-circle';
 import RatingBadge from './RatingBadge.astro';
 import BrandIcon from './BrandIcon.astro';
 import NimoImage from './NimoImage.astro';
-import { rupiah } from '../lib/data.js';
+import { rupiah, FOOTAGE } from '../lib/data.js';
 
 /* Server-rendered detail view for /penginapan/[slug]. `.view` + data-view
    contract keeps the client Router able to navigate the whole app. */
@@ -15,6 +15,7 @@ const { h, ratings = {} } = Astro.props;
 const rating = ratings[h.id] ?? null;
 const contactable = h.rooms.length === 0 || h.rooms.some(r => r.rate == null);
 const from = h.rooms.filter(r => r.rate != null).map(r => r.rate).sort((a, b) => a - b)[0];
+const video = FOOTAGE[h.id]?.aerial;
 ---
 <div class="view active" data-view="item-detail">
   <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
@@ -110,6 +111,16 @@ const from = h.rooms.filter(r => r.rate != null).map(r => r.rate).sort((a, b) =>
           </div>
         </aside>
       </div>
+
+      {video && (
+        <div class="mt-12">
+          <h2 class="font-heading font-semibold text-ink text-xl mb-4">Video / Suasana</h2>
+          <div class="rounded-2xl overflow-hidden img-shell aspect-video bg-bark">
+            <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
+                   controls preload="metadata" aria-label={`Video ${h.name}`}></video>
+          </div>
+        </div>
+      )}
     </div>
   </section>
 </div>

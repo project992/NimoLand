@@ -112,10 +112,21 @@ export const DESTINATIONS = [
     desc:'Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360° di sekelilingnya.',
     highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[FB.peak, FB.valley], price:'Info di lokasi' },
 
-  { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Jawa Barat',
-    img:FB.forest, fb:FB.forest,
-    desc:'Taman rekreasi keluarga dengan area bermain dan ruang hijau yang luas.',
-    highlights:['Playground','Area piknik','Spot foto'], gallery:[FB.forest, FB.trail], price:'Info di lokasi' },
+  { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
+    img:'/images/pinaru/pinaru-01.jpg', fb:'/images/pinaru/pinaru-01.jpg',
+    desc:'Taman rekreasi keluarga dengan area bermain, ruang hijau luas, dan wahana air — satu kawasan dengan New Dgyp Resort Ciater.',
+    highlights:['Playground','Water slide','Area piknik','Tempat ibadah'],
+    gallery:[
+      '/images/pinaru/pinaru-01.jpg','/images/pinaru/pinaru-02.jpg','/images/pinaru/pinaru-03.jpg',
+      '/images/pinaru/pinaru-04.jpg','/images/pinaru/pinaru-05.jpg','/images/pinaru/pinaru-07.jpg',
+      '/images/pinaru/pinaru-08.jpg','/images/pinaru/pinaru-09.jpg','/images/pinaru/pinaru-10.jpg',
+      '/images/pinaru/pinaru-11.jpg','/images/pinaru/pinaru-12.jpg','/images/pinaru/pinaru-13.jpg',
+      '/images/pinaru/pinaru-14.jpg','/images/pinaru/pinaru-15.jpg','/images/pinaru/pinaru-16.jpg',
+      '/images/pinaru/pinaru-17.jpg','/images/pinaru/pinaru-18.jpg','/images/pinaru/pinaru-19.jpg',
+      '/images/pinaru/pinaru-20.jpg','/images/pinaru/pinaru-21.jpg','/images/pinaru/pinaru-22.jpg',
+      '/images/pinaru/pinaru-23.jpg','/images/pinaru/pinaru-24.jpg','/images/pinaru/pinaru-25.jpg',
+      '/images/pinaru/pinaru-26.jpg','/images/pinaru/pinaru-06.jpg',
+    ], price:'Info di lokasi' },
 
   { id:'nimo-kaldera-toba', name:'Nimo Kaldera Toba', type:'alam', area:'Danau Toba, Sumut',
     img:FB.lake, fb:FB.lake,
@@ -232,6 +243,18 @@ export const HOTELS = [
 ];
 
 export const ROOM_TYPES = ['Semua', 'Villa', 'Room', 'Cabin', 'Cottage', 'Suite', 'Luxury Camp'];
+
+/* Footage yang diunduh dari Google Drive (lihat scripts/drive-download.mjs).
+   Memetakan destinasi/hotel ke video lokal di /public/videos/<id>/.
+   Dipakai sebagai cover autoplay di kartu destinasi (via coverMedia) dan di
+   halaman detail; row DB destination_videos tetap menang bila karyawan set. */
+export const FOOTAGE = {
+  'nimo-tea-resort':     { aerial: '/videos/nimo-tea-resort/aerial.mp4',     ad: '/videos/nimo-tea-resort/ad.mp4' },
+  'nimo-resort-ciater':  { aerial: '/videos/nimo-resort-ciater/aerial.mp4',  ad: '/videos/nimo-resort-ciater/ad.mp4' },
+  'new-dgyp-resort':     { aerial: '/videos/new-dgyp-resort/aerial.mp4',     ad: '/videos/new-dgyp-resort/ad.mp4' },
+  'savia-hotel-resort':  { aerial: '/videos/savia-hotel-resort/aerial.mp4' },
+  'pinaru-park':         { aerial: '/videos/pinaru-park/aerial.MOV' },
+};
 
 /** Flat list of every room with its parent hotel folded in. */
 export function allRooms() {

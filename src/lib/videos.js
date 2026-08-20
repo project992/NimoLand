@@ -8,10 +8,20 @@
    If Supabase is unreachable or unconfigured, this returns an empty map and
    every destination card simply falls back to its static image. */
 import { supabase, withTimeout } from './supabase.js';
+import { FOOTAGE } from './data.js';
 
 const CACHE_MS = 5 * 60 * 1000;
 const DB_TIMEOUT_MS = 1500;
 let cache = { at: 0, data: null };
+
+/** Static footage from /public/videos plus any DB overrides. */
+function baseline() {
+  const byId = {};
+  for (const [id, f] of Object.entries(FOOTAGE)) {
+    if (f?.aerial) byId[id] = f.aerial;
+  }
+  return byId;
+}
 
 /**
  * @returns {Promise<Record<string, string>>} destination_id -> video_url
@@ -19,7 +29,7 @@ let cache = { at: 0, data: null };
 export async function getVideos() {
   if (cache.data && Date.now() - cache.at < CACHE_MS) return cache.data;
 
-  if (!supabase) return {};
+  if (!supabase) return baseline();
 
   let result;
   try {
@@ -30,7 +40,7 @@ export async function getVideos() {
   } catch (err) {
     console.error('[videos] load failed (timeout or network):', err.message);
     // Negative cache: don't hammer an unreachable database on every pageview.
-    cache = { at: Date.now(), data: cache.data ?? {} };
+    cache = { at: Date.now(), data: cache.data ?? baseline() };
     return cache.data;
   }
 
@@ -38,10 +48,10 @@ export async function getVideos() {
 
   if (error) {
     console.error('[videos] load failed:', error.message);
-    return cache.data ?? {};
+    return cache.data ?? baseline();
   }
 
-  const byId = {};
+  const byId = baseline();
   for (const row of data ?? []) {
     if (row.video_url) byId[row.destination_id] = row.video_url;
   }

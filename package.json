@@ -13,6 +13,7 @@
     "icons": "node scripts/gen-icons.mjs",
     "images:lista": "node scripts/images-seed.mjs",
     "images:seed": "node scripts/images-seed.mjs --download",
+    "footage": "node scripts/drive-download.mjs",
     "seed:employees": "node --env-file=.env scripts/seed-employees.mjs"
   },
   "dependencies": {
