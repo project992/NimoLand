@@ -10,9 +10,10 @@
               node scripts/apply-live-images.mjs
    Safe to re-run (skips existing files).
  */
-import { mkdirSync, copyFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { mkdirSync, copyFileSync, existsSync, readdirSync, statSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { basename, dirname, join, extname } from 'node:path';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = dirname(fileURLToPath(import.meta.url)) + '/..';
@@ -63,6 +64,35 @@ hiFiles.forEach((f, i) => {
   hiDone++;
 });
 console.log(`Nimo Highland: ${hiDone} disalin, ${hiSkip} sudah ada.`);
+
+/* Flat brands: folder berisi kumpulan foto apa adanya (jpg/png), ditata ulang
+   menjadi <slug>-<n>.jpg dan di-mirror ke public/brand/<slug>/. */
+const FLAT_BRANDS = [
+  { src: join(ROOT, 'src', 'assets', 'Aqua Game'),          slug: 'aqua-game' },
+  { src: join(ROOT, 'src', 'assets', 'Nimo Water Forest'),  slug: 'nimo-water-forest' },
+  { src: join(ROOT, 'src', 'assets', 'nimo eye'),           slug: 'nimo-eye' },
+];
+for (const b of FLAT_BRANDS) {
+  const pub = join(ROOT, 'public', 'brand', b.slug);
+  mkdirSync(pub, { recursive: true });
+  let i = 0, skipped2 = 0;
+  for (const f of readdirSync(b.src).filter(f => /\.(jpe?g|png)$/i.test(f)).sort((x, y) => x.localeCompare(y))) {
+    i++;
+    const key = `${b.slug}-${String(i).padStart(2, '0')}.jpg`;
+    const dest = join(pub, key);
+    if (existsSync(dest)) { skipped2++; continue; }
+    const full = join(b.src, f);
+    if (/\.png$/i.test(f)) {
+      const tmp = join(tmpdir(), key);
+      const r = convertPng(full, tmp);
+      if (r.status === 0 && existsSync(tmp)) copyFileSync(tmp, dest);
+      rmSync(tmp, { force: true });
+    } else {
+      copyFileSync(full, dest);
+    }
+  }
+  console.log(`${b.slug}: ${i} file (${skipped2} sudah ada) -> public/brand/${b.slug}/`);
+}
 
 console.log('Folder brand siap.');
 console.log('  src/assets/dgyp/', readdirSync(OUT_DGYP).length, 'jpg');

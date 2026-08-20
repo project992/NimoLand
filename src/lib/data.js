@@ -95,6 +95,9 @@ export function localSrc(url) {
    referenced directly; localSrc() passes them through untouched. */
 const NH = n => `/brand/nimo-highland/nh-${String(n).padStart(2, '0')}.jpg`;
 const DG = (facility, n) => `/brand/dgyp/${facility}-${n}.jpg`;
+const AQ = n => `/brand/aqua-game/aqua-game-${String(n).padStart(2, '0')}.jpg`;
+const NWF = n => `/brand/nimo-water-forest/nimo-water-forest-${String(n).padStart(2, '0')}.jpg`;
+const NE = n => `/brand/nimo-eye/nimo-eye-${String(n).padStart(2, '0')}.jpg`;
 
 /* ---- Destinations ---- */
 export const DEST_FILTERS = [
@@ -112,20 +115,20 @@ export const DESTINATIONS = [
     gallery:[NH(1), NH(2), NH(3), NH(4)], price:PRICE['nimo-highland'], bookable:true },
 
   { id:'nimo-eye', name:'Nimo Eye', type:'alam', area:'Pangalengan, Bandung',
-    tag:'Rekor MURI', img:IMG.eye, fb:IMG.eye,
+    tag:'Rekor MURI', img:NE(1), fb:NE(1),
     desc:'Bianglala tertinggi di Indonesia pada ketinggian sekitar 1.400 mdpl, dengan pemandangan kebun teh dari ketinggian ekstrem.',
     highlights:['Kabin Regular & VIP','Karaoke in the Sky','Dine in the Sky','360° view'],
-    gallery:[IMG.eye, IMG.eyeCabin], price:PRICE['nimo-eye'], bookable:true },
+    gallery:[NE(1), NE(2), NE(3), NE(4)], price:PRICE['nimo-eye'], bookable:true },
 
   { id:'nimo-water-forest', name:'Nimo Water Forest', type:'air', area:'Jawa Barat',
-    img:IMG.hero, fb:IMG.hero,
+    img:NWF(1), fb:NWF(1),
     desc:'Taman air keluarga dengan konsep hutan, memadukan wahana basah dan area teduh untuk bersantai.',
-    highlights:['Kolam anak','Wahana air','Area piknik'], gallery:[IMG.hero, IMG.mist], price:'Info di lokasi' },
+    highlights:['Kolam anak','Wahana air','Area piknik'], gallery:[NWF(1), NWF(2), NWF(3)], price:'Info di lokasi' },
 
   { id:'bogor-aqua-game', name:'Bogor Aqua Game', type:'air', area:'Bogor',
-    img:IMG.hero, fb:IMG.hero,
+    img:AQ(1), fb:AQ(1),
     desc:'Wahana watersport pertama di Indonesia yang menghadirkan permainan inflatable premium Wibit dari Jerman.',
-    highlights:['Wibit inflatable','Boqu War','Wahana interaktif'], gallery:[IMG.hero, IMG.fac6], price:'Info di lokasi' },
+    highlights:['Wibit inflatable','Boqu War','Wahana interaktif'], gallery:[AQ(1), AQ(2), AQ(3)], price:'Info di lokasi' },
 
   { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang',
     img:IMG.fac5, fb:IMG.fac5,
