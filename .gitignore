@@ -27,3 +27,6 @@ yarn-error.log*
 
 # Footage perusahaan (HD lokal, TIDAK di-deploy)
 /public/videos/company/
+
+# Foto hasil capture situs live (staging migrasi, lokal saja)
+/public/images/live/
