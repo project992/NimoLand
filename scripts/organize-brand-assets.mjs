@@ -71,6 +71,11 @@ const FLAT_BRANDS = [
   { src: join(ROOT, 'src', 'assets', 'Aqua Game'),          slug: 'aqua-game' },
   { src: join(ROOT, 'src', 'assets', 'Nimo Water Forest'),  slug: 'nimo-water-forest' },
   { src: join(ROOT, 'src', 'assets', 'nimo eye'),           slug: 'nimo-eye' },
+  { src: join(ROOT, 'src', 'assets', 'malang skyland'),     slug: 'malang-skyland' },
+  { src: join(ROOT, 'src', 'assets', 'Nimo Ecomarine'),     slug: 'nimo-ecomarine' },
+  { src: join(ROOT, 'src', 'assets', 'Nimo Kaldera Toba'),  slug: 'nimo-kaldera-toba' },
+  { src: join(ROOT, 'src', 'assets', 'NIMO ZOO'),           slug: 'nimo-zoo' },
+  { src: join(ROOT, 'src', 'assets', 'Punceling Park'),     slug: 'punceling-park' },
 ];
 for (const b of FLAT_BRANDS) {
   const pub = join(ROOT, 'public', 'brand', b.slug);
