@@ -121,7 +121,7 @@ export const DEST_FILTERS = [
 
 export const DESTINATIONS = [
   { id:'nimo-highland', name:'Nimo Highland', type:'alam', area:'Pangalengan, Bandung',
-    tag:'Unggulan', img:NH(1), fb:NH(1),
+    tag:'Unggulan', img:'/brand/nimo-highland/nh-hero.jpg', fb:'/brand/nimo-highland/nh-hero.jpg',
     desc:'Kebun teh dengan Sky Bridge berbentuk U dan panorama 360°. Datang subuh untuk menyaksikan kabut yang perlahan larut oleh matahari terbit.',
     highlights:['Glass Sky Bridge','Sunrise Point','ATV & Flying Fox','Nimo Zoo'],
     gallery:[NH(1), NH(2), NH(3), NH(4)], price:PRICE['nimo-highland'], bookable:true },
@@ -133,7 +133,7 @@ export const DESTINATIONS = [
     gallery:[NE(1), NE(2), NE(3), NE(4)], price:PRICE['nimo-eye'], bookable:true },
 
   { id:'nimo-water-forest', name:'Nimo Water Forest', type:'air', area:'Jawa Barat',
-    img:NWF(1), fb:NWF(1),
+    img:'/brand/nimo-water-forest/nwf-hero.jpg', fb:'/brand/nimo-water-forest/nwf-hero.jpg',
     desc:'Taman air keluarga dengan konsep hutan, memadukan wahana basah dan area teduh untuk bersantai.',
     highlights:['Kolam anak','Wahana air','Area piknik'], gallery:[NWF(1), NWF(2), NWF(3)], price:'Info di lokasi' },
 
@@ -143,7 +143,7 @@ export const DESTINATIONS = [
     highlights:['Wibit inflatable','Boqu War','Wahana interaktif'], gallery:[AQ(1), AQ(2), AQ(3)], price:'Info di lokasi' },
 
   { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang',
-    img:MSK(1), fb:MSK(1),
+    img:'/brand/malang-skyland/msk-hero.gif', fb:'/brand/malang-skyland/msk-hero.gif',
     desc:'Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360° di sekelilingnya.',
     highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8), MSKGIF(9), MSKGIF(10), MSKGIF(11)], price:'Info di lokasi' },
 
