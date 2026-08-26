@@ -1,0 +1,32 @@
+{
+  "name": "nimo-highland",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "prebuild": "node scripts/validate-pricing.mjs",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "test": "node --test src/lib/*.test.mjs",
+    "icons": "node scripts/gen-icons.mjs",
+    "images:lista": "node scripts/images-seed.mjs",
+    "images:seed": "node scripts/images-seed.mjs --download",
+    "footage": "node scripts/drive-download.mjs",
+    "seed:employees": "node --env-file=.env scripts/seed-employees.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.5",
+    "@astrojs/vercel": "^8.2.11",
+    "@lucide/astro": "^1.28.0",
+    "@supabase/supabase-js": "^2.112.0",
+    "astro": "^5.1.0",
+    "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "lighthouse": "^13.4.1",
+    "tailwindcss": "^4.3.3"
+  }
+}

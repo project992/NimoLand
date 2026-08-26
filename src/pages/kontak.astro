@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { breadcrumbs, organization } from '../lib/seo.js';
+
+const locale = Astro.locals.locale ?? 'id';
+
+const jsonLd = [
+  organization(),
+  breadcrumbs([{ name: locale === 'en' ? 'Home' : 'Beranda', path: '/' }, { name: locale === 'en' ? 'Contact' : 'Kontak', path: '/kontak' }]),
+];
+---
+<Base
+  title={locale === 'en' ? 'Contact & Reservation — Nimo Land Group' : 'Kontak & Reservasi — Nimo Land Group'}
+  description={locale === 'en' ? 'Operating hours, address, and official contact for Nimo Land Group. Reach the reservation team via WhatsApp 0811-1112-1162.' : 'Jam operasional, alamat, dan kontak resmi Nimo Land Group. Hubungi tim reservasi via WhatsApp 0811-1112-1162.'}
+  canonical="/kontak"
+  jsonLd={jsonLd}
+>
+  <Shell active="kontak" />
+</Base>

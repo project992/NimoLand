@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+dist-node/
+.astro/
+.vercel/output/
+.vercel/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# environment variables
+.env
+.env.production
+
+# macOS
+.DS_Store
+
+# editor
+.vscode/
+.idea/
+
+# Footage perusahaan (HD lokal, TIDAK di-deploy)
+/public/videos/company/
+
+# Foto hasil capture situs live (staging migrasi, lokal saja)
+/public/images/live/
+
+# Unduhan mentah Google Drive (staging konversi, PNG besar — lokal saja)
+/DGYP/

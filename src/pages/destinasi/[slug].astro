@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import Shell from '../../components/Shell.astro';
+import DestinasiDetail from '../../components/DestinasiDetail.astro';
+import { DESTINATIONS, localSrc } from '../../lib/data.js';
+import { getRatings } from '../../lib/ratings.js';
+import { organization, touristAttraction, breadcrumbs } from '../../lib/seo.js';
+import { u } from '../../lib/site.js';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const d = DESTINATIONS.find(x => x.id === slug);
+if (!d) return Astro.redirect('/destinasi');
+
+const ratings = await getRatings();
+const jsonLd = [
+  organization(),
+  touristAttraction(d, ratings),
+  breadcrumbs([
+    { name: 'Beranda', path: '/' },
+    { name: 'Destinasi', path: '/destinasi' },
+    { name: d.name, path: `/destinasi/${d.id}` },
+  ]),
+];
+---
+<Base
+  title={`${d.name} — Destinasi Nimo Land Group`}
+  description={d.desc}
+  canonical={`/destinasi/${d.id}`}
+  ogImage={u(localSrc(d.gallery[0]))}
+  ogType="website"
+  jsonLd={jsonLd}
+>
+  <Shell active="destinations" ratings={ratings} detail>
+    <DestinasiDetail slot="detail" d={d} ratings={ratings} />
+  </Shell>
+</Base>

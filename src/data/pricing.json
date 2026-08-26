@@ -1,0 +1,75 @@
+{
+  "terakhir_diverifikasi": "YYYY-MM-DD",
+  "catatan": "SEMUA harga dan label harga dibaca dari file ini. Angka bersumber dari situs resmi nimoland.com dan konfirmasi tim finance. Ganti 'terakhir_diverifikasi' setelah finance menyetujui. Tarif kamar bernilai null artinya BELUM dipublikasikan -> tampilkan 'Hubungi reservasi'.",
+  "destinations": {
+    "nimo-highland": "Mulai Rp 40.000",
+    "nimo-eye": "Mulai Rp 55.000",
+    "nimo-water-forest": "Info di lokasi",
+    "bogor-aqua-game": "Info di lokasi",
+    "malang-skyland": "Info di lokasi",
+    "pinaru-park": "Info di lokasi",
+    "nimo-kaldera-toba": "Info di lokasi",
+    "nimo-zoo": "Mulai Rp 25.000",
+    "punceling-park": "Info di lokasi",
+    "nimo-ecomarine": "Info di lokasi"
+  },
+  "packs": [
+    {
+      "id": "regular",
+      "name": "Tiket Masuk Regular",
+      "desc": "Akses area kebun teh, Sky Bridge, dan spot foto.",
+      "price": {
+        "domestik": { "adult": [40000, 45000], "child": [45000, 35000] },
+        "manca": { "adult": [80000, 90000], "child": [60000, 70000] }
+      }
+    },
+    {
+      "id": "eye",
+      "name": "Tiket Nimo Eye (Bianglala)",
+      "desc": "Kabin regular 4 pax, 1 putaran ± 10 menit.",
+      "price": {
+        "domestik": { "adult": [55000, 60000], "child": [55000, 60000] },
+        "manca": { "adult": [55000, 60000], "child": [55000, 60000] }
+      }
+    }
+  ],
+  "eye_tariffs": [
+    ["Regular Cabins · Weekday", 55000],
+    ["Regular Cabins · Weekend", 60000],
+    ["Sunrise · Weekday", 60000],
+    ["VIP 2 orang + Pop Mie · Weekday", 155000],
+    ["VIP 2 orang + Pop Mie · Weekend", 185000],
+    ["VIP Family 3-4 orang · Weekday", 280000],
+    ["VIP Family 3-4 orang · Weekend", 325000],
+    ["Karaoke in the Sky · Weekday", 325000],
+    ["Karaoke in the Sky · Weekend", 375000],
+    ["Dine in the Sky · Mulai", 200000]
+  ],
+  "hotel_rates": {
+    "lavaza": 2500000,
+    "arjuna": 2250000,
+    "lux-camp": 1500000,
+    "std-camp": 950000,
+    "ciat-superior": null,
+    "ciat-standard": null,
+    "ciat-deluxe-pool": null,
+    "ciat-deluxe-triple": null,
+    "ciat-deluxe-queen": null,
+    "ciat-exec-suite": null,
+    "ciat-family-3": null,
+    "ciat-family-4": null,
+    "ciat-family-5": null,
+    "savia-superior-room": null,
+    "savia-superior-cabin": null,
+    "savia-deluxe-cottage": null,
+    "savia-executive-cabin": null,
+    "savia-suite-cabin": null,
+    "savia-grand-deluxe": null,
+    "savia-junior-suite": null,
+    "junior-suite": null,
+    "standard": null,
+    "villa-kayu-exclusive": null,
+    "villa-kayu-standar": null,
+    "junior-private-pool": null
+  }
+}

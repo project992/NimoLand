@@ -1,0 +1,51 @@
+---
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import FloatingActions from './FloatingActions.astro';
+import Beranda from './views/Beranda.astro';
+import DestinationsView from './views/DestinationsView.astro';
+import HotelsView from './views/HotelsView.astro';
+import GaleriView from './views/GaleriView.astro';
+import KontakView from './views/KontakView.astro';
+import BookingModal from './modals/BookingModal.astro';
+import AuthGateModal from './modals/AuthGateModal.astro';
+import ETicketModal from './modals/ETicketModal.astro';
+import MiscModals from './modals/MiscModals.astro';
+import EssPortal from './ess/EssPortal.astro';
+import { jsonForScript } from '../lib/serialize.js';
+
+/* App shell shared by every path-routed page. Server-renders the full SPA view
+   set so the client Router (app.js) can switch between sections in-place, and
+   so every URL is crawlable with its real content. Detail pages pass their own
+   rendered item as <slot name="detail">. */
+const { active = 'beranda', ratings = {}, videos = {}, detail = false } = Astro.props;
+
+const viewClass = name => {
+  if (detail) return name === 'item-detail' ? 'view active' : 'view';
+  return name === active ? 'view active' : 'view';
+};
+---
+<Navbar active={active} />
+
+<script type="application/json" id="ratings-data" set:html={jsonForScript(ratings)} is:inline />
+<script type="application/json" id="videos-data" set:html={jsonForScript(videos)} is:inline />
+
+<main id="appRoot">
+  <Beranda ratings={ratings} class={viewClass('beranda')} />
+  <DestinationsView class={viewClass('destinations')} />
+  <HotelsView class={viewClass('hotels')} />
+  <GaleriView class={viewClass('galeri')} />
+  <KontakView class={viewClass('kontak')} />
+  <slot name="detail" />
+</main>
+
+<Footer />
+<FloatingActions />
+
+<BookingModal />
+<AuthGateModal />
+<ETicketModal />
+<MiscModals />
+<EssPortal />
+
+<script src="../scripts/app.js"></script>

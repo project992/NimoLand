@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import { IMG_KEYS } from '../lib/data.js';
+
+/* Images: astro:assets with WebP + responsive widths + lazy loading.
+
+   Download the local files first:
+     npm run images:seed        (downloads what it can to src/assets/nimo)
+     then add the Google-locked files from ASSETS-UNDUH-MANUAL.txt manually
+
+   Until a local file is present the component falls back to the legacy `remote`
+   URL, so nothing ever breaks during migration.
+
+   Props:
+     name    optional key override (else resolved from `remote` via IMG_KEYS)
+     remote  legacy URL used until the local file is in place
+     alt     required
+     eager   true — skip lazy loading (use for LCP images only)
+     widths  srcset breakpoints
+     sizes   browser hint, e.g. '(min-width:1024px) 33vw, 100vw'
+     class   extra classes
+*/
+const assets = import.meta.glob('../assets/nimo/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default',
+});
+
+const {
+  name,
+  remote,
+  alt,
+  eager = false,
+  fill = false,
+  widths = [480, 768, 1280],
+  sizes = '100vw',
+  class: cls = '',
+} = Astro.props;
+
+const assetKey = `../assets/nimo/${name || (remote && IMG_KEYS[remote]) || 'missing'}.jpg`;
+const local = Object.prototype.hasOwnProperty.call(assets, assetKey) ? assets[assetKey] : null;
+---
+{
+  local ? (
+    <Image
+      src={local}
+      alt={alt}
+      class:list={[cls, fill && 'w-full h-full object-cover']}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+      widths={widths}
+      sizes={sizes}
+      formats={['webp', 'avif', 'jpeg']}
+    />
+  ) : (
+    <img
+      src={remote}
+      alt={alt}
+      class:list={[cls, fill && 'w-full h-full object-cover']}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+    />
+  )
+}

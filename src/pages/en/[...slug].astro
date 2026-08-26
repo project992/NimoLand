@@ -1,0 +1,17 @@
+---
+/* /en/[...slug] catch-all:
+   Sets locale cookie to "en", then redirects to the same path without prefix. */
+export const prerender = false;
+
+const slug = Astro.params.slug ?? '';
+const rest = slug ? `/${slug}` : '/';
+const qs = Astro.url.search;
+
+Astro.cookies.set('nl_lang', 'en', {
+  path: '/',
+  maxAge: 60 * 60 * 24 * 365,
+  sameSite: 'lax',
+});
+
+return Astro.redirect(rest + qs, 301);
+---

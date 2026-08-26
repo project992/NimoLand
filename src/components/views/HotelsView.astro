@@ -1,0 +1,47 @@
+---
+import BrandIcon from '../BrandIcon.astro';
+const locale = Astro.locals.locale ?? 'id';
+const t = key => Astro.locals.t(key);
+const { class: cls = 'view' } = Astro.props;
+---
+<div class={cls} data-view="hotels">
+  <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <p class="eyebrow text-white/70 mb-4">
+        <span class="w-6 h-px bg-white/40"></span> {t('penginapan.eyebrow')}
+      </p>
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-2xl">
+        {t('penginapan.judul')}
+      </h1>
+      <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+        {locale === 'en'
+          ? 'Wooden villas, glamping, and cabins with balconies overlooking the plantation. Choose a room type, view amenities, and book directly here.'
+          : 'Villa kayu, glamping, sampai cabin dengan balkon menghadap perkebunan. Pilih tipe kamar, lihat fasilitasnya, lalu pesan langsung di sini.'}
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-canvas py-14 lg:py-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div id="hotelTabs" class="flex flex-wrap gap-3 mb-4" role="group" aria-label="Filter"></div>
+      <p id="roomCount" class="text-xs text-muted mb-8" aria-live="polite"></p>
+      <div id="roomGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <section class="bg-surface py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 lg:px-10 text-center">
+      <h2 class="font-heading font-bold text-ink text-2xl sm:text-3xl leading-tight">
+        {t('penginapan.rombongan')}
+      </h2>
+      <p class="text-muted text-sm mt-4">
+        {locale === 'en'
+          ? 'The reservation team can arrange room blocks, stay-plus-ticket packages, or corporate events.'
+          : 'Tim reservasi bisa membantu mengatur blok kamar, paket menginap plus tiket masuk, atau acara perusahaan.'}
+      </p>
+      <a href="https://wa.me/6281111121162" target="_blank" rel="noopener" class="btn-dark mt-7 px-7 py-3.5">
+        <BrandIcon name="whatsapp" class="w-4 h-4" /> {t('penginapan.hubungiReservasi')}
+      </a>
+    </div>
+  </section>
+</div>

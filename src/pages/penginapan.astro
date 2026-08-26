@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { getRatings } from '../lib/ratings.js';
+import { breadcrumbs, organization } from '../lib/seo.js';
+
+const locale = Astro.locals.locale ?? 'id';
+const ratings = await getRatings();
+
+const jsonLd = [
+  organization(),
+  breadcrumbs([{ name: locale === 'en' ? 'Home' : 'Beranda', path: '/' }, { name: locale === 'en' ? 'Accommodation' : 'Penginapan', path: '/penginapan' }]),
+];
+---
+<Base
+  title={locale === 'en' ? 'Hotels & Accommodation — Nimo Land Group' : 'Hotels & Penginapan — Nimo Land Group'}
+  description={locale === 'en' ? 'Nimo Land Group accommodation options: Nimo Tea Resort, Nimo Resort Ciater, Glamping Nimoza, Savia Hotel & Resort, and New Dgyp Resort Ciater.' : 'Pilihan penginapan Nimo Land Group: Nimo Tea Resort, Nimo Resort Ciater, Glamping Nimoza, Savia Hotel & Resort, dan New Dgyp Resort Ciater.'}
+  canonical="/penginapan"
+  jsonLd={jsonLd}
+>
+  <Shell active="hotels" ratings={ratings} />
+</Base>

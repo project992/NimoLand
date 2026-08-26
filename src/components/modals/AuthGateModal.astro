@@ -1,0 +1,46 @@
+---
+import Lock from '@lucide/astro/icons/lock';
+import LogIn from '@lucide/astro/icons/log-in';
+import UserPlus from '@lucide/astro/icons/user-plus';
+import X from '@lucide/astro/icons/x';
+
+/* Shown when a signed-out visitor clicks "Beli Tiket" / "Booking Kamar".
+
+   This is a courtesy prompt, not the access control. The real gate is
+   src/middleware.js (page + API) and POST /api/bookings, which reject
+   anonymous callers regardless of what the browser does. */
+---
+<div id="authGateModal" class="hidden fixed inset-0 z-97 flex items-center justify-center p-4 bg-bark/50"
+     role="dialog" aria-modal="true" aria-labelledby="authGateTitle">
+  <div class="bg-surface rounded-2xl w-full max-w-sm p-7 shadow-lg relative">
+    <button type="button" data-close-authgate aria-label="Tutup"
+            class="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-paper flex items-center justify-center text-muted">
+      <X class="w-4 h-4" />
+    </button>
+
+    <div class="w-12 h-12 rounded-full bg-sage-tint flex items-center justify-center mb-5">
+      <Lock class="w-6 h-6 text-sage-deep" />
+    </div>
+
+    <h3 id="authGateTitle" class="font-heading font-bold text-ink text-lg">Masuk untuk melanjutkan</h3>
+    <p class="text-sm text-muted leading-relaxed mt-2">
+      Pemesanan tiket dan kamar memerlukan akun, supaya e-tiket dan riwayat pesanan Anda tersimpan
+      dan bisa dibuka kapan saja.
+    </p>
+    <p class="text-xs text-muted mt-3">
+      Setelah masuk, Anda akan kembali ke halaman ini dan form pemesanan terbuka otomatis.
+    </p>
+
+    <div class="flex flex-col gap-2.5 mt-6">
+      <a id="authGateLogin" href="/login" class="btn-primary w-full">
+        <LogIn class="w-4 h-4" /> Masuk
+      </a>
+      <a id="authGateRegister" href="/register" class="btn-outline w-full">
+        <UserPlus class="w-4 h-4" /> Daftar Akun Baru
+      </a>
+      <button type="button" data-close-authgate class="text-xs text-muted hover:text-ink transition-colors mt-1 py-1">
+        Nanti saja
+      </button>
+    </div>
+  </div>
+</div>

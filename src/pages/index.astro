@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { getRatings } from '../lib/ratings.js';
+import { getVideos } from '../lib/videos.js';
+import { organization } from '../lib/seo.js';
+import { HERO_SLIDES, localSrc } from '../lib/data.js';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale ?? 'id';
+
+const ratings = await getRatings();
+const videos = await getVideos();
+const heroImage = localSrc(HERO_SLIDES[0].fb);
+---
+<Base
+  title={locale === 'en' ? 'Nimo Land Group — Embrace the Serene Breeze' : 'Nimo Land Group — Embrace the Serene Breeze'}
+  description={locale === 'en' ? 'Nimo Land Group — tea plantation destination, Sky Bridge 360°, Nimo Eye, destinations & accommodation across Indonesia. Book tickets and rooms online.' : 'Nimo Land Group — destinasi kebun teh, Sky Bridge 360°, Nimo Eye, destinasi & penginapan di seluruh Indonesia. Pesan tiket dan kamar online.'}
+  canonical="/"
+  jsonLd={[organization()]}
+  preloads={[heroImage]}
+>
+  <Shell active="beranda" ratings={ratings} videos={videos} />
+</Base>

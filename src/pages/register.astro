@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import AuthShell from '../components/AuthShell.astro';
+import UserPlus from '@lucide/astro/icons/user-plus';
+import { safeNext } from '../lib/redirect.js';
+
+export const prerender = false;
+
+const next = safeNext(Astro.url.searchParams.get('next'));
+---
+<Base title="Daftar — Nimo Land Group" description="Buat akun Nimo Land Group untuk memesan tiket dan kamar." noindex>
+  <AuthShell
+    title="Buat akun baru"
+    subtitle="Cukup nama, email, dan password. Setelah mendaftar Anda langsung masuk dan bisa melanjutkan pemesanan."
+  >
+    <form id="registerForm" class="mt-8" novalidate>
+      <input type="hidden" id="nextUrl" value={next} />
+
+      <label for="name" class="label">Nama Lengkap</label>
+      <input type="text" id="name" name="name" autocomplete="name" required maxlength="80"
+             placeholder="Nama sesuai identitas" class="field mb-4" />
+
+      <label for="email" class="label">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" required
+             placeholder="nama@email.com" class="field mb-4" />
+
+      <label for="phone" class="label">
+        Nomor WhatsApp <span class="font-normal text-muted">(opsional)</span>
+      </label>
+      <input type="tel" id="phone" name="phone" autocomplete="tel"
+             placeholder="08xxxxxxxxxx" class="field mb-4" />
+
+      <label for="password" class="label">Password</label>
+      <input type="password" id="password" name="password" autocomplete="new-password" required
+             minlength="8" placeholder="Minimal 8 karakter" class="field mb-1.5" />
+      <p class="text-xs text-muted mb-4">Minimal 8 karakter.</p>
+
+      <p id="registerError" class="hidden note-error mb-4" role="alert"></p>
+
+      <button type="submit" id="registerBtn" class="btn-primary w-full py-3.5">
+        <UserPlus class="w-4 h-4" /> Daftar &amp; Masuk
+      </button>
+    </form>
+
+    <p class="text-sm text-muted text-center mt-6">
+      Sudah punya akun?
+      <a href={`/login?next=${encodeURIComponent(next)}`} class="font-heading font-semibold text-sage-deep border-b border-sage pb-0.5">
+        Masuk di sini
+      </a>
+    </p>
+  </AuthShell>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const btn = document.getElementById('registerBtn');
+    const err = document.getElementById('registerError');
+    const original = btn.innerHTML;
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      err.classList.add('hidden');
+
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password: document.getElementById('password').value,
+      };
+
+      // Mirror of the server rules, purely to save a round trip. The server
+      // validates all of this again in src/pages/api/auth/register.js.
+      if (payload.name.length < 3) return fail('Nama minimal 3 karakter.');
+      if (!payload.email) return fail('Email wajib diisi.');
+      if (payload.password.length < 8) return fail('Password minimal 8 karakter.');
+
+      btn.disabled = true;
+      btn.textContent = 'Mendaftarkan…';
+
+      let res, data;
+      try {
+        res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(payload),
+        });
+        data = await res.json();
+      } catch {
+        return fail('Tidak dapat menghubungi server. Periksa koneksi Anda.');
+      }
+
+      if (!res.ok) return fail(data?.error ?? 'Pendaftaran gagal. Coba lagi.');
+
+      // Registration signs the user in, so go straight to where they were headed.
+      window.location.href = document.getElementById('nextUrl').value || '/';
+    });
+
+    function fail(message) {
+      btn.disabled = false;
+      btn.innerHTML = original;
+      err.textContent = message;
+      err.classList.remove('hidden');
+    }
+  </script>
+</AuthShell>
+</Base>

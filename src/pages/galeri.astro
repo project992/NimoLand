@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Shell from '../components/Shell.astro';
+import { breadcrumbs, organization } from '../lib/seo.js';
+
+const locale = Astro.locals.locale ?? 'id';
+
+const jsonLd = [
+  organization(),
+  breadcrumbs([{ name: locale === 'en' ? 'Home' : 'Beranda', path: '/' }, { name: locale === 'en' ? 'Gallery' : 'Galeri', path: '/galeri' }]),
+];
+---
+<Base
+  title={locale === 'en' ? 'Photo Gallery — Nimo Land Group' : 'Galeri Momen Nimo Highland — Nimo Land Group'}
+  description={locale === 'en' ? 'Photo gallery of Nimo Highland tea plantation: morning mist, sunrise, Sky Bridge, Nimo Eye, and moments across Nimo Land Group.' : 'Galeri foto kebun teh Nimo Highland: kabut pagi, sunrise, Sky Bridge, Nimo Eye, dan momen-momen di kawasan Nimo Land Group.'}
+  canonical="/galeri"
+  jsonLd={jsonLd}
+>
+  <Shell active="galeri" />
+</Base>

@@ -1,0 +1,44 @@
+---
+import Star from '@lucide/astro/icons/star';
+import { formatRating, formatCount } from '../lib/ratings.js';
+
+/* Official rating badge.
+
+   `rating` is null whenever destination_ratings has no row for this
+   destination, and then this component renders nothing at all. A missing
+   rating must show as absent, never as a placeholder number.
+
+   Props:
+     rating  {rating, count, source} | null | undefined
+     size    'sm' | 'md' | 'lg'
+     tone    'light' (on dark photos) | 'dark' (on white cards)
+*/
+const { rating, size = 'sm', tone = 'dark', class: cls = '' } = Astro.props;
+
+const sizes = {
+  sm: { wrap: 'text-xs px-2.5 py-1 gap-1.5', icon: 'w-3.5 h-3.5', score: 'text-xs' },
+  md: { wrap: 'text-sm px-3 py-1.5 gap-2',   icon: 'w-4 h-4',     score: 'text-sm' },
+  lg: { wrap: 'text-sm px-4 py-2 gap-2',     icon: 'w-4.5 h-4.5', score: 'text-base' },
+};
+const s = sizes[size] ?? sizes.sm;
+
+const tones = {
+  dark:  'bg-clay-tint border-clay/25 text-ink',
+  light: 'bg-white/15 border-white/25 text-white backdrop-blur-sm',
+};
+
+const label = rating
+  ? `Rating resmi ${formatRating(rating.rating)} dari 5, berdasarkan ${formatCount(rating.count)} ulasan${rating.source ? ` di ${rating.source}` : ''}`
+  : '';
+---
+{rating && (
+  <span
+    class:list={['inline-flex items-center rounded-full border font-heading', s.wrap, tones[tone], cls]}
+    title={label}
+    aria-label={label}
+  >
+    <Star class={`${s.icon} fill-clay text-clay shrink-0`} aria-hidden="true" />
+    <span class:list={['font-bold', s.score]}>{formatRating(rating.rating)}</span>
+    <span class="opacity-70 font-normal">({formatCount(rating.count)})</span>
+  </span>
+)}
