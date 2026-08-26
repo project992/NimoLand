@@ -19,7 +19,7 @@ export const IS_DEMO_MODE = true;
 /** Company details single source: the fill-in badges in the UI read from here
  *  instead of hard-coded strings, so going live is a one-line edit. */
 export const COMPANY = {
-  legalName: '[ISI DI SINI — contoh: PT Nimo Land Nusantara (sesuai akta perusahaan)]',
+  legalName: 'PT Nimo Enterprise',
   email: 'official@nimoenterprise.com',
 };
 

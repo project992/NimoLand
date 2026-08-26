@@ -3,54 +3,58 @@ import Base from '../layouts/Base.astro';
 import AuthShell from '../components/AuthShell.astro';
 import UserPlus from '@lucide/astro/icons/user-plus';
 import { safeNext } from '../lib/redirect.js';
+import { t } from '../lib/i18n.js';
 
 export const prerender = false;
 
+const locale = Astro.locals.locale ?? 'id';
+const _t = (k) => t(k, locale);
+
 const next = safeNext(Astro.url.searchParams.get('next'));
 ---
-<Base title="Daftar — Nimo Land Group" description="Buat akun Nimo Land Group untuk memesan tiket dan kamar." noindex>
+<Base title={_t('auth.registerPageTitle')} description={_t('auth.registerPageDesc')} noindex>
   <AuthShell
-    title="Buat akun baru"
-    subtitle="Cukup nama, email, dan password. Setelah mendaftar Anda langsung masuk dan bisa melanjutkan pemesanan."
+    title={_t('auth.registerTitle')}
+    subtitle={_t('auth.registerSubtitle')}
   >
     <form id="registerForm" class="mt-8" novalidate>
       <input type="hidden" id="nextUrl" value={next} />
 
-      <label for="name" class="label">Nama Lengkap</label>
+      <label for="name" class="label">{_t('auth.registerName')}</label>
       <input type="text" id="name" name="name" autocomplete="name" required maxlength="80"
-             placeholder="Nama sesuai identitas" class="field mb-4" />
+             placeholder={_t('auth.registerNamePh')} class="field mb-4" />
 
-      <label for="email" class="label">Email</label>
+      <label for="email" class="label">{_t('auth.registerEmail')}</label>
       <input type="email" id="email" name="email" autocomplete="email" required
              placeholder="nama@email.com" class="field mb-4" />
 
       <label for="phone" class="label">
-        Nomor WhatsApp <span class="font-normal text-muted">(opsional)</span>
+        {_t('auth.registerPhone')} <span class="font-normal text-muted">({_t('auth.registerPhoneOptional')})</span>
       </label>
       <input type="tel" id="phone" name="phone" autocomplete="tel"
-             placeholder="08xxxxxxxxxx" class="field mb-4" />
+             placeholder={_t('auth.registerPhonePh')} class="field mb-4" />
 
-      <label for="password" class="label">Password</label>
+      <label for="password" class="label">{_t('auth.registerPassword')}</label>
       <input type="password" id="password" name="password" autocomplete="new-password" required
-             minlength="8" placeholder="Minimal 8 karakter" class="field mb-1.5" />
-      <p class="text-xs text-muted mb-4">Minimal 8 karakter.</p>
+             minlength="8" placeholder={_t('auth.registerPasswordPh')} class="field mb-1.5" />
+      <p class="text-xs text-muted mb-4">{_t('auth.registerPasswordMin')}</p>
 
       <p id="registerError" class="hidden note-error mb-4" role="alert"></p>
 
       <button type="submit" id="registerBtn" class="btn-primary w-full py-3.5">
-        <UserPlus class="w-4 h-4" /> Daftar &amp; Masuk
+        <UserPlus class="w-4 h-4" /> {_t('auth.registerBtn')}
       </button>
     </form>
 
     <p class="text-sm text-muted text-center mt-6">
-      Sudah punya akun?
+      {_t('auth.hasAccount')}
       <a href={`/login?next=${encodeURIComponent(next)}`} class="font-heading font-semibold text-sage-deep border-b border-sage pb-0.5">
-        Masuk di sini
+        {_t('auth.loginHere')}
       </a>
     </p>
   </AuthShell>
 
-  <script>
+  <script define:vars={{ t_name: _t('auth.registerErrorName'), t_email: _t('auth.registerErrorEmail'), t_pass: _t('auth.registerErrorPassword'), t_loading: _t('auth.registerLoading'), t_conn: _t('auth.registerErrorConn'), t_default: _t('auth.registerErrorDefault') }}>
     const form = document.getElementById('registerForm');
     const btn = document.getElementById('registerBtn');
     const err = document.getElementById('registerError');
@@ -67,14 +71,12 @@ const next = safeNext(Astro.url.searchParams.get('next'));
         password: document.getElementById('password').value,
       };
 
-      // Mirror of the server rules, purely to save a round trip. The server
-      // validates all of this again in src/pages/api/auth/register.js.
-      if (payload.name.length < 3) return fail('Nama minimal 3 karakter.');
-      if (!payload.email) return fail('Email wajib diisi.');
-      if (payload.password.length < 8) return fail('Password minimal 8 karakter.');
+      if (payload.name.length < 3) return fail(t_name);
+      if (!payload.email) return fail(t_email);
+      if (payload.password.length < 8) return fail(t_pass);
 
       btn.disabled = true;
-      btn.textContent = 'Mendaftarkan…';
+      btn.textContent = t_loading;
 
       let res, data;
       try {
@@ -86,12 +88,11 @@ const next = safeNext(Astro.url.searchParams.get('next'));
         });
         data = await res.json();
       } catch {
-        return fail('Tidak dapat menghubungi server. Periksa koneksi Anda.');
+        return fail(t_conn);
       }
 
-      if (!res.ok) return fail(data?.error ?? 'Pendaftaran gagal. Coba lagi.');
+      if (!res.ok) return fail(data?.error ?? t_default);
 
-      // Registration signs the user in, so go straight to where they were headed.
       window.location.href = document.getElementById('nextUrl').value || '/';
     });
 
@@ -102,5 +103,4 @@ const next = safeNext(Astro.url.searchParams.get('next'));
       err.classList.remove('hidden');
     }
   </script>
-</AuthShell>
 </Base>
