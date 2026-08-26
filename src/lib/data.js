@@ -144,7 +144,7 @@ export const DESTINATIONS = [
   { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang',
     img:MSK(1), fb:MSK(1),
     desc:'Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360° di sekelilingnya.',
-    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3)], price:'Info di lokasi' },
+    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8)], price:'Info di lokasi' },
 
   { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
     img:PR(1), fb:PR(1),
