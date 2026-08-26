@@ -99,6 +99,7 @@ const AQ = n => `/brand/aqua-game/aqua-game-${String(n).padStart(2, '0')}.jpg`;
 const NWF = n => `/brand/nimo-water-forest/nimo-water-forest-${String(n).padStart(2, '0')}.jpg`;
 const NE = n => `/brand/nimo-eye/nimo-eye-${String(n).padStart(2, '0')}.jpg`;
 const MSK = n => `/brand/malang-skyland/malang-skyland-${String(n).padStart(2, '0')}.jpg`;
+const MSKGIF = n => `/brand/malang-skyland/malang-skyland-${String(n).padStart(2, '0')}.gif`;
 const ECO = n => `/brand/nimo-ecomarine/nimo-ecomarine-${String(n).padStart(2, '0')}.jpg`;
 const KLT = n => `/brand/nimo-kaldera-toba/nimo-kaldera-toba-${String(n).padStart(2, '0')}.jpg`;
 const ZOO = n => `/brand/nimo-zoo/nimo-zoo-${String(n).padStart(2, '0')}.jpg`;
@@ -144,7 +145,7 @@ export const DESTINATIONS = [
   { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang',
     img:MSK(1), fb:MSK(1),
     desc:'Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360° di sekelilingnya.',
-    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8)], price:'Info di lokasi' },
+    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8), MSKGIF(9), MSKGIF(10), MSKGIF(11)], price:'Info di lokasi' },
 
   { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
     img:PR(1), fb:PR(1),
