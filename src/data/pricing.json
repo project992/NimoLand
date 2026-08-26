@@ -19,7 +19,7 @@
       "name": "Tiket Masuk Regular",
       "desc": "Akses area kebun teh, Sky Bridge, dan spot foto.",
       "price": {
-        "domestik": { "adult": [40000, 45000], "child": [45000, 35000] },
+        "domestik": { "adult": [40000, 45000], "child": [35000, 45000] },
         "manca": { "adult": [80000, 90000], "child": [60000, 70000] }
       }
     },

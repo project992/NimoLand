@@ -17,21 +17,27 @@
     "beliTiket": "Buy Ticket"
   },
   "hero": {
-    "lokasi": "Pangalengan · Bandung",
-    "tagline": "Embrace the Serene Breeze",
-    "deskripsi": "A tea plantation destination in Pangalengan, Bandung, featuring a U-shaped Sky Bridge stretching over lush tea gardens — a 360° panorama rarely found elsewhere.",
+    "lokasi": "National Destination Network",
+    "tagline": "Indonesia, from Tea Gardens to Open Seas",
+    "deskripsi": "Nimo Land Group manages a nationwide network of tourist destinations & resorts — from tea plantations in Bandung to the world's largest volcanic lake, Indonesia's tallest ferris wheel, and ecomarine in Sulawesi. One platform, across Indonesia.",
     "beliTiketSekarang": "Buy Ticket Now",
     "lihatPenginapan": "View Accommodation"
   },
   "tentang": {
-    "eyebrow": "About the Destination",
-    "judul": "Tea Plantation with 360° Panorama",
-    "paragraf1": "As night recedes, a thin blanket of mist sweeps across the tea gardens creating a dreamlike atmosphere. The horizon then ignites in amber and red — golden hour in its purest form.",
-    "paragraf2": "The main attraction is the U-shaped Sky Bridge towering above the green expanse. In those quiet moments, only the morning birdsong keeps you company.",
-    "panorama": "Sky Bridge Panorama",
-    "wahana": "Attractions & activities",
-    "buka": "Open on weekends",
-    "selengkapnya": "Explore other destinations"
+    "eyebrow": "About Nimo Land Group",
+    "judul": "One Vision, Across the Archipelago",
+    "paragraf1": "Nimo Land Group is an integrated tourism destination network committed to delivering world-class experiences across Indonesia. From highland tea plantations to the world's largest volcanic lake — each destination is designed with an authentic local touch.",
+    "paragraf2": "With an integrated digital ticketing system and a growing network of resorts, we ensure every visit is effortless, safe, and unforgettable.",
+    "panorama": "Destinations spread across",
+    "wahana": "Cities & provinces",
+    "buka": "Resorts & hotels",
+    "selengkapnya": "Explore All Destinations"
+  },
+  "jaringan": {
+    "eyebrow": "Destination Network",
+    "judul": "Across Indonesia, One Platform",
+    "desc": "From Java to Sumatra and Sulawesi — find Nimo Land Group destinations in your favorite city.",
+    "lihatSemua": "View All Destinations"
   },
   "wahana": {
     "eyebrow": "Attractions & Activities",

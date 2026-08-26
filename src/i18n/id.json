@@ -17,21 +17,27 @@
     "beliTiket": "Beli Tiket"
   },
   "hero": {
-    "lokasi": "Pangalengan · Bandung",
-    "tagline": "Embrace the Serene Breeze",
-    "deskripsi": "Destinasi kebun teh di Pangalengan, Bandung, dengan daya tarik utama Sky Bridge berbentuk U yang membentang di atas hamparan kebun teh — panorama 360° yang jarang ditemui di tempat lain.",
+    "lokasi": "Jaringan Destinasi Nasional",
+    "tagline": "Indonesia, from Tea Gardens to Open Seas",
+    "deskripsi": "Nimo Land Group mengelola jaringan destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga danau vulkanik Toba, bianglala tertinggi di Indonesia, hingga ecomarine di Sulawesi. Satu platform, seluruh Indonesia.",
     "beliTiketSekarang": "Beli Tiket Sekarang",
     "lihatPenginapan": "Lihat Penginapan"
   },
   "tentang": {
-    "eyebrow": "Tentang Destinasi",
-    "judul": "Kebun Teh dengan Panorama 360°",
-    "paragraf1": "Saat malam surut, selimut kabut tipis menyapu kebun teh dan menciptakan suasana yang terasa seperti mimpi. Cakrawala kemudian menyala dalam warna amber dan merah — golden hour dalam bentuknya yang paling murni.",
-    "paragraf2": "Daya tarik utamanya adalah Sky Bridge berbentuk U yang menjulang di atas hamparan hijau. Di momen-momen sunyi itu, hanya kicau burung pagi yang menemani.",
-    "panorama": "Panorama Sky Bridge",
-    "wahana": "Wahana & aktivitas",
-    "buka": "Buka akhir pekan",
-    "selengkapnya": "Jelajahi destinasi lain"
+    "eyebrow": "Tentang Nimo Land Group",
+    "judul": "Satu Visi, Sepanjang Nusantara",
+    "paragraf1": "Nimo Land Group adalah jaringan destinasi wisata terpadu yang berkomitmen menghadirkan pengalaman berkelas dunia di berbagai penjuru Indonesia. Dari kebun teh di ketinggian Bandung hingga danau vulkanik terbesar di dunia — setiap destinasi dirancang dengan sentuhan lokal yang autentik.",
+    "paragraf2": "Dengan sistem tiket digital terintegrasi dan jaringan resort yang terus berkembang, kami memastikan setiap kunjungan menjadi pengalaman yang mudah, aman, dan tak terlupakan.",
+    "panorama": "Destinasi tersebar",
+    "wahana": "Kota & provinsi",
+    "buka": "Resort & hotel",
+    "selengkapnya": "Jelajahi Semua Destinasi"
+  },
+  "jaringan": {
+    "eyebrow": "Jaringan Destinasi",
+    "judul": "Seluruh Indonesia, Satu Platform",
+    "desc": "Dari Jawa hingga Sumatera dan Sulawesi — temukan destinasi Nimo Land Group di kota favoritmu.",
+    "lihatSemua": "Lihat Semua Destinasi"
   },
   "wahana": {
     "eyebrow": "Wahana & Aktivitas",

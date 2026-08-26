@@ -264,7 +264,7 @@ const DETAIL_RE = /^\/(destinasi|penginapan)\//;
 /* Display titles for SPA navigation (server-rendered head already has the
    right one on first paint; this keeps it correct after pushState). */
 const TITLES = {
-  beranda: 'Nimo Land Group — Embrace the Serene Breeze',
+  beranda: 'Nimo Land Group — Jaringan Destinasi Wisata Nasional',
   destinations: 'Destinasi — Nimo Land Group',
   hotels: 'Hotels & Penginapan — Nimo Land Group',
   galeri: 'Galeri — Nimo Land Group',

@@ -2,12 +2,12 @@
    sitemap and robots. Imported by server pages only (never by the client). */
 export const SITE = {
   name: 'Nimo Land Group',
-  title: 'Nimo Land Group — Embrace the Serene Breeze',
-  titleEn: 'Nimo Land Group — Embrace the Serene Breeze',
+  title: 'Nimo Land Group — Jaringan Destinasi Wisata Nasional',
+  titleEn: 'Nimo Land Group — Indonesia\'s Nationwide Tourism Network',
   description:
-    'Nimo Land Group — destinasi kebun teh, Sky Bridge 360°, Nimo Eye, destinasi & penginapan di seluruh Indonesia. Pesan tiket dan kamar online.',
+    'Nimo Land Group mengelola destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga Danau Toba. Pesan tiket dan kamar online.',
   descriptionEn:
-    'Nimo Land Group — tea plantation destination, Sky Bridge 360°, Nimo Eye, destinations & accommodation across Indonesia. Book tickets and rooms online.',
+    'Nimo Land Group manages tourist destinations & resorts across Indonesia — from Bandung tea plantations to Lake Toba. Book tickets and rooms online.',
   url: 'https://nimo-land.vercel.app',
   lang: 'id',
   email: 'official@nimoenterprise.com',
