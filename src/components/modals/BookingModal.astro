@@ -6,7 +6,7 @@ import Minus from '@lucide/astro/icons/minus';
 import Plus from '@lucide/astro/icons/plus';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
-import { HOTELS, PACKAGES, rupiah } from '../../lib/data.js';
+import { DESTINATIONS, HOTELS, PACKAGES, rupiah } from '../../lib/data.js';
 
 const user = Astro.locals.user;
 
@@ -71,21 +71,15 @@ const roomSummary = [
         </p>
       </div>
 
-      <p class="label">1. Pilih Paket Tiket</p>
-      <div class="grid gap-3 mb-7">
-        {PACKAGES.map((p, i) => (
-          <label class:list={[
-            'border rounded-xl px-4 py-3.5 cursor-pointer transition-colors hover:border-sage',
-            'has-[:checked]:border-sage has-[:checked]:bg-sage-tint flex items-start gap-3',
-            i === 0 ? 'border-sage bg-sage-tint' : 'border-line',
-          ]}>
-            <input type="radio" name="pkg" value={p.id} checked={i === 0} class="accent-[#5E7A66] mt-1" />
-            <span>
-              <span class="block text-sm font-heading font-semibold text-ink">{p.name}</span>
-              <span class="block text-xs text-muted mt-0.5">{p.desc}</span>
-            </span>
-          </label>
+      <p class="label">1. Pilih Destinasi & Paket</p>
+      <label for="ticketDest" class="sr-only">Pilih destinasi</label>
+      <select id="ticketDest" class="field mb-3">
+        {DESTINATIONS.filter(d => PACKAGES.some(p => p.destination === d.id)).map(d => (
+          <option value={d.id}>{d.name}</option>
         ))}
+      </select>
+      <div id="pkgList" class="grid gap-3 mb-7">
+        {/* populated client-side for the selected destination */}
       </div>
 
       <p class="label">2. Kategori Pengunjung</p>

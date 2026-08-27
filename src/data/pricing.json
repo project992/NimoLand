@@ -16,8 +16,9 @@
   "packs": [
     {
       "id": "regular",
-      "name": "Tiket Masuk Regular",
-      "desc": "Akses area kebun teh, Sky Bridge, dan spot foto.",
+      "destination": "nimo-highland",
+      "name": "Tiket Masuk Nimo Highland",
+      "desc": "Akses area kebun teh, Sky Bridge, dan spot foto Nimo Highland.",
       "price": {
         "domestik": { "adult": [40000, 45000], "child": [35000, 45000] },
         "manca": { "adult": [80000, 90000], "child": [60000, 70000] }
@@ -25,11 +26,92 @@
     },
     {
       "id": "eye",
+      "destination": "nimo-eye",
       "name": "Tiket Nimo Eye (Bianglala)",
-      "desc": "Kabin regular 4 pax, 1 putaran ± 10 menit.",
+      "desc": "Kabin regular 4 pax, 1 putaran ± 10 menit di bianglala tertinggi Indonesia.",
       "price": {
         "domestik": { "adult": [55000, 60000], "child": [55000, 60000] },
         "manca": { "adult": [55000, 60000], "child": [55000, 60000] }
+      }
+    },
+    {
+      "id": "water-forest",
+      "destination": "nimo-water-forest",
+      "name": "Tiket Nimo Water Forest",
+      "desc": "Taman air keluarga berkonsep hutan: kolam anak, wahana air, dan area piknik.",
+      "price": {
+        "domestik": { "adult": [50000, 65000], "child": [40000, 55000] },
+        "manca": { "adult": [90000, 110000], "child": [70000, 90000] }
+      }
+    },
+    {
+      "id": "aqua-game",
+      "destination": "bogor-aqua-game",
+      "name": "Tiket Bogor Aqua Game",
+      "desc": "Watersport pertama di Indonesia dengan permainan inflatable premium Wibit.",
+      "price": {
+        "domestik": { "adult": [45000, 55000], "child": [35000, 45000] },
+        "manca": { "adult": [85000, 100000], "child": [65000, 80000] }
+      }
+    },
+    {
+      "id": "skyland",
+      "destination": "malang-skyland",
+      "name": "Tiket Masuk Malang Skyland",
+      "desc": "Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360°.",
+      "price": {
+        "domestik": { "adult": [35000, 45000], "child": [30000, 40000] },
+        "manca": { "adult": [70000, 90000], "child": [55000, 70000] }
+      }
+    },
+    {
+      "id": "pinaru",
+      "destination": "pinaru-park",
+      "name": "Tiket Masuk Pinaru Park",
+      "desc": "Taman rekreasi keluarga dengan playground, water slide, dan ruang hijau luas.",
+      "price": {
+        "domestik": { "adult": [40000, 50000], "child": [30000, 40000] },
+        "manca": { "adult": [80000, 95000], "child": [60000, 75000] }
+      }
+    },
+    {
+      "id": "kaldera",
+      "destination": "nimo-kaldera-toba",
+      "name": "Tiket Masuk Nimo Kaldera Toba",
+      "desc": "Destinasi panorama kaldera Danau Toba dengan udara sejuk dan spot foto.",
+      "price": {
+        "domestik": { "adult": [45000, 55000], "child": [35000, 45000] },
+        "manca": { "adult": [85000, 100000], "child": [65000, 80000] }
+      }
+    },
+    {
+      "id": "zoo",
+      "destination": "nimo-zoo",
+      "name": "Tiket Masuk Nimo Zoo",
+      "desc": "Area edukasi satwa dengan interactive storytelling dan feeding time.",
+      "price": {
+        "domestik": { "adult": [25000, 35000], "child": [20000, 30000] },
+        "manca": { "adult": [55000, 70000], "child": [45000, 60000] }
+      }
+    },
+    {
+      "id": "punceling",
+      "destination": "punceling-park",
+      "name": "Tiket Masuk Punceling Park",
+      "desc": "Oase ketenangan di Ciwidey: camping, kolam air panas, dan hutan pinus.",
+      "price": {
+        "domestik": { "adult": [40000, 50000], "child": [30000, 40000] },
+        "manca": { "adult": [80000, 95000], "child": [60000, 75000] }
+      }
+    },
+    {
+      "id": "ecomarine",
+      "destination": "nimo-ecomarine",
+      "name": "Tiket Masuk Nimo Ecomarine",
+      "desc": "Petualangan air keluarga Nimo Land Group di Bali: wahana air dan area pantai.",
+      "price": {
+        "domestik": { "adult": [50000, 65000], "child": [40000, 55000] },
+        "manca": { "adult": [90000, 110000], "child": [70000, 90000] }
       }
     }
   ],

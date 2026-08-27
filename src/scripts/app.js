@@ -15,6 +15,7 @@ import {
   DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES, CATEGORIES, WAHANA,
   MOMENTS, GALLERY, PACKAGES, FAQ_DATA, RULES,
   allRooms, parseISODate, addDays, toISODate, priceTicket, rupiah, localSrc,
+  packagesForDestination,
 } from '../lib/data.js';
 import { icon } from '../lib/icons.js';
 
@@ -659,7 +660,7 @@ const Destinations = {
     ImageFallback.bindAll(body);
     body.querySelector('[data-dest-book]')?.addEventListener('click', () => {
       this.closeDetail();
-      Booking.open('ticket');
+      Booking.open('ticket', { destinationId: d.id });
     });
 
     document.getElementById('destModal').classList.remove('hidden');
@@ -895,6 +896,7 @@ const FAQ = {
 const Booking = {
   tab: 'ticket',
   ticket: { packageId: 'regular', nationality: 'domestik', adult: 1, child: 0, date: '' },
+  destinationId: 'nimo-highland',
   room: { roomId: null, checkIn: '', checkOut: '', rooms: 1, guests: 2 },
 
   init() {
@@ -911,10 +913,12 @@ const Booking = {
     document.getElementById('dateHint').textContent =
       t('booking.dateHint') + DateUtil.long(minDate) + '.';
 
-    document.querySelectorAll('input[name="pkg"]').forEach(r =>
-      r.addEventListener('change', e => { this.ticket.packageId = e.target.value; this.updateTicket(); }));
     document.querySelectorAll('input[name="nationality"]').forEach(r =>
       r.addEventListener('change', e => { this.ticket.nationality = e.target.value; this.updateTicket(); }));
+    document.getElementById('ticketDest').addEventListener('change', e => this.setDestination(e.target.value));
+    document.getElementById('pkgList').addEventListener('change', e => {
+      if (e.target.name === 'pkg') { this.ticket.packageId = e.target.value; this.updateTicket(); }
+    });
     ['change', 'input'].forEach(ev =>
       arrival.addEventListener(ev, () => { this.ticket.date = arrival.value; this.updateTicket(); }));
 
@@ -974,7 +978,7 @@ const Booking = {
 
     this.initEticketActions();
     this.setTab('ticket');
-    this.updateTicket();
+    this.setDestination(this.destinationId);
     this.updateRoom();
     this.loadPromos();
   },
@@ -1017,11 +1021,33 @@ const Booking = {
   },
 
   /** The booking gate. `skipGate` is only set when resuming after a login. */
-  open(tab = 'ticket', { skipGate = false } = {}) {
+  open(tab = 'ticket', { skipGate = false, destinationId } = {}) {
     if (!skipGate && !Auth.requireCustomer({ kind: 'ticket', tab })) return;
+    if (destinationId) this.destinationId = destinationId;
     this.setTab(tab);
     document.getElementById('bookingModal').classList.remove('hidden');
     lockScroll(true);
+  },
+
+  /** Render ticket categories for a destination and select its first package. */
+  setDestination(destinationId) {
+    this.destinationId = destinationId;
+    const select = document.getElementById('ticketDest');
+    if (select && select.value !== destinationId) select.value = destinationId;
+    const list = document.getElementById('pkgList');
+    const packs = packagesForDestination(destinationId);
+    const current = this.ticket.packageId;
+    const activeId = packs.some(p => p.id === current) ? current : packs[0]?.id;
+    this.ticket.packageId = activeId;
+    list.innerHTML = packs.map((p, i) => `
+      <label class="${i === 0 ? 'border-sage bg-sage-tint' : 'border-line'} border rounded-xl px-4 py-3.5 cursor-pointer transition-colors hover:border-sage has-[:checked]:border-sage has-[:checked]:bg-sage-tint flex items-start gap-3">
+        <input type="radio" name="pkg" value="${esc(p.id)}" ${activeId === p.id ? 'checked' : ''} class="accent-[#5E7A66] mt-1" />
+        <span>
+          <span class="block text-sm font-heading font-semibold text-ink">${esc(p.name)}</span>
+          <span class="block text-xs text-muted mt-0.5">${esc(p.desc)}</span>
+        </span>
+      </label>`).join('');
+    this.updateTicket();
   },
 
   close() {
