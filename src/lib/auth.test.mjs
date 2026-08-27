@@ -197,3 +197,38 @@ test('parseISODate: rejects malformed input instead of returning Invalid Date', 
   }
   assert.equal(parseISODate('06/08/2026'), null);
 });
+
+/* ---------------- promo (Buy 1 Get 1) ---------------- */
+
+const { computePromo, promoMatches, promoNoteText } = await import('./promo.js');
+
+test('promo: buy 1 get 1 doubles the quantity for paid tickets', () => {
+  const promo = { promo_type: 'buy_n_get_m', buy_qty: 1, free_qty: 1, target_package: null };
+  assert.equal(computePromo(promo, { packageId: 'regular', adult: 1, child: 0 }).bonusQty, 1);
+  assert.equal(computePromo(promo, { packageId: 'regular', adult: 3, child: 1 }).bonusQty, 4);
+});
+
+test('promo: buy 2 get 1 grants one free per two paid', () => {
+  const promo = { promo_type: 'buy_n_get_m', buy_qty: 2, free_qty: 1, target_package: null };
+  assert.equal(computePromo(promo, { packageId: 'regular', adult: 1, child: 0 }).bonusQty, 0);
+  assert.equal(computePromo(promo, { packageId: 'regular', adult: 2, child: 0 }).bonusQty, 1);
+  assert.equal(computePromo(promo, { packageId: 'regular', adult: 5, child: 0 }).bonusQty, 2);
+});
+
+test('promo: does not apply to a different target package', () => {
+  const promo = { promo_type: 'buy_n_get_m', buy_qty: 1, free_qty: 1, target_package: 'nimo-eye' };
+  assert.ok(!promoMatches(promo, 'regular'));
+  assert.equal(computePromo(promo, { packageId: 'regular', adult: 2, child: 0 }).applied, false);
+  assert.equal(computePromo(promo, { packageId: 'nimo-eye', adult: 2, child: 0 }).applied, true);
+});
+
+test('promo: free qty never exceeds the ticket ceiling', () => {
+  const promo = { promo_type: 'buy_n_get_m', buy_qty: 1, free_qty: 1, target_package: null };
+  const { bonusQty } = computePromo(promo, { packageId: 'regular', adult: 50, child: 0 });
+  assert.ok(bonusQty <= 50, 'bonus must not push past MAX_TICKETS');
+});
+
+test('promo: note text is human-readable', () => {
+  const promo = { promo_type: 'buy_n_get_m', title: 'Buy 1 Get 1', buy_qty: 1, free_qty: 1 };
+  assert.match(promoNoteText(promo), /Buy 1 Get 1/);
+});

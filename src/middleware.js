@@ -20,7 +20,7 @@ const PROTECTED_API = ['/api/bookings', '/api/my', '/api/payments/'];
 const PROTECTED_EMPLOYEE_PAGES = [];
 
 /** API routes that require a signed-in employee. */
-const EMPLOYEE_API = ['/api/ess/tickets', '/api/ess/verify', '/api/ess/videos', '/api/ess/accounts'];
+const EMPLOYEE_API = ['/api/ess/tickets', '/api/ess/verify', '/api/ess/videos', '/api/ess/accounts', '/api/ess/promos'];
 
 /** API routes that require a SUPERVISOR. */
 const SUPERVISOR_API = ['/api/ess/reports', '/api/ess/quota'];

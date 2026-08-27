@@ -976,6 +976,31 @@ const Booking = {
     this.setTab('ticket');
     this.updateTicket();
     this.updateRoom();
+    this.loadPromos();
+  },
+
+  /* Fetch active promos (read-only, from /api/promos) and cache for the
+     booking summary. Bonus is recomputed authoritatively server-side at
+     checkout — this only improves the on-screen preview. */
+  promos: [],
+  async loadPromos() {
+    const { ok, data } = await api('/api/promos');
+    this.promos = ok ? (data?.promos ?? []) : [];
+    this.updateTicket();
+  },
+
+  /** Free tickets granted by the first applicable buy_n_get_m promo. */
+  bonusFor(tk) {
+    for (const p of this.promos) {
+      if (p.promo_type !== 'buy_n_get_m') continue;
+      if (p.target_package && p.target_package !== tk.packageId) continue;
+      const paid = tk.adult + tk.child;
+      const buy = Math.max(1, Number(p.buy_qty) || 1);
+      const each = Math.max(1, Number(p.free_qty) || 1);
+      const bonus = Math.min(Math.floor(paid / buy) * each, RULES.MAX_TICKETS - paid);
+      if (bonus > 0) return { bonus, promo: p };
+    }
+    return { bonus: 0, promo: null };
   },
 
   setTab(tab) {
@@ -1084,6 +1109,18 @@ const Booking = {
       ? '—'
       : `${tk.child} × ${rupiah(quote.childUnit)} = ${rupiah(quote.childUnit * tk.child)}`;
     document.getElementById('sumTotal').textContent = rupiah(valid ? quote.total : 0);
+
+    // --- Promo (Buy 1 Get 1) preview on the booking summary ---
+    const promoEl = document.getElementById('sumPromo');
+    if (promoEl) {
+      const { bonus, promo } = this.bonusFor(tk);
+      if (valid && bonus > 0 && promo) {
+        promoEl.textContent = `${promo.title} — ${t('booking.gratisTiket')}: +${bonus} ${t('booking.tiket')} GRATIS (${tk.adult + tk.child + bonus} ${State.locale === 'en' ? 'tickets' : 'tiket'})`;
+        promoEl.classList.remove('hidden');
+      } else {
+        promoEl.classList.add('hidden');
+      }
+    }
 
     document.getElementById('payButton').disabled = !valid || quote.total <= 0;
     this._ticket = { valid, arrival, expiry: quote.expiry, total: quote.total };
@@ -1236,6 +1273,16 @@ const Booking = {
     document.getElementById('ticketTotal').textContent = rupiah(Number(b.total_price));
     document.getElementById('ticketArrival').textContent = arrival ? DateUtil.long(arrival) : '—';
     document.getElementById('ticketExpiry').textContent = expiry ? DateUtil.long(expiry) : '—';
+
+    const promoEl = document.getElementById('ticketPromo');
+    if (promoEl) {
+      if (b.promo_note && Number(b.promo_bonus_qty) > 0) {
+        promoEl.textContent = `${b.promo_note} — Anda mendapat ${b.promo_bonus_qty} tiket GRATIS (+${b.promo_bonus_qty}).`;
+        promoEl.classList.remove('hidden');
+      } else {
+        promoEl.classList.add('hidden');
+      }
+    }
 
     const qr = document.getElementById('ticketQR');
     qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' +
@@ -1534,6 +1581,22 @@ const ESS = {
       const btn = e.target.closest('[data-del-acc]');
       if (btn) this.deleteAccount(btn.dataset.delAcc);
     });
+
+    document.getElementById('essPromoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      this.savePromo();
+    });
+    document.getElementById('essPromoReset').addEventListener('click', () => this.resetPromoForm());
+    document.getElementById('essPromoBody').addEventListener('click', e => {
+      const toggle = e.target.closest('[data-toggle-promo]');
+      if (toggle) { this.togglePromo(toggle.dataset.togglePromo, toggle.dataset.active === 'true'); return; }
+      const edit = e.target.closest('[data-edit-promo]');
+      if (edit) this.editPromo(edit.dataset.editPromo);
+      else {
+        const del = e.target.closest('[data-del-promo]');
+        if (del) this.deletePromo(del.dataset.delPromo);
+      }
+    });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { this.closeLogin(); this.closeVerify(); }
     });
@@ -1613,12 +1676,15 @@ const ESS = {
     return !!(u && u.kind === 'employee' && (u.name || '').trim().toLowerCase() === 'ami');
   },
 
-  /* Show the account-management panel only for the designated admin (Ami). */
+  /* Show the account & promo management panels only for the designated admin (Ami). */
   syncAccountsPanel() {
     const panel = document.getElementById('essAccountsPanel');
-    if (!panel) return;
-    panel.classList.toggle('hidden', !this.isAdmin());
+    if (panel) panel.classList.toggle('hidden', !this.isAdmin());
     if (this.isAdmin()) this.loadAccounts();
+
+    const promoPanel = document.getElementById('essPromosPanel');
+    if (promoPanel) promoPanel.classList.toggle('hidden', !this.isAdmin());
+    if (this.isAdmin()) this.loadPromosAdmin();
   },
 
   async loadAccounts() {
@@ -1707,6 +1773,142 @@ const ESS = {
     this.loadAccounts();
   },
 
+  /* ============ PROMO (admin) ============ */
+  async loadPromosAdmin() {
+    const { ok, status, data } = await api('/api/ess/promos');
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); return; }
+      return;
+    }
+    this.renderPromos(data.promos ?? []);
+    this._promos = data.promos ?? [];
+  },
+
+  renderPromos(promos) {
+    document.getElementById('essPromoBody').innerHTML = promos.map(p => {
+      const bonus = p.promo_type === 'buy_n_get_m' ? `Beli ${p.buy_qty} gratis ${p.free_qty}` : (p.promo_type === 'percentage' ? `-${p.discount_pct}%` : `Rp ${Number(p.discount_amount || 0).toLocaleString('id-ID')}`);
+      const status = p.active
+        ? '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-ok/25 bg-ok-tint text-ok px-2.5 py-1 rounded-full">AKTIF</span>'
+        : '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-line bg-paper text-muted px-2.5 py-1 rounded-full">NONAKTIF</span>';
+      return `
+        <tr class="hover:bg-paper/70 transition-colors">
+          <td class="px-3 py-3 font-heading font-bold text-ink text-xs whitespace-nowrap">${esc(p.code)}</td>
+          <td class="px-3 py-3 text-sm text-ink">
+            ${esc(p.title)}${p.sticky ? ' <span class="text-[10px] text-sage-deep font-semibold">AUTO</span>' : ''}
+            ${p.target_package ? `<span class="block text-[11px] text-muted">${esc(p.target_package)}</span>` : ''}
+          </td>
+          <td class="px-3 py-3 text-xs text-muted whitespace-nowrap">${bonus}</td>
+          <td class="px-3 py-3">${status}</td>
+          <td class="px-3 py-3">
+            <div class="flex justify-end items-center gap-2">
+              <button type="button" data-toggle-promo="${esc(p.id)}" data-active="${p.active}"
+                      class="inline-flex items-center gap-1.5 ${p.active ? 'border border-line text-muted hover:bg-paper' : 'bg-sage hover:bg-sage-deep text-white'} font-heading font-semibold text-xs px-3 py-2 rounded-full transition-colors">
+                ${p.active ? 'Nonaktifkan' : 'Aktifkan'}</button>
+              <button type="button" data-edit-promo="${esc(p.id)}"
+                      class="inline-flex items-center gap-1.5 border border-line text-ink font-heading font-semibold text-xs px-3 py-2 rounded-full hover:bg-paper transition-colors">Edit</button>
+              <button type="button" data-del-promo="${esc(p.id)}"
+                      class="inline-flex items-center gap-1.5 border border-danger/30 text-danger font-heading font-semibold text-xs px-3 py-2 rounded-full hover:bg-danger-tint transition-colors">${icon('trash-2', 'w-3.5 h-3.5')} Hapus</button>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+    document.getElementById('essPromoEmpty').classList.toggle('hidden', promos.length > 0);
+  },
+
+  resetPromoForm() {
+    document.getElementById('essPromoId').value = '';
+    document.getElementById('essPromoCode').value = '';
+    document.getElementById('essPromoTitle').value = '';
+    document.getElementById('essPromoDesc').value = '';
+    document.getElementById('essPromoBuy').value = '1';
+    document.getElementById('essPromoFree').value = '1';
+    document.getElementById('essPromoPkg').value = '';
+    document.getElementById('essPromoSticky').checked = true;
+    document.getElementById('essPromoBtn').textContent = 'Simpan Promo';
+    document.getElementById('essPromoError').classList.add('hidden');
+  },
+
+  editPromo(id) {
+    const all = this._promos || [];
+    const p = all.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('essPromoId').value = p.id;
+    document.getElementById('essPromoCode').value = p.code;
+    document.getElementById('essPromoTitle').value = p.title;
+    document.getElementById('essPromoDesc').value = p.description || '';
+    document.getElementById('essPromoBuy').value = p.buy_qty || 1;
+    document.getElementById('essPromoFree').value = p.free_qty || 1;
+    document.getElementById('essPromoPkg').value = p.target_package || '';
+    document.getElementById('essPromoSticky').checked = !!p.sticky;
+    document.getElementById('essPromoBtn').textContent = 'Perbarui Promo';
+    document.getElementById('essPromoError').classList.add('hidden');
+  },
+
+  async savePromo() {
+    const err = document.getElementById('essPromoError');
+    err.classList.add('hidden');
+    const body = {
+      id: document.getElementById('essPromoId').value || undefined,
+      code: document.getElementById('essPromoCode').value.trim(),
+      title: document.getElementById('essPromoTitle').value.trim(),
+      description: document.getElementById('essPromoDesc').value.trim() || null,
+      promo_type: 'buy_n_get_m',
+      buy_qty: Number(document.getElementById('essPromoBuy').value),
+      free_qty: Number(document.getElementById('essPromoFree').value),
+      target_package: document.getElementById('essPromoPkg').value || null,
+      sticky: document.getElementById('essPromoSticky').checked,
+    };
+    if (!body.code || !body.title) {
+      err.textContent = 'Kode dan nama promo wajib diisi.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    const btn = document.getElementById('essPromoBtn');
+    btn.disabled = true;
+    const { ok, status, data } = await api('/api/ess/promos', { method: 'POST', body: JSON.stringify(body) });
+    btn.disabled = false;
+
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      err.textContent = data?.error ?? 'Gagal menyimpan promo.';
+      err.classList.remove('hidden');
+      return;
+    }
+    Toast.show(`Promo ${data.promo.code} disimpan`);
+    this.resetPromoForm();
+    this.loadPromosAdmin();
+  },
+
+  async togglePromo(id, currentActive) {
+    const { ok, status, data } = await api('/api/ess/promos', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, active: !currentActive }),
+    });
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      Toast.show(data?.error ?? 'Gagal mengubah status promo.');
+      return;
+    }
+    this.loadPromosAdmin();
+  },
+
+  async deletePromo(id) {
+    if (!confirm('Hapus promo ini?')) return;
+    const { ok, status, data } = await api('/api/ess/promos', { method: 'DELETE', body: JSON.stringify({ id }) });
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      Toast.show(data?.error ?? 'Gagal menghapus promo.');
+      return;
+    }
+    Toast.show(`Promo ${data.deleted} dihapus`);
+    this.loadPromosAdmin();
+  },
+
   /* ponytail: 20s polling instead of Supabase Realtime. Realtime needed the
      anon key in the browser, which meant a public read policy on `tickets` —
      every customer name and total, readable by anyone. If gate staff need
@@ -1770,10 +1972,12 @@ const ESS = {
         <tr class="hover:bg-paper/70 transition-colors">
           <td class="px-4 py-3 font-heading font-semibold text-ink text-xs whitespace-nowrap">${esc(t.booking_code)}</td>
           <td class="px-4 py-3 font-medium text-ink">${esc(t.customer_name)}</td>
-          <td class="px-4 py-3 text-muted text-xs">${esc(t.ticket_type)}</td>
+          <td class="px-4 py-3 text-muted text-xs">${esc(t.ticket_type)}${Number(t.promo_bonus_qty) > 0
+            ? ` <span class="inline-flex items-center gap-1 text-[10px] font-heading font-semibold bg-sage-tint text-sage-deep border border-sage/25 px-2 py-0.5 rounded-full ml-1">PROMO +${esc(t.promo_bonus_qty)}</span>`
+            : ''}</td>
           <td class="px-4 py-3 text-muted text-xs whitespace-nowrap">${visit ? DateUtil.short(visit) : '—'}</td>
           <td class="px-4 py-3 text-muted text-xs whitespace-nowrap">${expiry ? DateUtil.short(expiry) : '—'}</td>
-          <td class="px-4 py-3 text-muted text-xs">${esc(t.quantity)}</td>
+          <td class="px-4 py-3 text-muted text-xs">${esc(t.quantity)}${Number(t.promo_bonus_qty) > 0 ? ` <span class="text-[10px] text-sage-deep font-semibold">(${esc(Number(t.quantity) - Number(t.promo_bonus_qty))} bayar)</span>` : ''}</td>
           <td class="px-4 py-3 font-heading font-semibold text-ink text-xs whitespace-nowrap">${rupiah(Number(t.total_price))}</td>
           <td class="px-4 py-3">${this.statusBadge(t.status)}</td>
           <td class="px-4 py-3">${action}</td>

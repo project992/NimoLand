@@ -12,7 +12,7 @@ export const GET = handler(async () => {
   const db = requireSupabase();
   const { data, error } = await db
     .from('tickets')
-    .select('booking_code, customer_name, ticket_type, quantity, total_price, visit_date, expiry_date, status, created_at')
+    .select('booking_code, customer_name, ticket_type, quantity, total_price, visit_date, expiry_date, status, created_at, promo_code, promo_bonus_qty, promo_note')
     .order('created_at', { ascending: false })
     .limit(500);
 

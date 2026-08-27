@@ -7,6 +7,7 @@ import { createSnapTransaction, publicClientKey, midtransReady, snapBase } from 
 import {
   PACKAGES, RULES, allRooms, parseISODate, addDays, toISODate, priceTicket, IS_DEMO_MODE,
 } from '../../lib/data.js';
+import { listActivePromos, computePromo, promoNoteText } from '../../lib/promo.js';
 
 export const prerender = false;
 
@@ -105,10 +106,28 @@ async function buildTicketBooking(body, user, db) {
     throw new HttpError(400, 'Tanggal kedatangan minimal H-1 dari hari ini.');
   }
 
-  const qty = adult + child;
+  const paidQty = adult + child;
+
+  // ---- Promo aktif ----
+  // Bonus tiket (mis. Buy 1 Get 1) dihitung di server, bukan dari input klien.
+  // totalQty = terbayar + gratis; harga tetap mengikuti yang terbayar.
+  let promo = null;
+  let promoBonus = 0;
+  let promoCode = null;
+  let promoNote = null;
+  const activePromos = await listActivePromos(db);
+  for (const p of activePromos) {
+    const c = computePromo(p, { packageId, adult, child });
+    if (c.applied) { promo = p; promoBonus = c.bonusQty; break; }
+  }
+  if (promo) {
+    promoCode = promo.code;
+    promoNote = promoNoteText(promo);
+  }
+  const totalQty = Math.min(paidQty + promoBonus, RULES.MAX_TICKETS);
 
   // ---- Kuota harian (anti-overbooking) ----
-  const slot = await reserveDailySlot(db, toISODate(arrival), qty);
+  const slot = await reserveDailySlot(db, toISODate(arrival), totalQty);
   if (!slot.ok) {
     throw new HttpError(
       409,
@@ -175,7 +194,7 @@ async function buildTicketBooking(body, user, db) {
       customer_name: user.name,
       customer_email: user.email,
       ticket_type: label,
-      quantity: qty,
+      quantity: totalQty,
       total_price: total,
       visit_date: visitISO,
       expiry_date: toISODate(expiry),
@@ -183,6 +202,9 @@ async function buildTicketBooking(body, user, db) {
       order_id,
       payment_method: payment?.midtrans ? 'midtrans' : 'demo',
       paid_at: payment?.midtrans ? null : new Date().toISOString(),
+      promo_code: promoCode,
+      promo_bonus_qty: promoBonus,
+      promo_note: promoNote,
     },
     payment,
   };

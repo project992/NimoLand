@@ -86,6 +86,8 @@
   },
   "booking": {
     "pemesananOnline": "Online Booking",
+    "gratisTiket": "FREE",
+    "tiket": "ticket",
     "tiketMasuk": "Entrance Ticket",
     "kamarMenginap": "Room / Stay",
     "dewasa": "Adult",

@@ -86,6 +86,8 @@
   },
   "booking": {
     "pemesananOnline": "Pemesanan Online",
+    "gratisTiket": "GRATIS",
+    "tiket": "tiket",
     "tiketMasuk": "Tiket Masuk",
     "kamarMenginap": "Kamar / Menginap",
     "dewasa": "Dewasa",

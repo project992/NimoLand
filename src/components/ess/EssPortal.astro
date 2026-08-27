@@ -8,7 +8,8 @@ import ShieldCheck from '@lucide/astro/icons/shield-check';
 import Video from '@lucide/astro/icons/video';
 import UserPlus from '@lucide/astro/icons/user-plus';
 import Trash2 from '@lucide/astro/icons/trash-2';
-import { DESTINATIONS } from '../../lib/data.js';
+import BadgePercent from '@lucide/astro/icons/badge-percent';
+import { DESTINATIONS, PACKAGES } from '../../lib/data.js';
 
 /* Employee Self-Service: login modal, dashboard overlay, verify confirmation.
 
@@ -229,6 +230,88 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
           </table>
         </div>
         <p id="essAccountEmpty" class="hidden text-center text-muted text-sm py-6">Belum ada akun.</p>
+      </div>
+    </div>
+
+    <!-- ============ KELOLA PROMO (khusus Ami) ============ -->
+    <div id="essPromosPanel" class:list=['card p-6 mt-5', !isEssAdmin && 'hidden']>
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
+          <BadgePercent class="w-5 h-5 text-sage-deep" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-heading font-bold text-ink text-lg">Kelola Promo</h2>
+          <p class="text-xs text-muted mt-0.5">
+            Buat, ubah, atau aktifkan promo seperti Buy 1 Get 1. Promo aktif otomatis memberi tiket gratis
+            saat pelanggan checkout, dan masuk ke data tiket. Khusus akun Ami.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+        <form id="essPromoForm" class="space-y-3" novalidate>
+          <input type="hidden" id="essPromoId" />
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="essPromoCode" class="label">Kode</label>
+              <input type="text" id="essPromoCode" placeholder="mis. B1G1" class="field" autocomplete="off" />
+            </div>
+            <div>
+              <label for="essPromoTitle" class="label">Nama</label>
+              <input type="text" id="essPromoTitle" placeholder="mis. Buy 1 Get 1" class="field" autocomplete="off" />
+            </div>
+          </div>
+          <div>
+            <label for="essPromoDesc" class="label">Deskripsi</label>
+            <input type="text" id="essPromoDesc" placeholder="Keterangan singkat (opsional)" class="field" autocomplete="off" />
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label for="essPromoBuy" class="label">Beli</label>
+              <input type="number" id="essPromoBuy" value="1" min="1" max="100" class="field" />
+            </div>
+            <div>
+              <label for="essPromoFree" class="label">Gratis</label>
+              <input type="number" id="essPromoFree" value="1" min="1" max="100" class="field" />
+            </div>
+            <div>
+              <label for="essPromoPkg" class="label">Paket</label>
+              <select id="essPromoPkg" class="field">
+                <option value="">Semua paket</option>
+                {PACKAGES.map(p => <option value={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="block text-xs text-muted">
+              <input type="checkbox" id="essPromoSticky" class="mr-1" /> Pakai otomatis (disarankan untuk B1G1)
+            </label>
+          </div>
+          <div class="flex gap-3">
+            <button type="submit" id="essPromoBtn" class="btn-primary">Simpan Promo</button>
+            <button type="button" id="essPromoReset" class="btn-outline">Baru</button>
+          </div>
+          <p id="essPromoError" class="hidden note-error mt-2 mb-0" role="alert"></p>
+        </form>
+
+        <div>
+          <h3 class="font-heading font-semibold text-ink text-sm mb-3">Daftar Promo</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="bg-paper text-muted text-[11px] uppercase tracking-wider">
+                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Kode</th>
+                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Nama</th>
+                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Bonus</th>
+                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Status</th>
+                  <th scope="col" class="px-3 py-3 font-heading font-semibold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="essPromoBody" class="divide-y divide-line-soft"></tbody>
+            </table>
+          </div>
+          <p id="essPromoEmpty" class="hidden text-center text-muted text-sm py-6">Belum ada promo.</p>
+        </div>
       </div>
     </div>
 
