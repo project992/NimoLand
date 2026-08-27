@@ -33,3 +33,5 @@ yarn-error.log*
 
 # Unduhan mentah Google Drive (staging konversi, PNG besar — lokal saja)
 /DGYP/
+.vercel
+.env*
