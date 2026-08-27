@@ -1525,6 +1525,15 @@ const ESS = {
     });
     document.getElementById('essVideoClear').addEventListener('click', () => this.clearVideo());
     document.getElementById('essVideoDest').addEventListener('change', () => this.previewVideo());
+
+    document.getElementById('essAccountForm').addEventListener('submit', e => {
+      e.preventDefault();
+      this.createAccount();
+    });
+    document.getElementById('essAccountBody').addEventListener('click', e => {
+      const btn = e.target.closest('[data-del-acc]');
+      if (btn) this.deleteAccount(btn.dataset.delAcc);
+    });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { this.closeLogin(); this.closeVerify(); }
     });
@@ -1595,7 +1604,107 @@ const ESS = {
     document.getElementById('essProfileMeta').textContent = `${u.nik} · ${u.role}`;
     document.getElementById('essDashboard').classList.remove('hidden');
     lockScroll(true);
+    this.syncAccountsPanel();
     this.startPolling();
+  },
+
+  isAdmin() {
+    const u = this.user;
+    return !!(u && u.kind === 'employee' && (u.name || '').trim().toLowerCase() === 'ami');
+  },
+
+  /* Show the account-management panel only for the designated admin (Ami). */
+  syncAccountsPanel() {
+    const panel = document.getElementById('essAccountsPanel');
+    if (!panel) return;
+    panel.classList.toggle('hidden', !this.isAdmin());
+    if (this.isAdmin()) this.loadAccounts();
+  },
+
+  async loadAccounts() {
+    const { ok, status, data } = await api('/api/ess/accounts');
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      document.getElementById('essAccountError').textContent = data?.error ?? 'Gagal memuat akun.';
+      document.getElementById('essAccountError').classList.remove('hidden');
+      return;
+    }
+    this.renderAccounts(data.accounts ?? []);
+  },
+
+  renderAccounts(accounts) {
+    const body = document.getElementById('essAccountBody');
+    const self = this;
+    body.innerHTML = accounts.map(a => `
+      <tr class="hover:bg-paper/70 transition-colors">
+        <td class="px-4 py-3 font-heading font-semibold text-ink text-xs whitespace-nowrap">${esc(a.nik)}</td>
+        <td class="px-4 py-3 font-medium text-ink text-sm">${esc(a.full_name)}</td>
+        <td class="px-4 py-3 text-muted text-xs">${esc(a.role)}</td>
+        <td class="px-4 py-3">${a.active
+          ? '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-ok/25 bg-ok-tint text-ok px-2.5 py-1 rounded-full">AKTIF</span>'
+          : '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-line bg-paper text-muted px-2.5 py-1 rounded-full">NONAKTIF</span>'}</td>
+        <td class="px-4 py-3 text-right">
+          ${a.nik === (self.user && self.user.nik) ? '<span class="text-[11px] text-muted">Anda</span>'
+            : `<button type="button" data-del-acc="${esc(a.nik)}"
+                 class="inline-flex items-center gap-1.5 border border-danger/30 text-danger font-heading font-semibold text-xs px-3 py-2 rounded-full hover:bg-danger-tint transition-colors">
+                 ${icon('trash-2', 'w-3.5 h-3.5')} Hapus</button>`}
+        </td>
+      </tr>`).join('');
+    document.getElementById('essAccountEmpty').classList.toggle('hidden', accounts.length > 0);
+  },
+
+  async createAccount() {
+    const err = document.getElementById('essAccountError');
+    err.classList.add('hidden');
+    const nik = document.getElementById('essAccNik').value.trim();
+    const name = document.getElementById('essAccName').value.trim();
+    const role = document.getElementById('essAccRole').value;
+    const password = document.getElementById('essAccPassword').value;
+
+    if (!nik || !name || !role || !password) {
+      err.textContent = 'Lengkapi NIK, nama, role, dan password.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    const btn = document.getElementById('essAccountBtn');
+    btn.disabled = true;
+    const { ok, status, data } = await api('/api/ess/accounts', {
+      method: 'POST',
+      body: JSON.stringify({ nik, name, role, password }),
+    });
+    btn.disabled = false;
+
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      err.textContent = data?.error ?? 'Gagal membuat akun.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    document.getElementById('essAccNik').value = '';
+    document.getElementById('essAccName').value = '';
+    document.getElementById('essAccRole').value = '';
+    document.getElementById('essAccPassword').value = '';
+    Toast.show(`Akun ${data.account.nik} berhasil dibuat`);
+    this.loadAccounts();
+  },
+
+  async deleteAccount(nik) {
+    if (!confirm(`Hapus akun ${nik}?`)) return;
+    const { ok, status, data } = await api('/api/ess/accounts', {
+      method: 'DELETE',
+      body: JSON.stringify({ nik }),
+    });
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      Toast.show(data?.error ?? 'Gagal menghapus akun.');
+      return;
+    }
+    Toast.show(`Akun ${data.deleted} dihapus`);
+    this.loadAccounts();
   },
 
   /* ponytail: 20s polling instead of Supabase Realtime. Realtime needed the

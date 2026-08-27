@@ -6,6 +6,8 @@ import Search from '@lucide/astro/icons/search';
 import BadgeCheck from '@lucide/astro/icons/badge-check';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
 import Video from '@lucide/astro/icons/video';
+import UserPlus from '@lucide/astro/icons/user-plus';
+import Trash2 from '@lucide/astro/icons/trash-2';
 import { DESTINATIONS } from '../../lib/data.js';
 
 /* Employee Self-Service: login modal, dashboard overlay, verify confirmation.
@@ -16,6 +18,7 @@ import { DESTINATIONS } from '../../lib/data.js';
 
 const employee = Astro.locals.isEmployee ? Astro.locals.user : null;
 const standalone = Astro.props.standalone === true;
+const isEssAdmin = employee?.kind === 'employee' && (employee?.name || '').trim().toLowerCase() === 'ami';
 
 const stats = [
   { id: 'essStatTotal',   label: 'Total',    tone: 'bg-paper border-line text-ink' },
@@ -172,6 +175,61 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
       </form>
       <p id="essVideoNote" class="text-[11px] text-muted mt-3" aria-live="polite"></p>
       <p id="essVideoError" class="hidden note-error mt-3 mb-0" role="alert"></p>
+    </div>
+
+    <!-- ============ KELOLA AKUN ESS (khusus Ami) ============ -->
+    <div id="essAccountsPanel" class:list=['card p-6 mt-5', !isEssAdmin && 'hidden']>
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
+          <UserPlus class="w-5 h-5 text-sage-deep" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-heading font-bold text-ink text-lg">Kelola Akun ESS</h2>
+          <p class="text-xs text-muted mt-0.5">
+            Buat atau hapus akun karyawan (NIK, password, role). Khusus akun Ami.
+          </p>
+        </div>
+      </div>
+
+      <form id="essAccountForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5" novalidate>
+        <label for="essAccNik" class="sr-only">NIK</label>
+        <input type="text" id="essAccNik" placeholder="NIK karyawan (mis. NIK-0002)" class="field" autocomplete="off" />
+        <label for="essAccName" class="sr-only">Nama</label>
+        <input type="text" id="essAccName" placeholder="Nama lengkap" class="field" autocomplete="off" />
+        <label for="essAccRole" class="sr-only">Role</label>
+        <select id="essAccRole" class="field">
+          <option value="">Pilih role…</option>
+          <option value="Staff Tiket / Gate">Staff Tiket / Gate</option>
+          <option value="Supervisor">Supervisor</option>
+          <option value="Manager">Manager</option>
+          <option value="Admin">Admin</option>
+          <option value="Owner">Owner</option>
+          <option value="Direktur">Direktur</option>
+        </select>
+        <label for="essAccPassword" class="sr-only">Password</label>
+        <input type="password" id="essAccPassword" placeholder="Password (min. 8 karakter)" class="field" autocomplete="new-password" />
+        <button type="submit" id="essAccountBtn" class="btn-primary sm:col-span-2">Tambah Akun</button>
+      </form>
+      <p id="essAccountError" class="hidden note-error mt-3 mb-0" role="alert"></p>
+
+      <div class="mt-6">
+        <h3 class="font-heading font-semibold text-ink text-sm mb-3">Daftar Akun</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="bg-paper text-muted text-[11px] uppercase tracking-wider">
+                <th scope="col" class="px-4 py-3 font-heading font-semibold whitespace-nowrap">NIK</th>
+                <th scope="col" class="px-4 py-3 font-heading font-semibold">Nama</th>
+                <th scope="col" class="px-4 py-3 font-heading font-semibold">Role</th>
+                <th scope="col" class="px-4 py-3 font-heading font-semibold">Status</th>
+                <th scope="col" class="px-4 py-3 font-heading font-semibold text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="essAccountBody" class="divide-y divide-line-soft"></tbody>
+          </table>
+        </div>
+        <p id="essAccountEmpty" class="hidden text-center text-muted text-sm py-6">Belum ada akun.</p>
+      </div>
     </div>
 
     <p id="essSyncNote" class="text-center text-[11px] text-muted mt-5" aria-live="polite"></p>
