@@ -35,7 +35,8 @@ const ogUrl = canonical ?? u(Astro.url.pathname);
   <title>{docTitle}</title>
 
   <link rel="canonical" href={ogUrl} />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
 
   {/* Open Graph + Twitter — link previews on WhatsApp, Instagram, FB, X */}
   <meta property="og:site_name" content={SITE.name} />
