@@ -93,7 +93,7 @@ const otherLocale = LOCALES.find(l => l !== locale);
 
       <div class="flex items-center gap-2.5">
         {/* Language switcher */}
-        <form method="POST" action="/api/locale" class="hidden lg:inline-flex">
+        <form method="POST" action="/api/locale" data-locale-form class="hidden lg:inline-flex">
           <input type="hidden" name="locale" value={otherLocale} />
           <input type="hidden" name="next" value={Astro.url.pathname} />
           <button type="submit" class="nav-account inline-flex items-center gap-1.5 border rounded-full px-3 py-2 font-heading font-semibold text-xs transition-colors" aria-label="Switch language">
@@ -179,7 +179,7 @@ const otherLocale = LOCALES.find(l => l !== locale);
       <a href="/kontak" data-route="kontak" class="py-3 border-b border-line-soft">{t('nav.kontak')}</a>
 
       {/* Mobile language switcher */}
-      <form method="POST" action="/api/locale" class="border-b border-line-soft">
+      <form method="POST" action="/api/locale" data-locale-form class="border-b border-line-soft">
         <input type="hidden" name="locale" value={otherLocale} />
         <input type="hidden" name="next" value={Astro.url.pathname} />
         <button type="submit" class="py-3 w-full text-left flex items-center gap-2 font-heading text-sm text-ink">
@@ -202,6 +202,27 @@ const otherLocale = LOCALES.find(l => l !== locale);
     </nav>
   </div>
 </header>
+
+<script is:inline>
+  document.addEventListener('submit', async (e) => {
+    const form = e.target.closest('[data-locale-form]');
+    if (!form) return;
+    e.preventDefault();
+    const locale = form.querySelector('input[name="locale"]')?.value;
+    const next = form.querySelector('input[name="next"]')?.value || '/';
+    try {
+      await fetch('/api/locale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ locale, next }),
+      });
+    } catch {
+      /* fall through to full reload regardless */
+    }
+    window.location.href = next;
+  });
+</script>
 
 <style>
   .nav-account { color: #fff; border-color: rgba(255, 255, 255, .3); }
