@@ -14,21 +14,21 @@ const LOCALE_COOKIE = 'nl_lang';
 const PROTECTED_PAGES = ['/booking', '/akun', '/pesanan'];
 
 /** API routes that require a signed-in customer. Prefix match. */
-const PROTECTED_API = ['/api/bookings', '/api/my', '/api/payments/'];
+const PROTECTED_API = ['/api/bookings', '/api/my'];
 
 /** Pages that require a signed-in employee. */
 const PROTECTED_EMPLOYEE_PAGES = [];
 
 /** API routes that require a signed-in employee. */
-const EMPLOYEE_API = ['/api/ess/tickets', '/api/ess/verify', '/api/ess/videos', '/api/ess/accounts', '/api/ess/promos'];
+const EMPLOYEE_API = ['/api/ess/videos', '/api/ess/accounts'];
 
 /** API routes that require a SUPERVISOR. */
-const SUPERVISOR_API = ['/api/ess/reports', '/api/ess/quota'];
+const SUPERVISOR_API = [];
 
 const SUPERVISOR_ROLES = ['Supervisor', 'Manager', 'Admin', 'Owner', 'Direktur'];
 
 /** Exempt from customer gate (third-party webhooks). */
-const CUSTOMER_GATE_EXEMPT = ['/api/payments/notification'];
+const CUSTOMER_GATE_EXEMPT = [];
 
 const startsWithAny = (path, prefixes) => prefixes.some(p => path === p || path.startsWith(p + '/'));
 

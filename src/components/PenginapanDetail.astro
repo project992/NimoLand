@@ -4,15 +4,13 @@ import BedDouble from '@lucide/astro/icons/bed-double';
 import Wifi from '@lucide/astro/icons/wifi';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import MessageCircle from '@lucide/astro/icons/message-circle';
-import RatingBadge from './RatingBadge.astro';
 import BrandIcon from './BrandIcon.astro';
 import NimoImage from './NimoImage.astro';
 import { rupiah, FOOTAGE } from '../lib/data.js';
 
 /* Server-rendered detail view for /penginapan/[slug]. `.view` + data-view
    contract keeps the client Router able to navigate the whole app. */
-const { h, ratings = {} } = Astro.props;
-const rating = ratings[h.id] ?? null;
+const { h } = Astro.props;
 const contactable = h.rooms.length === 0 || h.rooms.some(r => r.rate == null);
 const from = h.rooms.filter(r => r.rate != null).map(r => r.rate).sort((a, b) => a - b)[0];
 const video = FOOTAGE[h.id]?.aerial;
@@ -28,7 +26,6 @@ const video = FOOTAGE[h.id]?.aerial;
         <p class="eyebrow text-white/70 mb-0">
           <span class="w-6 h-px bg-white/40"></span> {h.area}
         </p>
-        <RatingBadge rating={rating} size="md" tone="light" />
       </div>
       <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4">
         {h.name}

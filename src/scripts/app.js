@@ -8,14 +8,13 @@
    04. Navbar     — scroll state + mobile menu
    05. Hero / MomentSlider
    06. Wahana / Destinations / Hotels / Gallery / FAQ
-   07. Booking    — ticket & room, priced by the server
+   07. Booking    — room, priced by the server
    08. ESS        — employee portal against /api/ess/*
    ===================================================================== */
 import {
   DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES, CATEGORIES, WAHANA,
-  MOMENTS, GALLERY, PACKAGES, FAQ_DATA, RULES,
-  allRooms, parseISODate, addDays, toISODate, priceTicket, rupiah, localSrc,
-  packagesForDestination,
+  MOMENTS, GALLERY, FAQ_DATA, RULES,
+  allRooms, parseISODate, addDays, toISODate, rupiah, localSrc,
 } from '../lib/data.js';
 import { icon } from '../lib/icons.js';
 
@@ -152,26 +151,6 @@ function coverMedia(d, className) {
                class="${className}" ${className.includes('w-full') ? 'loading="lazy"' : ''}>`;
 }
 
-/** Star row for rating badges built in template strings. */
-function ratingBadge(destId, tone = 'dark') {
-  const r = State.ratings[destId];
-  if (!r) return '';
-  const score = r.rating.toFixed(1).replace('.', ',');
-  const count = Number(r.count).toLocaleString(State.locale === 'en' ? 'en-US' : 'id-ID');
-  const label = State.locale === 'en'
-    ? `Official rating ${score} out of 5, based on ${count} reviews${r.source ? ` on ${r.source}` : ''}`
-    : `Rating resmi ${score} dari 5, berdasarkan ${count} ulasan${r.source ? ` di ${r.source}` : ''}`;
-  const skin = tone === 'light'
-    ? 'bg-white/15 border-white/25 text-white'
-    : 'bg-clay-tint border-clay/25 text-ink';
-  return `<span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-heading ${skin}"
-                title="${esc(label)}" aria-label="${esc(label)}">
-      ${icon('star', 'w-3.5 h-3.5 fill-clay text-clay shrink-0')}
-      <span class="font-bold">${score}</span>
-      <span class="opacity-70">(${count})</span>
-    </span>`;
-}
-
 /* ------------------------------------------------------------------
    02. AUTH — session state and the booking gate
 ------------------------------------------------------------------ */
@@ -240,7 +219,7 @@ const Auth = {
     // Wait for Booking.init() to have wired everything up.
     setTimeout(() => {
       if (intent.kind === 'room' && intent.roomId) Booking.openRoom(intent.roomId, { skipGate: true });
-      else Booking.open(intent.tab ?? 'ticket', { skipGate: true });
+      else Booking.open({ skipGate: true });
       Toast.show(t('sukses.selamatDatang') + ' — ' + (State.locale === 'en' ? 'continue your booking' : 'lanjutkan pemesanan Anda'));
     }, 150);
   },
@@ -355,7 +334,20 @@ const Navbar = {
     const iconOpen = document.getElementById('iconOpen');
     const iconClose = document.getElementById('iconClose');
 
-    const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 40);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      navbar.classList.toggle('scrolled', y > 40);
+      if (y > 40 && !menu.classList.contains('hidden')) {
+        /* keep navbar visible while the mobile menu is open */
+        navbar.classList.remove('hidden-nav');
+      } else if (y > 40 && y > lastY) {
+        navbar.classList.add('hidden-nav');
+      } else {
+        navbar.classList.remove('hidden-nav');
+      }
+      lastY = y;
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
@@ -550,16 +542,12 @@ const Destinations = {
           ${d.tag ? `<span class="absolute top-3 left-3 bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">${esc(d.tag)}</span>` : ''}
         </div>
         <div class="p-5 flex flex-col flex-1">
-          <div class="flex items-start justify-between gap-3">
-            <p class="font-heading font-bold text-ink text-lg">${esc(d.name)}</p>
-            ${ratingBadge(d.id)}
-          </div>
+          <p class="font-heading font-bold text-ink text-lg">${esc(d.name)}</p>
           <p class="text-xs text-muted mt-1 flex items-center gap-1.5">
             ${icon('map-pin', 'w-3.5 h-3.5 shrink-0')}${esc(d.area)}
           </p>
           <p class="text-sm text-muted leading-relaxed mt-3 flex-1">${esc(d.desc.slice(0, 110))}…</p>
           <div class="flex items-center justify-between mt-5 pt-4 border-t border-line-soft">
-            <span class="text-sm font-heading font-semibold text-ink">${esc(d.price)}</span>
             <button type="button" data-dest-detail="${d.id}"
                     class="inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-sage-deep border-b-2 border-sage pb-0.5 transition-colors">
               ${State.locale === 'en' ? 'View details' : 'Lihat detail'} ${icon('arrow-right', 'w-3.5 h-3.5')}
@@ -599,7 +587,6 @@ const Destinations = {
     const d = DESTINATIONS.find(x => x.id === id);
     if (!d) return;
     const body = document.getElementById('destModalBody');
-    const rating = State.ratings[d.id];
 
     body.innerHTML = `
       <div class="relative aspect-[16/9] img-shell">
@@ -612,7 +599,6 @@ const Destinations = {
         <div class="absolute bottom-5 left-6 right-6">
           <div class="flex items-center gap-3 flex-wrap">
             <h3 class="font-heading font-bold text-white text-2xl">${esc(d.name)}</h3>
-            ${ratingBadge(d.id, 'light')}
           </div>
           <p class="text-white/75 text-xs mt-1 flex items-center gap-1.5">
             ${icon('map-pin', 'w-3.5 h-3.5')}${esc(d.area)}
@@ -620,14 +606,6 @@ const Destinations = {
         </div>
       </div>
       <div class="p-6 sm:p-7">
-        ${rating ? `
-          <div class="flex items-center gap-3 mb-5 pb-5 border-b border-line-soft">
-            ${ratingBadge(d.id)}
-            <span class="text-xs text-muted">
-              ${State.locale === 'en' ? 'Official rating' : 'Rating resmi'}${rating.source ? ` · ${esc(rating.source)}` : ''}
-            </span>
-          </div>` : ''}
-
         <p class="text-sm text-muted leading-relaxed">${esc(d.desc)}</p>
 
         <p class="font-heading font-semibold text-ink text-sm mt-6 mb-3">${State.locale === 'en' ? 'Highlights' : 'Sorotan'}</p>
@@ -645,23 +623,12 @@ const Destinations = {
             </div>`).join('')}
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3 mt-7">
-          ${d.bookable
-            ? `<button type="button" data-dest-book class="btn-accent flex-1 py-3.5">
-                 ${icon('ticket', 'w-4 h-4')} ${State.locale === 'en' ? 'Buy Ticket' : 'Beli Tiket'} ${esc(d.name)}
-               </button>`
-            : `<a href="https://wa.me/6281111121162" target="_blank" rel="noopener" class="btn-accent flex-1 py-3.5">
-                 ${State.locale === 'en' ? 'Check Availability' : 'Tanya Ketersediaan'}
-               </a>`}
-          <button type="button" data-close-dest class="btn-outline py-3.5">${State.locale === 'en' ? 'Close' : 'Tutup'}</button>
+        <div class="flex mt-7">
+          <button type="button" data-close-dest class="btn-outline flex-1 py-3.5">${State.locale === 'en' ? 'Close' : 'Tutup'}</button>
         </div>
       </div>`;
 
     ImageFallback.bindAll(body);
-    body.querySelector('[data-dest-book]')?.addEventListener('click', () => {
-      this.closeDetail();
-      Booking.open('ticket', { destinationId: d.id });
-    });
 
     document.getElementById('destModal').classList.remove('hidden');
     lockScroll(true);
@@ -894,46 +861,13 @@ const FAQ = {
    07. BOOKING
 ------------------------------------------------------------------ */
 const Booking = {
-  tab: 'ticket',
-  ticket: { packageId: 'regular', nationality: 'domestik', adult: 1, child: 0, date: '' },
-  destinationId: 'nimo-highland',
   room: { roomId: null, checkIn: '', checkOut: '', rooms: 1, guests: 2 },
 
   init() {
     const modal = document.getElementById('bookingModal');
 
-    document.querySelectorAll('.btab').forEach(b =>
-      b.addEventListener('click', () => this.setTab(b.dataset.btab)));
-
-    /* ---------- Ticket ---------- */
-    const minDate = DateUtil.addDays(DateUtil.today(), RULES.MIN_LEAD_DAYS);
-    const arrival = document.getElementById('arrivalDate');
-    arrival.min = DateUtil.toISO(minDate);
-    arrival.value = '';
-    document.getElementById('dateHint').textContent =
-      t('booking.dateHint') + DateUtil.long(minDate) + '.';
-
-    document.querySelectorAll('input[name="nationality"]').forEach(r =>
-      r.addEventListener('change', e => { this.ticket.nationality = e.target.value; this.updateTicket(); }));
-    document.getElementById('ticketDest').addEventListener('change', e => this.setDestination(e.target.value));
-    document.getElementById('pkgList').addEventListener('change', e => {
-      if (e.target.name === 'pkg') { this.ticket.packageId = e.target.value; this.updateTicket(); }
-    });
-    ['change', 'input'].forEach(ev =>
-      arrival.addEventListener(ev, () => { this.ticket.date = arrival.value; this.updateTicket(); }));
-
-    document.querySelectorAll('[data-step]').forEach(btn =>
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.step;
-        const min = key === 'adult' ? 1 : 0;
-        const next = this.ticket[key] + Number(btn.dataset.delta);
-        if (next < min || next > RULES.MAX_TICKETS) return;
-        this.ticket[key] = next;
-        this.updateTicket();
-      }));
-    document.getElementById('payButton').addEventListener('click', () => this.checkoutTicket());
-
     /* ---------- Room ---------- */
+    const minDate = DateUtil.addDays(DateUtil.today(), RULES.MIN_LEAD_DAYS);
     const roomSelect = document.getElementById('roomSelect');
     this.room.roomId = allRooms()[0].id;
     roomSelect.value = this.room.roomId;
@@ -964,7 +898,7 @@ const Booking = {
     /* ---------- Open / close ---------- */
     document.addEventListener('click', e => {
       const b = e.target.closest('[data-open-booking]');
-      if (b && !e.target.closest('#destModal')) this.open(b.dataset.openBooking || 'ticket');
+      if (b && !e.target.closest('#destModal')) this.open({});
     });
     document.getElementById('closeBooking').addEventListener('click', () => this.close());
     modal.addEventListener('click', e => { if (e.target === modal) this.close(); });
@@ -976,78 +910,14 @@ const Booking = {
       lockScroll(false);
     });
 
-    this.initEticketActions();
-    this.setTab('ticket');
-    this.setDestination(this.destinationId);
     this.updateRoom();
-    this.loadPromos();
-  },
-
-  /* Fetch active promos (read-only, from /api/promos) and cache for the
-     booking summary. Bonus is recomputed authoritatively server-side at
-     checkout — this only improves the on-screen preview. */
-  promos: [],
-  async loadPromos() {
-    const { ok, data } = await api('/api/promos');
-    this.promos = ok ? (data?.promos ?? []) : [];
-    this.updateTicket();
-  },
-
-  /** Free tickets granted by the first applicable buy_n_get_m promo. */
-  bonusFor(tk) {
-    for (const p of this.promos) {
-      if (p.promo_type !== 'buy_n_get_m') continue;
-      if (p.target_package && p.target_package !== tk.packageId) continue;
-      const paid = tk.adult + tk.child;
-      const buy = Math.max(1, Number(p.buy_qty) || 1);
-      const each = Math.max(1, Number(p.free_qty) || 1);
-      const bonus = Math.min(Math.floor(paid / buy) * each, RULES.MAX_TICKETS - paid);
-      if (bonus > 0) return { bonus, promo: p };
-    }
-    return { bonus: 0, promo: null };
-  },
-
-  setTab(tab) {
-    this.tab = tab;
-    document.getElementById('tabTicket').classList.toggle('hidden', tab !== 'ticket');
-    document.getElementById('tabRoom').classList.toggle('hidden', tab !== 'room');
-    document.querySelectorAll('.btab').forEach(b => {
-      const on = b.dataset.btab === tab;
-      b.classList.toggle('text-ink', on);
-      b.classList.toggle('border-sage', on);
-      b.classList.toggle('text-muted', !on);
-      b.classList.toggle('border-transparent', !on);
-    });
   },
 
   /** The booking gate. `skipGate` is only set when resuming after a login. */
-  open(tab = 'ticket', { skipGate = false, destinationId } = {}) {
-    if (!skipGate && !Auth.requireCustomer({ kind: 'ticket', tab })) return;
-    if (destinationId) this.destinationId = destinationId;
-    this.setTab(tab);
+  open({ skipGate = false } = {}) {
+    if (!skipGate && !Auth.requireCustomer({ kind: 'room' })) return;
     document.getElementById('bookingModal').classList.remove('hidden');
     lockScroll(true);
-  },
-
-  /** Render ticket categories for a destination and select its first package. */
-  setDestination(destinationId) {
-    this.destinationId = destinationId;
-    const select = document.getElementById('ticketDest');
-    if (select && select.value !== destinationId) select.value = destinationId;
-    const list = document.getElementById('pkgList');
-    const packs = packagesForDestination(destinationId);
-    const current = this.ticket.packageId;
-    const activeId = packs.some(p => p.id === current) ? current : packs[0]?.id;
-    this.ticket.packageId = activeId;
-    list.innerHTML = packs.map((p, i) => `
-      <label class="${i === 0 ? 'border-sage bg-sage-tint' : 'border-line'} border rounded-xl px-4 py-3.5 cursor-pointer transition-colors hover:border-sage has-[:checked]:border-sage has-[:checked]:bg-sage-tint flex items-start gap-3">
-        <input type="radio" name="pkg" value="${esc(p.id)}" ${activeId === p.id ? 'checked' : ''} class="accent-[#5E7A66] mt-1" />
-        <span>
-          <span class="block text-sm font-heading font-semibold text-ink">${esc(p.name)}</span>
-          <span class="block text-xs text-muted mt-0.5">${esc(p.desc)}</span>
-        </span>
-      </label>`).join('');
-    this.updateTicket();
   },
 
   close() {
@@ -1060,334 +930,7 @@ const Booking = {
     this.room.roomId = roomId;
     document.getElementById('roomSelect').value = roomId;
     this.updateRoom();
-    this.open('room', { skipGate: true });
-  },
-
-  /* ================= TICKET ================= */
-  getPackage() { return PACKAGES.find(p => p.id === this.ticket.packageId); },
-
-  updateTicket() {
-    const tk = this.ticket;
-    const arrivalInput = document.getElementById('arrivalDate');
-    const dateError = document.getElementById('dateError');
-    const expiryNotice = document.getElementById('expiryNotice');
-    const expirySpacer = document.getElementById('expirySpacer');
-
-    document.getElementById('adultCount').textContent = tk.adult;
-    document.getElementById('childCount').textContent = tk.child;
-    document.querySelectorAll('[data-step]').forEach(btn => {
-      const key = btn.dataset.step;
-      const delta = Number(btn.dataset.delta);
-      const min = key === 'adult' ? 1 : 0;
-      btn.disabled = (delta < 0 && tk[key] <= min) || (delta > 0 && tk[key] >= RULES.MAX_TICKETS);
-    });
-
-    // --- H-1 validation ---
-    let valid = false;
-    let arrival = null;
-    if (tk.date) {
-      arrival = DateUtil.parseISO(tk.date);
-      const min = DateUtil.addDays(DateUtil.today(), RULES.MIN_LEAD_DAYS);
-      if (!arrival) {
-        dateError.textContent = t('booking.tglTidakTerbaca');
-        dateError.classList.remove('hidden');
-      } else if (arrival < min) {
-        dateError.textContent = t('booking.tglMinH1');
-        dateError.classList.remove('hidden');
-        arrivalInput.value = '';
-        tk.date = '';
-        arrival = null;
-      } else {
-        dateError.classList.add('hidden');
-        valid = true;
-      }
-    } else {
-      dateError.classList.add('hidden');
-    }
-
-    const quote = priceTicket({
-      packageId: tk.packageId,
-      nationality: tk.nationality,
-      adult: tk.adult,
-      child: tk.child,
-      arrival: arrival ?? DateUtil.today(),
-    });
-
-    document.getElementById('adultPriceLabel').textContent = rupiah(quote.adultUnit) + ' ' + t('booking.perOrang');
-    document.getElementById('childPriceLabel').textContent = rupiah(quote.childUnit) + ' ' + t('booking.perOrang');
-
-    expiryNotice.classList.toggle('hidden', !valid);
-    expirySpacer.classList.toggle('hidden', valid);
-    if (valid) {
-      document.getElementById('expiryValue').textContent =
-        DateUtil.long(quote.expiry) + ` (${t('booking.kedatangan')} ${RULES.TICKET_VALID_DAYS} ${State.locale === 'en' ? 'days' : 'hari'})`;
-    }
-
-    document.getElementById('sumPackage').textContent =
-      this.getPackage().name + (tk.nationality === 'manca' ? ' · ' + t('booking.mancanegara') : ' · ' + t('booking.domestik'));
-    document.getElementById('sumArrival').textContent = valid
-      ? DateUtil.long(arrival) + ' · ' + (DateUtil.isWeekend(arrival) ? t('booking.weekend') : t('booking.weekday'))
-      : t('booking.belumDipilih');
-    document.getElementById('sumExpiry').textContent = valid ? DateUtil.long(quote.expiry) : t('booking.belumDipilih');
-    document.getElementById('sumAdult').textContent =
-      `${tk.adult} × ${rupiah(quote.adultUnit)} = ${rupiah(quote.adultUnit * tk.adult)}`;
-    document.getElementById('sumChild').textContent = tk.child === 0
-      ? '—'
-      : `${tk.child} × ${rupiah(quote.childUnit)} = ${rupiah(quote.childUnit * tk.child)}`;
-    document.getElementById('sumTotal').textContent = rupiah(valid ? quote.total : 0);
-
-    // --- Promo (Buy 1 Get 1) preview on the booking summary ---
-    const promoEl = document.getElementById('sumPromo');
-    if (promoEl) {
-      const { bonus, promo } = this.bonusFor(tk);
-      if (valid && bonus > 0 && promo) {
-        promoEl.textContent = `${promo.title} — ${t('booking.gratisTiket')}: +${bonus} ${t('booking.tiket')} GRATIS (${tk.adult + tk.child + bonus} ${State.locale === 'en' ? 'tickets' : 'tiket'})`;
-        promoEl.classList.remove('hidden');
-      } else {
-        promoEl.classList.add('hidden');
-      }
-    }
-
-    document.getElementById('payButton').disabled = !valid || quote.total <= 0;
-    this._ticket = { valid, arrival, expiry: quote.expiry, total: quote.total };
-  },
-
-  async checkoutTicket() {
-    const r = this._ticket;
-    if (!r?.valid) return;
-
-    const tk = this.ticket;
-    const btn = document.getElementById('payButton');
-    const errEl = document.getElementById('ticketApiError');
-    const modal = document.getElementById('eticketModal');
-    const loading = document.getElementById('eticketLoading');
-    const body = document.getElementById('eticketBody');
-
-    errEl.classList.add('hidden');
-    btn.disabled = true;
-
-    this.close();
-    modal.classList.remove('hidden');
-    loading.classList.remove('hidden');
-    body.classList.add('hidden');
-    lockScroll(true);
-    document.getElementById('eticketLoadingText').textContent = t('booking.memprosesPembayaran');
-
-    // The server recomputes the price from src/lib/data.js and returns the
-    // stored record. Nothing about the amount is taken from this request.
-    const { ok, status, data } = await api('/api/bookings', {
-      method: 'POST',
-      body: JSON.stringify({
-        kind: 'ticket',
-        packageId: tk.packageId,
-        nationality: tk.nationality,
-        adult: tk.adult,
-        child: tk.child,
-        arrival: tk.date,
-      }),
-    });
-
-    btn.disabled = false;
-
-    if (!ok) {
-      modal.classList.add('hidden');
-      lockScroll(false);
-      if (status === 401) {
-        // Session expired between opening the form and paying.
-        State.user = null;
-        Auth.requireCustomer({ kind: 'ticket', tab: 'ticket' });
-        return;
-      }
-      this.open('ticket', { skipGate: true });
-      errEl.textContent = data?.error ?? t('booking.pemesananGagal');
-      errEl.classList.remove('hidden');
-      return;
-    }
-
-    if (data.payment?.midtrans) {
-      const paid = await this.payViaSnap(data.payment);
-      if (paid) {
-        const fresh = await this.fetchTicketByOrder(data.payment.order_id);
-        this.renderEticket(fresh ?? data.booking);
-        loading.classList.add('hidden');
-        body.classList.remove('hidden');
-        Toast.show(t('booking.pembayaranBerhasil'));
-        return;
-      }
-      modal.classList.add('hidden');
-      lockScroll(false);
-      this.open('ticket', { skipGate: true });
-      errEl.textContent = t('booking.pembayaranBelumSelesai');
-      errEl.classList.remove('hidden');
-      return;
-    }
-
-    this.renderEticket(data.booking);
-    loading.classList.add('hidden');
-    body.classList.remove('hidden');
-    Toast.show(t('booking.pembayaranBerhasil'));
-  },
-
-  /* ============ SNAP (MIDTRANS) ============ */
-  _snapReady: null,
-
-  async ensureSnap(base, clientKey) {
-    if (window.snap) return;
-    if (this._snapReady) return this._snapReady;
-    this._snapReady = new Promise((res, rej) => {
-      const s = document.createElement('script');
-      s.src = `${base}/snap/snap.js?client_key=${encodeURIComponent(clientKey)}`;
-      s.async = true;
-      s.onload = res;
-      s.onerror = () => { this._snapReady = null; rej(new Error('snap load failed')); };
-      document.head.appendChild(s);
-    });
-    return this._snapReady;
-  },
-
-  /** Buka Snap, lalu tunggu sampai webhook melunasi tiketnya. */
-  async payViaSnap(p) {
-    try {
-      await this.ensureSnap(p.snap_base, p.client_key);
-    } catch (err) {
-      console.error('[pay] snap load failed:', err);
-      return false;
-    }
-    return new Promise(resolve => {
-      let settled = false;
-      const done = v => { if (!settled) { settled = true; resolve(v); } };
-      window.snap.pay(p.token, {
-        onSuccess: () => done(this.waitTicketPaid(p.order_id)),
-        onPending: () => done(this.waitTicketPaid(p.order_id)),
-        onError: () => done(this.waitTicketPaid(p.order_id, 8)),
-        onClose: () => done(this.waitTicketPaid(p.order_id, 8)),
-      });
-      // Pengaman: kalau callback Snap tak pernah datang, putuskan setelah 90 dtk.
-      setTimeout(() => done(this.waitTicketPaid(p.order_id, 6)), 90_000);
-    });
-  },
-
-  async fetchTicketByOrder(orderId) {
-    const { ok, data } = await api(`/api/payments/${encodeURIComponent(orderId)}/status`);
-    return ok ? data.ticket : null;
-  },
-
-  /** Polling status pembayaran sampai lunas / batal / habis percobaan. */
-  waitTicketPaid(orderId, tries = 30, delay = 2000) {
-    return new Promise(resolve => {
-      const poll = async (n) => {
-        const { ok, data } = await api(`/api/payments/${encodeURIComponent(orderId)}/status`);
-        if (ok && data.ticket?.status === 'LUNAS') return resolve(true);
-        if (ok && ['CANCELED', 'EXPIRED', 'FAILED'].includes(data.payment?.status)) return resolve(false);
-        if (n <= 0) return resolve(false);
-        setTimeout(() => poll(n - 1), delay);
-      };
-      poll(tries);
-    });
-  },
-
-  renderEticket(b) {
-    const arrival = DateUtil.parseISO(b.visit_date);
-    const expiry = DateUtil.parseISO(b.expiry_date);
-    const tk = this.ticket;
-
-    document.getElementById('ticketCode').textContent = b.booking_code;
-    document.getElementById('ticketName').textContent = b.customer_name;
-    document.getElementById('ticketType').textContent = b.ticket_type;
-    document.getElementById('ticketQty').textContent =
-      `${b.quantity} ${State.locale === 'en' ? 'persons' : 'orang'} (${tk.adult} ${t('booking.dewasaLabel')}${tk.child ? ' + ' + tk.child + ' ' + t('booking.anakLabel') : ''})`;
-    document.getElementById('ticketTotal').textContent = rupiah(Number(b.total_price));
-    document.getElementById('ticketArrival').textContent = arrival ? DateUtil.long(arrival) : '—';
-    document.getElementById('ticketExpiry').textContent = expiry ? DateUtil.long(expiry) : '—';
-
-    const promoEl = document.getElementById('ticketPromo');
-    if (promoEl) {
-      if (b.promo_note && Number(b.promo_bonus_qty) > 0) {
-        promoEl.textContent = `${b.promo_note} — Anda mendapat ${b.promo_bonus_qty} tiket GRATIS (+${b.promo_bonus_qty}).`;
-        promoEl.classList.remove('hidden');
-      } else {
-        promoEl.classList.add('hidden');
-      }
-    }
-
-    const qr = document.getElementById('ticketQR');
-    qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' +
-      encodeURIComponent(b.booking_code);
-    qr.alt = 'QR Code ' + b.booking_code;
-  },
-
-  /* ================= E-TICKET ACTIONS ================= */
-  async downloadTicket() {
-    const card = document.getElementById('ticketCard');
-    const btn = document.getElementById('eticketPrint');
-    const original = btn.innerHTML;
-
-    btn.disabled = true;
-    btn.textContent = t('booking.menyiapkanFile');
-
-    try {
-      // Loaded on demand: ~200 kB that only matters if someone hits download.
-      const { default: html2canvas } = await import('html2canvas');
-
-      const qr = document.getElementById('ticketQR');
-      if (!qr.complete || qr.naturalWidth === 0) {
-        await new Promise(resolve => {
-          qr.addEventListener('load', resolve, { once: true });
-          qr.addEventListener('error', resolve, { once: true });
-        });
-      }
-
-      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-      const link = document.createElement('a');
-      link.download = 'E-Ticket-Nimo-' +
-        document.getElementById('ticketCode').textContent.replace(/[^\w-]/g, '') + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } catch (err) {
-      console.error('[eticket] download failed:', err);
-      Toast.show(t('booking.gagalFile'));
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = original;
-    }
-  },
-
-  shareWhatsApp() {
-    const get = id => document.getElementById(id).textContent;
-    const lines = [
-      t('booking.haloNimo'),
-      '',
-      `*${t('booking.kotaBooking')}:* ${get('ticketCode')}`,
-      `*${t('booking.nama')}:* ${get('ticketName')}`,
-      `*${t('booking.tipeTiket')}:* ${get('ticketType')}`,
-      `*${t('booking.jumlah')}:* ${get('ticketQty')}`,
-      `*${t('booking.total')}:* ${get('ticketTotal')}`,
-      `*${t('booking.checkinLabel')}:* ${get('ticketArrival')}`,
-      `*${t('booking.berlakuSampai')}:* ${get('ticketExpiry')}`,
-      '',
-      t('booking.tiketBerlakuHari') + ' ' + RULES.TICKET_VALID_DAYS + ' ' + t('booking.tiketBerlakuSuffix'),
-    ];
-    window.open('https://wa.me/6281111121162?text=' + encodeURIComponent(lines.join('\n')), '_blank');
-  },
-
-  initEticketActions() {
-    document.getElementById('closeEticket').addEventListener('click', () => this.closeEticket());
-    document.getElementById('eticketModal').addEventListener('click', e => {
-      if (e.target === e.currentTarget) this.closeEticket();
-    });
-    document.getElementById('eticketPrint').addEventListener('click', () => this.downloadTicket());
-    document.getElementById('eticketWhatsapp').addEventListener('click', () => this.shareWhatsApp());
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !document.getElementById('eticketModal').classList.contains('hidden')) {
-        this.closeEticket();
-      }
-    });
-  },
-
-  closeEticket() {
-    document.getElementById('eticketModal').classList.add('hidden');
-    document.body.classList.remove('printing');
-    lockScroll(false);
+    this.open({ skipGate: true });
   },
 
   /* ================= ROOM ================= */
@@ -1565,9 +1108,6 @@ const Booking = {
 ------------------------------------------------------------------ */
 const ESS = {
   user: null,
-  tickets: [],
-  verifyTarget: null,
-  pollTimer: null,
 
   init() {
     const standalone = !!document.getElementById('essStandalone');
@@ -1586,11 +1126,7 @@ const ESS = {
     document.getElementById('essLoginModal').addEventListener('click', e => {
       if (e.target === e.currentTarget && !standalone) this.closeLogin();
     });
-    document.getElementById('essSearch').addEventListener('input', () => this.renderTickets());
-    document.getElementById('essFilter').addEventListener('change', () => this.renderTickets());
     document.getElementById('essLogoutBtn').addEventListener('click', () => this.logout());
-    document.getElementById('essVerifyCancel').addEventListener('click', () => this.closeVerify());
-    document.getElementById('essVerifyConfirm').addEventListener('click', () => this.confirmVerify());
 
     document.getElementById('essVideoForm').addEventListener('submit', e => {
       e.preventDefault();
@@ -1608,31 +1144,15 @@ const ESS = {
       if (btn) this.deleteAccount(btn.dataset.delAcc);
     });
 
-    document.getElementById('essPromoForm').addEventListener('submit', e => {
-      e.preventDefault();
-      this.savePromo();
-    });
-    document.getElementById('essPromoReset').addEventListener('click', () => this.resetPromoForm());
-    document.getElementById('essPromoBody').addEventListener('click', e => {
-      const toggle = e.target.closest('[data-toggle-promo]');
-      if (toggle) { this.togglePromo(toggle.dataset.togglePromo, toggle.dataset.active === 'true'); return; }
-      const edit = e.target.closest('[data-edit-promo]');
-      if (edit) this.editPromo(edit.dataset.editPromo);
-      else {
-        const del = e.target.closest('[data-del-promo]');
-        if (del) this.deletePromo(del.dataset.delPromo);
-      }
-    });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { this.closeLogin(); this.closeVerify(); }
+      if (e.key === 'Escape') { this.closeLogin(); }
     });
 
     // The server already rendered the dashboard visible for a signed-in
-    // employee; just start pulling data. Di /ess, tampilkan login bila belum
-    // ada sesi karyawan.
+    // employee. Di /ess, tampilkan login bila belum ada sesi karyawan.
     if (State.user?.kind === 'employee') {
       this.user = State.user;
-      this.startPolling();
+      this.showDashboard();
     } else if (standalone) {
       this.openLogin();
     }
@@ -1694,7 +1214,6 @@ const ESS = {
     document.getElementById('essDashboard').classList.remove('hidden');
     lockScroll(true);
     this.syncAccountsPanel();
-    this.startPolling();
   },
 
   isAdmin() {
@@ -1702,15 +1221,11 @@ const ESS = {
     return !!(u && u.kind === 'employee' && (u.name || '').trim().toLowerCase() === 'ami');
   },
 
-  /* Show the account & promo management panels only for the designated admin (Ami). */
+  /* Show the account management panel only for the designated admin (Ami). */
   syncAccountsPanel() {
     const panel = document.getElementById('essAccountsPanel');
     if (panel) panel.classList.toggle('hidden', !this.isAdmin());
     if (this.isAdmin()) this.loadAccounts();
-
-    const promoPanel = document.getElementById('essPromosPanel');
-    if (promoPanel) promoPanel.classList.toggle('hidden', !this.isAdmin());
-    if (this.isAdmin()) this.loadPromosAdmin();
   },
 
   async loadAccounts() {
@@ -1799,278 +1314,6 @@ const ESS = {
     this.loadAccounts();
   },
 
-  /* ============ PROMO (admin) ============ */
-  async loadPromosAdmin() {
-    const { ok, status, data } = await api('/api/ess/promos');
-    if (!ok) {
-      if (status === 401) { this.forceLogout(); return; }
-      if (status === 403) { this.syncAccountsPanel(); return; }
-      return;
-    }
-    this.renderPromos(data.promos ?? []);
-    this._promos = data.promos ?? [];
-  },
-
-  renderPromos(promos) {
-    document.getElementById('essPromoBody').innerHTML = promos.map(p => {
-      const bonus = p.promo_type === 'buy_n_get_m' ? `Beli ${p.buy_qty} gratis ${p.free_qty}` : (p.promo_type === 'percentage' ? `-${p.discount_pct}%` : `Rp ${Number(p.discount_amount || 0).toLocaleString('id-ID')}`);
-      const status = p.active
-        ? '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-ok/25 bg-ok-tint text-ok px-2.5 py-1 rounded-full">AKTIF</span>'
-        : '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-line bg-paper text-muted px-2.5 py-1 rounded-full">NONAKTIF</span>';
-      return `
-        <tr class="hover:bg-paper/70 transition-colors">
-          <td class="px-3 py-3 font-heading font-bold text-ink text-xs whitespace-nowrap">${esc(p.code)}</td>
-          <td class="px-3 py-3 text-sm text-ink">
-            ${esc(p.title)}${p.sticky ? ' <span class="text-[10px] text-sage-deep font-semibold">AUTO</span>' : ''}
-            ${p.target_package ? `<span class="block text-[11px] text-muted">${esc(p.target_package)}</span>` : ''}
-          </td>
-          <td class="px-3 py-3 text-xs text-muted whitespace-nowrap">${bonus}</td>
-          <td class="px-3 py-3">${status}</td>
-          <td class="px-3 py-3">
-            <div class="flex justify-end items-center gap-2">
-              <button type="button" data-toggle-promo="${esc(p.id)}" data-active="${p.active}"
-                      class="inline-flex items-center gap-1.5 ${p.active ? 'border border-line text-muted hover:bg-paper' : 'bg-sage hover:bg-sage-deep text-white'} font-heading font-semibold text-xs px-3 py-2 rounded-full transition-colors">
-                ${p.active ? 'Nonaktifkan' : 'Aktifkan'}</button>
-              <button type="button" data-edit-promo="${esc(p.id)}"
-                      class="inline-flex items-center gap-1.5 border border-line text-ink font-heading font-semibold text-xs px-3 py-2 rounded-full hover:bg-paper transition-colors">Edit</button>
-              <button type="button" data-del-promo="${esc(p.id)}"
-                      class="inline-flex items-center gap-1.5 border border-danger/30 text-danger font-heading font-semibold text-xs px-3 py-2 rounded-full hover:bg-danger-tint transition-colors">${icon('trash-2', 'w-3.5 h-3.5')} Hapus</button>
-            </div>
-          </td>
-        </tr>`;
-    }).join('');
-    document.getElementById('essPromoEmpty').classList.toggle('hidden', promos.length > 0);
-  },
-
-  resetPromoForm() {
-    document.getElementById('essPromoId').value = '';
-    document.getElementById('essPromoCode').value = '';
-    document.getElementById('essPromoTitle').value = '';
-    document.getElementById('essPromoDesc').value = '';
-    document.getElementById('essPromoBuy').value = '1';
-    document.getElementById('essPromoFree').value = '1';
-    document.getElementById('essPromoPkg').value = '';
-    document.getElementById('essPromoSticky').checked = true;
-    document.getElementById('essPromoBtn').textContent = 'Simpan Promo';
-    document.getElementById('essPromoError').classList.add('hidden');
-  },
-
-  editPromo(id) {
-    const all = this._promos || [];
-    const p = all.find(x => x.id === id);
-    if (!p) return;
-    document.getElementById('essPromoId').value = p.id;
-    document.getElementById('essPromoCode').value = p.code;
-    document.getElementById('essPromoTitle').value = p.title;
-    document.getElementById('essPromoDesc').value = p.description || '';
-    document.getElementById('essPromoBuy').value = p.buy_qty || 1;
-    document.getElementById('essPromoFree').value = p.free_qty || 1;
-    document.getElementById('essPromoPkg').value = p.target_package || '';
-    document.getElementById('essPromoSticky').checked = !!p.sticky;
-    document.getElementById('essPromoBtn').textContent = 'Perbarui Promo';
-    document.getElementById('essPromoError').classList.add('hidden');
-  },
-
-  async savePromo() {
-    const err = document.getElementById('essPromoError');
-    err.classList.add('hidden');
-    const body = {
-      id: document.getElementById('essPromoId').value || undefined,
-      code: document.getElementById('essPromoCode').value.trim(),
-      title: document.getElementById('essPromoTitle').value.trim(),
-      description: document.getElementById('essPromoDesc').value.trim() || null,
-      promo_type: 'buy_n_get_m',
-      buy_qty: Number(document.getElementById('essPromoBuy').value),
-      free_qty: Number(document.getElementById('essPromoFree').value),
-      target_package: document.getElementById('essPromoPkg').value || null,
-      sticky: document.getElementById('essPromoSticky').checked,
-    };
-    if (!body.code || !body.title) {
-      err.textContent = 'Kode dan nama promo wajib diisi.';
-      err.classList.remove('hidden');
-      return;
-    }
-
-    const btn = document.getElementById('essPromoBtn');
-    btn.disabled = true;
-    const { ok, status, data } = await api('/api/ess/promos', { method: 'POST', body: JSON.stringify(body) });
-    btn.disabled = false;
-
-    if (!ok) {
-      if (status === 401) { this.forceLogout(); return; }
-      if (status === 403) { this.syncAccountsPanel(); }
-      err.textContent = data?.error ?? 'Gagal menyimpan promo.';
-      err.classList.remove('hidden');
-      return;
-    }
-    Toast.show(`Promo ${data.promo.code} disimpan`);
-    this.resetPromoForm();
-    this.loadPromosAdmin();
-  },
-
-  async togglePromo(id, currentActive) {
-    const { ok, status, data } = await api('/api/ess/promos', {
-      method: 'PATCH',
-      body: JSON.stringify({ id, active: !currentActive }),
-    });
-    if (!ok) {
-      if (status === 401) { this.forceLogout(); return; }
-      if (status === 403) { this.syncAccountsPanel(); }
-      Toast.show(data?.error ?? 'Gagal mengubah status promo.');
-      return;
-    }
-    this.loadPromosAdmin();
-  },
-
-  async deletePromo(id) {
-    if (!confirm('Hapus promo ini?')) return;
-    const { ok, status, data } = await api('/api/ess/promos', { method: 'DELETE', body: JSON.stringify({ id }) });
-    if (!ok) {
-      if (status === 401) { this.forceLogout(); return; }
-      if (status === 403) { this.syncAccountsPanel(); }
-      Toast.show(data?.error ?? 'Gagal menghapus promo.');
-      return;
-    }
-    Toast.show(`Promo ${data.deleted} dihapus`);
-    this.loadPromosAdmin();
-  },
-
-  /* ponytail: 20s polling instead of Supabase Realtime. Realtime needed the
-     anon key in the browser, which meant a public read policy on `tickets` —
-     every customer name and total, readable by anyone. If gate staff need
-     sub-second updates, add a server-sent-events endpoint behind the same
-     employee session check. */
-  startPolling() {
-    this.loadTickets();
-    clearInterval(this.pollTimer);
-    this.pollTimer = setInterval(() => {
-      if (!document.hidden) this.loadTickets();
-    }, 20_000);
-  },
-
-  async loadTickets() {
-    const { ok, status, data } = await api('/api/ess/tickets');
-    if (!ok) {
-      if (status === 401) { this.forceLogout(); return; }
-      document.getElementById('essSyncNote').textContent =
-        (State.locale === 'en' ? 'Failed to load data: ' : 'Gagal memuat data: ') + (data?.error ?? (State.locale === 'en' ? 'network error' : 'kesalahan jaringan'));
-      return;
-    }
-    this.tickets = data.tickets ?? [];
-    this.renderTickets();
-  },
-
-  effectiveStatus(t) {
-    if (t.status === 'TERPAKAI' || t.status === 'EXPIRED') return t.status;
-    const exp = DateUtil.parseISO(t.expiry_date);
-    const today = DateUtil.today();
-    return exp && exp < today ? 'EXPIRED' : 'LUNAS';
-  },
-
-  renderTickets() {
-    const query = document.getElementById('essSearch').value.trim().toLowerCase();
-    const filter = document.getElementById('essFilter').value;
-    const q = query.replace('#', '');
-
-    const withStatus = this.tickets.map(t => ({ ...t, status: this.effectiveStatus(t) }));
-    const list = withStatus.filter(t => {
-      const matchText = !query ||
-        t.booking_code.toLowerCase().includes(q) ||
-        t.customer_name.toLowerCase().includes(query);
-      return matchText && (filter === 'SEMUA' || t.status === filter);
-    });
-
-    document.getElementById('essStatTotal').textContent = withStatus.length;
-    document.getElementById('essStatLunas').textContent = withStatus.filter(t => t.status === 'LUNAS').length;
-    document.getElementById('essStatUsed').textContent = withStatus.filter(t => t.status === 'TERPAKAI').length;
-    document.getElementById('essStatExpired').textContent = withStatus.filter(t => t.status === 'EXPIRED').length;
-
-    document.getElementById('essTicketBody').innerHTML = list.map(t => {
-      const visit = DateUtil.parseISO(t.visit_date);
-      const expiry = DateUtil.parseISO(t.expiry_date);
-      const action = t.status === 'LUNAS'
-        ? `<button type="button" data-verify="${esc(t.booking_code)}"
-             class="inline-flex items-center gap-1.5 bg-sage hover:bg-sage-deep text-white font-heading font-semibold text-xs px-3 py-2 rounded-full transition-colors">
-             ${icon('badge-check', 'w-3.5 h-3.5')} ${t('ess.verifikasi')}</button>`
-        : '<span class="text-[11px] text-muted">—</span>';
-
-      return `
-        <tr class="hover:bg-paper/70 transition-colors">
-          <td class="px-4 py-3 font-heading font-semibold text-ink text-xs whitespace-nowrap">${esc(t.booking_code)}</td>
-          <td class="px-4 py-3 font-medium text-ink">${esc(t.customer_name)}</td>
-          <td class="px-4 py-3 text-muted text-xs">${esc(t.ticket_type)}${Number(t.promo_bonus_qty) > 0
-            ? ` <span class="inline-flex items-center gap-1 text-[10px] font-heading font-semibold bg-sage-tint text-sage-deep border border-sage/25 px-2 py-0.5 rounded-full ml-1">PROMO +${esc(t.promo_bonus_qty)}</span>`
-            : ''}</td>
-          <td class="px-4 py-3 text-muted text-xs whitespace-nowrap">${visit ? DateUtil.short(visit) : '—'}</td>
-          <td class="px-4 py-3 text-muted text-xs whitespace-nowrap">${expiry ? DateUtil.short(expiry) : '—'}</td>
-          <td class="px-4 py-3 text-muted text-xs">${esc(t.quantity)}${Number(t.promo_bonus_qty) > 0 ? ` <span class="text-[10px] text-sage-deep font-semibold">(${esc(Number(t.quantity) - Number(t.promo_bonus_qty))} bayar)</span>` : ''}</td>
-          <td class="px-4 py-3 font-heading font-semibold text-ink text-xs whitespace-nowrap">${rupiah(Number(t.total_price))}</td>
-          <td class="px-4 py-3">${this.statusBadge(t.status)}</td>
-          <td class="px-4 py-3">${action}</td>
-        </tr>`;
-    }).join('');
-
-    document.getElementById('essTicketEmpty').classList.toggle('hidden', list.length > 0);
-
-    document.getElementById('essTicketBody').querySelectorAll('[data-verify]').forEach(b =>
-      b.addEventListener('click', () => this.openVerify(b.dataset.verify)));
-
-    document.getElementById('essSyncNote').textContent =
-      t('ess.diperbarui') + ' ' + new Date().toLocaleTimeString(State.locale === 'en' ? 'en-US' : 'id-ID') + ' · ' + t('ess.menyegarkan');
-  },
-
-  statusBadge(s) {
-    const map = {
-      LUNAS:    'bg-ok-tint text-ok border-ok/25',
-      TERPAKAI: 'bg-info-tint text-info border-info/25',
-      EXPIRED:  'bg-danger-tint text-danger border-danger/25',
-    };
-    const cls = map[s] ?? 'bg-paper text-muted border-line';
-    return `<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border px-2.5 py-1 rounded-full whitespace-nowrap ${cls}">${
-      s === 'TERPAKAI' ? t('ess.terpakai') : esc(s)}</span>`;
-  },
-
-  openVerify(bookingCode) {
-    const t = this.tickets.find(x => x.booking_code === bookingCode);
-    if (!t) return;
-    this.verifyTarget = t;
-    document.getElementById('essVerifyCode').textContent = t.booking_code;
-    document.getElementById('essVerifyName').textContent = t.customer_name;
-    document.getElementById('essVerifyModal').classList.remove('hidden');
-  },
-
-  closeVerify() {
-    this.verifyTarget = null;
-    document.getElementById('essVerifyModal').classList.add('hidden');
-  },
-
-  async confirmVerify() {
-    const verifyTicket = this.verifyTarget;
-    if (!verifyTicket) return;
-
-    const btn = document.getElementById('essVerifyConfirm');
-    btn.disabled = true;
-
-    const { ok, status, data } = await api('/api/ess/verify', {
-      method: 'POST',
-      body: JSON.stringify({ booking_code: verifyTicket.booking_code }),
-    });
-
-    btn.disabled = false;
-
-    if (!ok) {
-      if (status === 401) { this.forceLogout(); return; }
-      Toast.show(data?.error ?? t('ess.gagalUpdateStatus'));
-      this.closeVerify();
-      await this.loadTickets();
-      return;
-    }
-
-    this.closeVerify();
-    await this.loadTickets();
-    Toast.show(`${t('ess.tiketDitandai')} ${verifyTicket.booking_code} ${t('ess.ditandai')} TERPAKAI`);
-  },
-
   /* Video editor: prefill, save, clear. */
   videoEls() {
     return {
@@ -2133,13 +1376,11 @@ const ESS = {
   },
 
   async logout() {
-    clearInterval(this.pollTimer);
     await api('/api/auth/logout', { method: 'POST' });
     location.href = '/';
   },
 
   forceLogout() {
-    clearInterval(this.pollTimer);
     Toast.show(t('ess.sesiBerakhir'));
     setTimeout(() => { location.href = '/'; }, 1500);
   },

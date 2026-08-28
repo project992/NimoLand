@@ -4,16 +4,6 @@
    coordinates or opening hours for destinations we don't have them for. */
 import { SITE, u } from './site.js';
 
-const rating = (d, ratings) => {
-  const r = ratings?.[d.id];
-  if (!r) return null;
-  return {
-    '@type': 'AggregateRating',
-    ratingValue: String(r.rating),
-    reviewCount: r.count,
-  };
-};
-
 /** Organization — homepage. */
 export function organization() {
   return {
@@ -33,10 +23,8 @@ export function organization() {
   };
 }
 
-/** TouristAttraction for each destination (valid coordinates/hours only for
-    the flagship, since that's all the official site describes). */
+/** TouristAttraction for each destination. */
 export function touristAttraction(d, ratings = {}, locale = 'id') {
-  const isFlagship = d.id === 'nimo-highland';
   const typeLabels = {
     id: { air: 'Wisata air', keluarga: 'Keluarga & edukasi', alam: 'Alam & pegunungan' },
     en: { air: 'Water tourism', keluarga: 'Family & education', alam: 'Nature & mountains' },
@@ -52,13 +40,6 @@ export function touristAttraction(d, ratings = {}, locale = 'id') {
     touristType: [typeLabels[locale]?.[d.type] ?? typeLabels.id[d.type]],
     isAccessibleForFree: false,
   };
-  const r = rating(d, ratings);
-  if (r) node.aggregateRating = r;
-  if (isFlagship) {
-    node.address = { '@type': 'PostalAddress', streetAddress: SITE.addressHighland, addressCountry: 'ID' };
-    node.geo = { '@type': 'GeoCoordinates', latitude: SITE.coordinate.lat, longitude: SITE.coordinate.lng };
-    node.openingHoursSpecification = SITE.hours;
-  }
   return node;
 }
 
@@ -78,8 +59,6 @@ export function hotel(h, ratings = {}) {
       name: f,
     })),
   };
-  const r = rating(h, ratings);
-  if (r) node.aggregateRating = r;
   return node;
 }
 

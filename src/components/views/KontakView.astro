@@ -1,5 +1,4 @@
 ---
-import Clock from '@lucide/astro/icons/clock';
 import MapPin from '@lucide/astro/icons/map-pin';
 import MessageCircle from '@lucide/astro/icons/message-circle';
 import BrandIcon from '../BrandIcon.astro';
@@ -7,11 +6,6 @@ import BrandIcon from '../BrandIcon.astro';
 const locale = Astro.locals.locale ?? 'id';
 const t = key => Astro.locals.t(key);
 
-const hours = [
-  [t('kontak.seninJumat'), '08.00–17.00'],
-  [t('kontak.sabtu'), '05.00–17.00'],
-  [t('kontak.minggu'), '05.00–17.00'],
-];
 const { class: cls = 'view' } = Astro.props;
 ---
 <div class={cls} data-view="kontak">
@@ -32,16 +26,18 @@ const { class: cls = 'view' } = Astro.props;
 
         <div class="card p-7">
           <div class="w-11 h-11 rounded-full bg-sage-tint flex items-center justify-center mb-5">
-            <Clock class="w-5 h-5 text-sage-deep" />
+            <MapPin class="w-5 h-5 text-sage-deep" />
           </div>
-          <h3 class="font-heading font-semibold text-ink text-lg mb-5">{t('kontak.judul')}</h3>
+          <h3 class="font-heading font-semibold text-ink text-lg mb-5">{t('kontak.kantor')}</h3>
           <ul class="text-sm divide-y divide-line-soft">
-            {hours.map(([day, time]) => (
-              <li class="flex justify-between py-2.5">
-                <span class="text-muted">{day}</span>
-                <span class="text-ink font-medium">{time}</span>
-              </li>
-            ))}
+            <li class="py-2.5">
+              <p class="font-medium text-ink">Kantor Bandung</p>
+              <p class="text-muted mt-1">Komplek Ruko Buahbatu Square Blk. A No.09, Cipagalo, Bojongsoang, Kabupaten Bandung 40267.</p>
+            </li>
+            <li class="py-2.5">
+              <p class="font-medium text-ink">Kantor Jakarta</p>
+              <p class="text-muted mt-1">Sequis Center Lt. 8 Kav 814, Jl. Jendral Sudirman No. 71, Senayan, Jakarta Selatan.</p>
+            </li>
           </ul>
         </div>
 
@@ -80,13 +76,13 @@ const { class: cls = 'view' } = Astro.props;
             </div>
             <h3 class="font-heading font-semibold text-ink text-lg mb-2">{t('kontak.lokasi')}</h3>
             <p class="text-muted text-sm leading-relaxed">
-              Banjarsari, Pangalengan, Kabupaten Bandung, Jawa Barat 40378
+              Komplek Ruko Buahbatu Square Blk. A No.09, Cipagalo, Bojongsoang, Kabupaten Bandung 40267
             </p>
           </div>
           <div class="mt-auto h-44">
-            <iframe src="https://www.google.com/maps?q=-7.219462,107.57742&z=17&output=embed"
+            <iframe src="https://www.google.com/maps?q=-6.9614,107.6121&z=16&output=embed"
                     class="w-full h-full" style="border:0" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade" title="Nimo Highland Map"></iframe>
+                    referrerpolicy="no-referrer-when-downgrade" title="Kantor Bandung Nimo Land Group"></iframe>
           </div>
         </div>
       </div>

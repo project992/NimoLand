@@ -2,16 +2,12 @@
 import IdCard from '@lucide/astro/icons/id-card';
 import LogIn from '@lucide/astro/icons/log-in';
 import LogOut from '@lucide/astro/icons/log-out';
-import Search from '@lucide/astro/icons/search';
-import BadgeCheck from '@lucide/astro/icons/badge-check';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
 import Video from '@lucide/astro/icons/video';
 import UserPlus from '@lucide/astro/icons/user-plus';
-import Trash2 from '@lucide/astro/icons/trash-2';
-import BadgePercent from '@lucide/astro/icons/badge-percent';
-import { DESTINATIONS, PACKAGES } from '../../lib/data.js';
+import { DESTINATIONS } from '../../lib/data.js';
 
-/* Employee Self-Service: login modal, dashboard overlay, verify confirmation.
+/* Employee Self-Service: login modal, dashboard overlay, data management.
 
    Login now POSTs to /api/ess/login (rate limited, scrypt-hashed, HTTP-only
    session cookie). The old flow compared a plain-text password column in the
@@ -20,15 +16,6 @@ import { DESTINATIONS, PACKAGES } from '../../lib/data.js';
 const employee = Astro.locals.isEmployee ? Astro.locals.user : null;
 const standalone = Astro.props.standalone === true;
 const isEssAdmin = employee?.kind === 'employee' && (employee?.name || '').trim().toLowerCase() === 'ami';
-
-const stats = [
-  { id: 'essStatTotal',   label: 'Total',    tone: 'bg-paper border-line text-ink' },
-  { id: 'essStatLunas',   label: 'LUNAS',    tone: 'bg-ok-tint border-ok/25 text-ok' },
-  { id: 'essStatUsed',    label: 'TERPAKAI', tone: 'bg-info-tint border-info/25 text-info' },
-  { id: 'essStatExpired', label: 'EXPIRED',  tone: 'bg-danger-tint border-danger/25 text-danger' },
-];
-
-const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', 'Expired', 'Qty', 'Total', 'Status', 'Aksi'];
 ---
 <!-- ============ LOGIN ESS ============ -->
 <div id="essLoginModal" class:list={[
@@ -47,7 +34,7 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
       <h3 id="essLoginTitle" class="font-heading font-bold text-white text-xl mt-3 flex items-center gap-2">
         <IdCard class="w-5 h-5" /> Portal ESS Karyawan
       </h3>
-      <p class="text-white/65 text-xs mt-1">Employee Self-Service · Masuk untuk mengelola tiket</p>
+      <p class="text-white/65 text-xs mt-1">Employee Self-Service · Masuk untuk mengelola data</p>
     </div>
 
     <form id="essLoginForm" class="px-6 py-6" novalidate>
@@ -102,54 +89,8 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
       </div>
     </div>
 
-    <div class="card p-6 mt-6">
-      <div class="flex items-center justify-between gap-4 flex-wrap">
-        <div>
-          <h2 class="font-heading font-bold text-ink text-2xl">Monitor Tiket Pelanggan</h2>
-          <p class="text-xs text-muted mt-1">Pantau, cari, dan validasi tiket orderan.</p>
-        </div>
-        <div class="flex gap-3 flex-wrap">
-          {stats.map(s => (
-            <div class:list={['text-center border rounded-xl px-5 py-3', s.tone]}>
-              <p id={s.id} class="font-heading font-bold text-xl">0</p>
-              <p class="text-[11px] text-muted">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-3 mt-6">
-        <div class="relative flex-1">
-          <Search class="w-4 h-4 text-muted absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <label for="essSearch" class="sr-only">Cari tiket</label>
-          <input type="search" id="essSearch" placeholder="Cari kode booking / nama pelanggan…" class="field rounded-full pl-11" />
-        </div>
-        <label for="essFilter" class="sr-only">Filter status</label>
-        <select id="essFilter" class="field rounded-full w-auto px-5">
-          <option value="SEMUA">Semua Status</option>
-          <option value="LUNAS">LUNAS</option>
-          <option value="TERPAKAI">TERPAKAI (USED)</option>
-          <option value="EXPIRED">EXPIRED</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="card mt-5 overflow-hidden p-0">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="bg-paper text-muted text-[11px] uppercase tracking-wider">
-              {columns.map(c => <th scope="col" class="px-4 py-3 font-heading font-semibold whitespace-nowrap">{c}</th>)}
-            </tr>
-          </thead>
-          <tbody id="essTicketBody" class="divide-y divide-line-soft"></tbody>
-        </table>
-      </div>
-      <p id="essTicketEmpty" class="hidden text-center text-muted text-sm py-12">Belum ada tiket ditemukan.</p>
-    </div>
-
     <!-- ============ EDITOR VIDEO DESTINASI ============ -->
-    <div class="card p-6 mt-5">
+    <div class="card p-6 mt-6">
       <div class="flex items-start gap-3">
         <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
           <Video class="w-5 h-5 text-sage-deep" />
@@ -200,7 +141,6 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
         <label for="essAccRole" class="sr-only">Role</label>
         <select id="essAccRole" class="field">
           <option value="">Pilih role…</option>
-          <option value="Staff Tiket / Gate">Staff Tiket / Gate</option>
           <option value="Supervisor">Supervisor</option>
           <option value="Manager">Manager</option>
           <option value="Admin">Admin</option>
@@ -233,108 +173,6 @@ const columns = ['Kode Booking', 'Nama Pelanggan', 'Tipe Tiket', 'Kedatangan', '
       </div>
     </div>
 
-    <!-- ============ KELOLA PROMO (khusus Ami) ============ -->
-    <div id="essPromosPanel" class:list=['card p-6 mt-5', !isEssAdmin && 'hidden']>
-      <div class="flex items-start gap-3">
-        <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
-          <BadgePercent class="w-5 h-5 text-sage-deep" />
-        </div>
-        <div class="flex-1 min-w-0">
-          <h2 class="font-heading font-bold text-ink text-lg">Kelola Promo</h2>
-          <p class="text-xs text-muted mt-0.5">
-            Buat, ubah, atau aktifkan promo seperti Buy 1 Get 1. Promo aktif otomatis memberi tiket gratis
-            saat pelanggan checkout, dan masuk ke data tiket. Khusus akun Ami.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
-        <form id="essPromoForm" class="space-y-3" novalidate>
-          <input type="hidden" id="essPromoId" />
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label for="essPromoCode" class="label">Kode</label>
-              <input type="text" id="essPromoCode" placeholder="mis. B1G1" class="field" autocomplete="off" />
-            </div>
-            <div>
-              <label for="essPromoTitle" class="label">Nama</label>
-              <input type="text" id="essPromoTitle" placeholder="mis. Buy 1 Get 1" class="field" autocomplete="off" />
-            </div>
-          </div>
-          <div>
-            <label for="essPromoDesc" class="label">Deskripsi</label>
-            <input type="text" id="essPromoDesc" placeholder="Keterangan singkat (opsional)" class="field" autocomplete="off" />
-          </div>
-          <div class="grid grid-cols-3 gap-3">
-            <div>
-              <label for="essPromoBuy" class="label">Beli</label>
-              <input type="number" id="essPromoBuy" value="1" min="1" max="100" class="field" />
-            </div>
-            <div>
-              <label for="essPromoFree" class="label">Gratis</label>
-              <input type="number" id="essPromoFree" value="1" min="1" max="100" class="field" />
-            </div>
-            <div>
-              <label for="essPromoPkg" class="label">Paket</label>
-              <select id="essPromoPkg" class="field">
-                <option value="">Semua paket</option>
-                {PACKAGES.map(p => <option value={p.id}>{p.name}</option>)}
-              </select>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <label class="block text-xs text-muted">
-              <input type="checkbox" id="essPromoSticky" class="mr-1" /> Pakai otomatis (disarankan untuk B1G1)
-            </label>
-          </div>
-          <div class="flex gap-3">
-            <button type="submit" id="essPromoBtn" class="btn-primary">Simpan Promo</button>
-            <button type="button" id="essPromoReset" class="btn-outline">Baru</button>
-          </div>
-          <p id="essPromoError" class="hidden note-error mt-2 mb-0" role="alert"></p>
-        </form>
-
-        <div>
-          <h3 class="font-heading font-semibold text-ink text-sm mb-3">Daftar Promo</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-              <thead>
-                <tr class="bg-paper text-muted text-[11px] uppercase tracking-wider">
-                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Kode</th>
-                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Nama</th>
-                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Bonus</th>
-                  <th scope="col" class="px-3 py-3 font-heading font-semibold">Status</th>
-                  <th scope="col" class="px-3 py-3 font-heading font-semibold text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="essPromoBody" class="divide-y divide-line-soft"></tbody>
-            </table>
-          </div>
-          <p id="essPromoEmpty" class="hidden text-center text-muted text-sm py-6">Belum ada promo.</p>
-        </div>
-      </div>
-    </div>
-
     <p id="essSyncNote" class="text-center text-[11px] text-muted mt-5" aria-live="polite"></p>
-  </div>
-</div>
-
-<!-- ============ KONFIRMASI VERIFIKASI ============ -->
-<div id="essVerifyModal" class="hidden fixed inset-0 z-98 flex items-center justify-center p-4 bg-bark/50"
-     role="dialog" aria-modal="true" aria-labelledby="essVerifyTitle">
-  <div class="bg-surface rounded-2xl w-full max-w-sm p-6 text-center shadow-lg">
-    <div class="w-14 h-14 rounded-full bg-sage-tint flex items-center justify-center mx-auto mb-4">
-      <BadgeCheck class="w-7 h-7 text-sage-deep" />
-    </div>
-    <h3 id="essVerifyTitle" class="font-heading font-bold text-ink text-lg">Verifikasi Tiket</h3>
-    <p class="text-sm text-muted leading-relaxed mt-2">
-      Ubah status tiket <strong id="essVerifyCode" class="text-ink">—</strong> milik
-      <strong id="essVerifyName" class="text-ink">—</strong> dari <strong>LUNAS</strong> menjadi
-      <strong>TERPAKAI (USED)</strong>?
-    </p>
-    <div class="flex gap-3 mt-6">
-      <button type="button" id="essVerifyCancel" class="btn-outline flex-1">Batal</button>
-      <button type="button" id="essVerifyConfirm" class="btn-primary flex-1">Ya, Verifikasi</button>
-    </div>
   </div>
 </div>

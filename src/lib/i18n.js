@@ -109,7 +109,6 @@ const SLUG_MAP = {
   '/galeri': '/gallery',
   '/kontak': '/contact',
   '/tentang-kami': '/about-us',
-  '/syarat-ketentuan': '/terms',
   '/kebijakan-privasi': '/privacy',
   '/pembatalan-refund': '/cancellation-refund',
   '/login': '/login',

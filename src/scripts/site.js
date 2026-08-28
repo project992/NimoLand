@@ -16,7 +16,7 @@ document.addEventListener('click', (e) => {
   if (book) {
     e.preventDefault();
     try {
-      sessionStorage.setItem(INTENT_KEY, JSON.stringify({ tab: book.dataset.openBooking || 'ticket' }));
+      sessionStorage.setItem(INTENT_KEY, JSON.stringify({ tab: book.dataset.openBooking || 'room' }));
     } catch { /* private mode: just go home */ }
     location.href = '/';
     return;

@@ -161,7 +161,10 @@ body { overflow-x: clip; }
   background: rgba(51, 61, 55, .32);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  transition: background .3s ease, box-shadow .3s ease;
+  transition: transform .32s ease, background .3s ease, box-shadow .3s ease;
+}
+#navbar.hidden-nav {
+  transform: translateY(-100%);
 }
 #navbar.scrolled,
 #navbar.solid {
@@ -229,36 +232,6 @@ body { overflow-x: clip; }
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
-
-/* ---- E-ticket print ---- */
-@media print {
-  body.printing #navbar,
-  body.printing #appRoot,
-  body.printing footer,
-  body.printing #bookingModal,
-  body.printing #destModal,
-  body.printing #successModal,
-  body.printing #eticketModal .eticket-chrome,
-  body.printing #toast,
-  body.printing .fixed { display: none !important; }
-  body.printing { background: #fff; }
-  body.printing #eticketModal {
-    position: static !important;
-    display: block !important;
-    background: #fff;
-    padding: 0;
-    overflow: visible;
-  }
-  body.printing #eticketModal > div {
-    max-width: 100% !important;
-    margin: 0;
-    box-shadow: none;
-    border: none;
-    background: #fff;
-    min-height: 0;
-  }
-  body.printing #ticketCard { box-shadow: none; border: none; }
-}
 
 /* Portal ESS (route /ess): sembunyikan chrome publik — halaman ini hanya
    menampilkan overlay login/dashboard ESS. */

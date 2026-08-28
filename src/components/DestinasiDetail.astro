@@ -1,18 +1,13 @@
 ---
 import MapPin from '@lucide/astro/icons/map-pin';
-import Clock from '@lucide/astro/icons/clock';
-import Ticket from '@lucide/astro/icons/ticket';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
-import RatingBadge from './RatingBadge.astro';
-import BrandIcon from './BrandIcon.astro';
 import NimoImage from './NimoImage.astro';
 import { SITE } from '../lib/site.js';
 import { FOOTAGE } from '../lib/data.js';
 
 /* Server-rendered detail view for /destinasi/[slug]. The `.view` + data-view
    contract lets the client Router keep navigating the whole app from here. */
-const { d, ratings = {} } = Astro.props;
-const rating = ratings[d.id] ?? null;
+const { d } = Astro.props;
 const flagship = d.id === 'nimo-highland';
 const video = FOOTAGE[d.id]?.aerial;
 ---
@@ -28,7 +23,6 @@ const video = FOOTAGE[d.id]?.aerial;
           <span class="w-6 h-px bg-white/40"></span> {d.area}
         </p>
         {d.tag && <span class="bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">{d.tag}</span>}
-        <RatingBadge rating={rating} size="md" tone="light" />
       </div>
       <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4">
         {d.name}
@@ -62,25 +56,6 @@ const video = FOOTAGE[d.id]?.aerial;
             ))}
           </div>
         </div>
-
-        {flagship && (
-          <div class="card p-6">
-            <h2 class="font-heading font-semibold text-ink text-lg mb-4">Jam Operasional</h2>
-            <ul class="text-sm divide-y divide-line-soft">
-              <li class="flex justify-between py-2.5">
-                <span class="text-muted">Senin – Jumat</span>
-                <span class="text-ink font-medium">08.00–17.00</span>
-              </li>
-              <li class="flex justify-between py-2.5">
-                <span class="text-muted">Sabtu &amp; Minggu</span>
-                <span class="text-ink font-medium">05.00–17.00</span>
-              </li>
-            </ul>
-            <p class="text-xs text-muted mt-3 flex items-center gap-1.5">
-              <Clock class="w-3.5 h-3.5" /> Akhir pekan buka lebih awal untuk mengejar sunrise.
-            </p>
-          </div>
-        )}
       </div>
 
       <aside class="space-y-5 lg:sticky lg:top-28 lg:self-start">
@@ -88,20 +63,8 @@ const video = FOOTAGE[d.id]?.aerial;
           <NimoImage remote={d.img} alt={d.name} fill eager sizes="(min-width:1024px) 30vw, 100vw" />
         </div>
         <div class="card p-6">
-          <p class="font-heading font-semibold text-sm text-muted">Tiket Masuk</p>
-          <p class="font-heading font-bold text-ink text-2xl mt-1">{d.price}</p>
-          <div class="mt-5 flex flex-col gap-3">
-            {d.bookable ? (
-              <button type="button" data-open-booking="ticket" class="btn-accent w-full py-3.5">
-                <Ticket class="w-4 h-4" /> Beli Tiket {d.name}
-              </button>
-            ) : (
-              <a href="https://wa.me/6281111121162" target="_blank" rel="noopener" class="btn-accent w-full py-3.5">
-                <BrandIcon name="whatsapp" class="w-4 h-4" /> Tanya Ketersediaan
-              </a>
-            )}
-            <a href="/penginapan" data-route="hotels" class="btn-outline w-full py-3.5">Lihat Penginapan di Sini</a>
-          </div>
+          <a href="/penginapan" data-route="hotels" class="btn-outline w-full py-3.5">Lihat Penginapan di Sini</a>
+        </div>
 {video && (
           <div>
             <h2 class="font-heading font-semibold text-ink text-xl mb-4">Video / Suasana</h2>

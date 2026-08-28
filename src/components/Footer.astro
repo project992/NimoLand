@@ -31,7 +31,6 @@ const t = key => Astro.locals.t(key);
       <div>
         <p class="font-heading text-white text-sm font-semibold uppercase tracking-widest mb-5">{t('footer.informasi')}</p>
         <ul class="space-y-3 text-sm text-white/55">
-          <li><a href="/" data-route="beranda" data-scroll="tiket" class="hover:text-white transition-colors">{t('footer.hargaTiket')}</a></li>
           <li><a href="/" data-route="beranda" data-scroll="faq" class="hover:text-white transition-colors">{t('footer.faq')}</a></li>
           <li><a href="/kontak" data-route="kontak" class="hover:text-white transition-colors">{t('footer.kontak')}</a></li>
         </ul>
@@ -40,7 +39,6 @@ const t = key => Astro.locals.t(key);
         <p class="font-heading text-white text-sm font-semibold uppercase tracking-widest mb-5">{t('footer.legal')}</p>
         <ul class="space-y-3 text-sm text-white/55">
           <li><a href="/tentang-kami" class="hover:text-white transition-colors">{t('footer.tentangKami')}</a></li>
-          <li><a href="/syarat-ketentuan" class="hover:text-white transition-colors">{t('footer.syaratKetentuan')}</a></li>
           <li><a href="/kebijakan-privasi" class="hover:text-white transition-colors">{t('footer.kebijakanPrivasi')}</a></li>
           <li><a href="/pembatalan-refund" class="hover:text-white transition-colors">{t('footer.pembatalanRefund')}</a></li>
         </ul>
@@ -77,9 +75,6 @@ const t = key => Astro.locals.t(key);
 
     <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-6 text-xs text-white/45 font-heading tracking-wide">
       <span>&copy; 2026 Nimo Land Group. All rights reserved.</span>
-      <span class="flex items-center gap-3">
-        <span>Pangalengan, Bandung — Jawa Barat</span>
-      </span>
     </div>
   </div>
 </footer>

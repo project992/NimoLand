@@ -4,7 +4,6 @@
     "destinations": "Destinasi",
     "hotels": "Hotels",
     "galeri": "Galeri",
-    "tiket": "Tiket",
     "kontak": "Kontak",
     "katalogDestinasi": "Katalog Destinasi",
     "lihatSemuaDestinasi": "Lihat semua destinasi",
@@ -14,7 +13,7 @@
     "keluar": "Keluar",
     "masuk": "Masuk",
     "masukAtauDaftar": "Masuk atau Daftar",
-    "beliTiket": "Beli Tiket"
+    "pesanKamar": "Pesan Kamar"
   },
   "hero": {
     "lokasi": "Jaringan Destinasi Nasional",
@@ -27,7 +26,7 @@
     "eyebrow": "Tentang Nimo Land Group",
     "judul": "Satu Visi, Sepanjang Nusantara",
     "paragraf1": "Nimo Land Group adalah jaringan destinasi wisata terpadu yang berkomitmen menghadirkan pengalaman berkelas dunia di berbagai penjuru Indonesia. Dari kebun teh di ketinggian Bandung hingga danau vulkanik terbesar di dunia — setiap destinasi dirancang dengan sentuhan lokal yang autentik.",
-    "paragraf2": "Dengan sistem tiket digital terintegrasi dan jaringan resort yang terus berkembang, kami memastikan setiap kunjungan menjadi pengalaman yang mudah, aman, dan tak terlupakan.",
+    "paragraf2": "Dengan jaringan resort terintegrasi yang terus berkembang, kami memastikan setiap kunjungan menjadi pengalaman yang mudah, aman, dan tak terlupakan.",
     "panorama": "Destinasi tersebar",
     "wahana": "Kota & provinsi",
     "buka": "Resort & hotel",
@@ -44,12 +43,6 @@
     "judul": "Satu Bukit, Segudang Cerita",
     "desc": "Pilih kategori untuk menyaring daftar wahana. Semua tersedia di area Nimo Highland.",
     "kosong": "Belum ada wahana pada kategori ini."
-  },
-  "tiket": {
-    "eyebrow": "Tickets & Promotions",
-    "judul": "Harga Tiket Masuk",
-    "desc": "Pemesanan online dilakukan minimal H-1 sebelum kedatangan, dan tiket berlaku maksimal 3 hari sejak tanggal kedatangan yang dipilih.",
-    "pesanOnline": "Pesan Tiket Online"
   },
   "fasilitas": {
     "eyebrow": "Fasilitas",
@@ -192,7 +185,7 @@
     "sudahPunya": "Sudah punya akun?",
     "loginDisini": "Masuk di sini",
     "judulGate": "Masuk untuk melanjutkan",
-    "descGate": "Pemesanan tiket dan kamar memerlukan akun agar riwayat pesanan dan e-tiket Anda tersimpan dan bisa dibuka kembali kapan saja.",
+    "descGate": "Pemesanan kamar memerlukan akun agar riwayat pesanan Anda tersimpan dan bisa dibuka kembali kapan saja.",
     "daftarAkunBaru": "Daftar Akun Baru",
     "nantiSaja": "Nanti saja"
   },
@@ -207,12 +200,10 @@
     "jelajah": "Jelajah",
     "beranda": "Beranda",
     "informasi": "Informasi",
-    "hargaTiket": "Harga Tiket",
     "faq": "FAQ",
     "kontak": "Kontak",
     "legal": "Legal",
     "tentangKami": "Tentang Kami",
-    "syaratKetentuan": "Syarat & Ketentuan",
     "kebijakanPrivasi": "Kebijakan Privasi",
     "pembatalanRefund": "Pembatalan & Refund",
     "namaBadanHukum": "Nama Badan Hukum",
@@ -297,12 +288,12 @@
   "auth": {
     "loginTitle": "Masuk ke akun Anda",
     "loginSubtitleGate": "Setelah masuk, Anda akan kembali ke halaman pemesanan yang tadi dibuka.",
-    "loginSubtitle": "Masuk untuk memesan tiket, menyimpan e-tiket, dan melihat riwayat pesanan.",
+    "loginSubtitle": "Masuk untuk memesan kamar dan melihat riwayat pesanan.",
     "loginBtn": "Masuk",
     "noAccount": "Belum punya akun?",
     "registerNow": "Daftar sekarang",
     "loginPageTitle": "Masuk — Nimo Land Group",
-    "loginPageDesc": "Masuk ke akun Nimo Land Group untuk memesan tiket dan kamar.",
+    "loginPageDesc": "Masuk ke akun Nimo Land Group untuk memesan kamar.",
     "loginErrorEmpty": "Email dan password wajib diisi.",
     "loginLoading": "Memeriksa…",
     "loginErrorConn": "Tidak dapat menghubungi server. Periksa koneksi Anda.",
@@ -313,7 +304,7 @@
     "hasAccount": "Sudah punya akun?",
     "loginHere": "Masuk di sini",
     "registerPageTitle": "Daftar — Nimo Land Group",
-    "registerPageDesc": "Buat akun Nimo Land Group untuk memesan tiket dan kamar.",
+    "registerPageDesc": "Buat akun Nimo Land Group untuk memesan kamar.",
     "registerName": "Nama Lengkap",
     "registerNamePh": "Nama sesuai identitas",
     "registerEmail": "Email",

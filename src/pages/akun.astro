@@ -1,10 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
-import Ticket from '@lucide/astro/icons/ticket';
 import BedDouble from '@lucide/astro/icons/bed-double';
 import LogOut from '@lucide/astro/icons/log-out';
-import ETicketModal from '../components/modals/ETicketModal.astro';
 import { supabase } from '../lib/supabase.js';
 import { rupiah } from '../lib/data.js';
 
@@ -15,30 +13,17 @@ const user = Astro.locals.user;
 
 // Scoped to this customer's id — the session is the only thing that decides
 // whose bookings are visible.
-const [tickets, rooms] = supabase
-  ? await Promise.all([
-      supabase.from('tickets')
-        .select('booking_code, ticket_type, quantity, total_price, visit_date, expiry_date, status, paid_at')
-        .eq('customer_id', user.id).order('created_at', { ascending: false }).limit(50),
-      supabase.from('room_bookings')
-        .select('booking_code, hotel_name, room_name, check_in, check_out, nights, rooms, guests, total_price, status')
-        .eq('customer_id', user.id).order('created_at', { ascending: false }).limit(50),
-    ])
-  : [{ data: [] }, { data: [] }];
+const rooms = supabase
+  ? await supabase.from('room_bookings')
+      .select('booking_code, hotel_name, room_name, check_in, check_out, nights, rooms, guests, total_price, status')
+      .eq('customer_id', user.id).order('created_at', { ascending: false }).limit(50)
+  : { data: [] };
 
-const ticketRows = tickets.data ?? [];
 const roomRows = rooms.data ?? [];
 
 const fmt = iso => new Date(iso + 'T00:00:00').toLocaleDateString('id-ID', {
   day: 'numeric', month: 'short', year: 'numeric',
 });
-
-// Pemesanan paling cepat H-1.
-const tomorrowISO = () => {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
-};
 
 const statusTone = {
   LUNAS: 'bg-ok-tint text-ok border-ok/25',
@@ -49,7 +34,7 @@ const statusTone = {
   DIKONFIRMASI: 'bg-ok-tint text-ok border-ok/25',
 };
 ---
-<Base title="Pesanan Saya — Nimo Land Group" description="Riwayat pemesanan tiket dan kamar Nimo Land Group." noindex>
+<Base title="Pesanan Saya — Nimo Land Group" description="Riwayat pemesanan kamar Nimo Land Group." noindex>
   <div class="min-h-screen bg-canvas">
     <div class="max-w-4xl mx-auto px-5 sm:px-8 py-12">
 
@@ -67,63 +52,6 @@ const statusTone = {
           <LogOut class="w-4 h-4" /> Keluar
         </button>
       </div>
-
-      <!-- Tiket -->
-      <h2 class="flex items-center gap-2 font-heading font-semibold text-ink text-lg mt-10 mb-4">
-        <Ticket class="w-5 h-5 text-sage-deep" /> Tiket Masuk
-      </h2>
-      {ticketRows.length === 0 ? (
-        <div class="card p-8 text-center">
-          <p class="text-sm text-muted">Belum ada pemesanan tiket.</p>
-          <a href="/" class="btn-accent mt-5">Pesan tiket sekarang</a>
-        </div>
-      ) : (
-        <div class="space-y-3">
-          {ticketRows.map(t => (
-            <div class="card p-5">
-              <div class="flex flex-wrap items-center justify-between gap-4">
-                <div class="min-w-0">
-                  <p class="font-heading font-bold text-ink">{t.booking_code}</p>
-                  <p class="text-sm text-muted mt-0.5">{t.ticket_type}</p>
-                  <p class="text-xs text-muted mt-1.5">
-                    Kunjungan {fmt(t.visit_date)} · berlaku s/d {fmt(t.expiry_date)} · {t.quantity} orang
-                  </p>
-                </div>
-                <div class="text-right shrink-0">
-                  <p class="font-heading font-bold text-ink">{rupiah(Number(t.total_price))}</p>
-                  <span class:list={['inline-flex mt-1.5 text-[11px] font-heading font-semibold border px-2.5 py-1 rounded-full',
-                                     statusTone[t.status] ?? 'bg-paper text-muted border-line']}>
-                    {t.status}
-                  </span>
-                </div>
-              </div>
-
-              {t.status === 'LUNAS' && (
-                <div class="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-line-soft">
-                  <button type="button" data-eticket={t.booking_code}
-                          data-name={t.customer_name} data-type={t.ticket_type}
-                          data-qty={t.quantity} data-total={t.total_price}
-                          data-visit={t.visit_date} data-expiry={t.expiry_date}
-                          class="btn-outline px-4 py-2 text-sm">
-                    Lihat E-Tiket
-                  </button>
-                  <a data-wa={t.booking_code} href={`https://wa.me/6281111121162?text=${encodeURIComponent(
-                    `Halo Nimo Land Group, berikut tiket saya: ${t.booking_code} (${t.ticket_type}, ${t.quantity} orang, kunjungan ${t.visit_date}).`
-                  )}`} target="_blank" rel="noopener" class="btn-primary px-4 py-2 text-sm">
-                    WhatsApp
-                  </a>
-                  <form data-resched={t.booking_code} class="flex items-center gap-2 ml-auto">
-                    <label class="sr-only" for={`resched-${t.booking_code}`}>Ubah tanggal kunjungan</label>
-                    <input id={`resched-${t.booking_code}`} type="date" name="arrival" class="field w-auto text-sm py-2 px-3"
-                           min={tomorrowISO()} />
-                    <button type="submit" class="btn-outline px-4 py-2 text-sm">Ubah Jadwal</button>
-                  </form>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
 
       <!-- Kamar -->
       <h2 class="flex items-center gap-2 font-heading font-semibold text-ink text-lg mt-10 mb-4">
@@ -159,69 +87,10 @@ const statusTone = {
   </div>
 
   <script>
-    const $ = id => document.getElementById(id);
-
     document.querySelectorAll('[data-logout]').forEach(b =>
       b.addEventListener('click', async () => {
         await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
         window.location.href = '/';
       }));
-
-    const openEticket = b => {
-      const long = iso => { const d = new Date(iso + 'T00:00:00');
-        return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); };
-      document.getElementById('eticketPrint').classList.add('hidden'); // html2canvas tak ada di halaman ini
-      $('ticketCode').textContent = b.dataset.eticket;
-      $('ticketName').textContent = b.dataset.name;
-      $('ticketType').textContent = b.dataset.type;
-      $('ticketQty').textContent = `${b.dataset.qty} orang`;
-      $('ticketTotal').textContent = 'Rp ' + Number(b.dataset.total).toLocaleString('id-ID');
-      $('ticketArrival').textContent = long(b.dataset.visit);
-      $('ticketExpiry').textContent = long(b.dataset.expiry);
-      $('ticketQR').src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' +
-        encodeURIComponent(b.dataset.eticket);
-      $('ticketQR').alt = 'QR Code ' + b.dataset.eticket;
-      $('eticketLoading').classList.add('hidden');
-      $('eticketBody').classList.remove('hidden');
-      $('eticketModal').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    };
-    document.querySelectorAll('[data-eticket]').forEach(b =>
-      b.addEventListener('click', () => openEticket(b)));
-    document.getElementById('closeEticket').addEventListener('click', () => {
-      $('eticketModal').classList.add('hidden');
-      document.body.style.overflow = '';
-    });
-    document.getElementById('eticketWhatsapp').addEventListener('click', () => {
-      const code = $('ticketCode').textContent;
-      window.open('https://wa.me/6281111121162?text=' + encodeURIComponent(
-        `Halo Nimo Land Group, berikut tiket digital saya: ${code}`), '_blank');
-    });
-
-    // Ubah jadwal -> POST /api/my/bookings/{code}/reschedule
-    document.querySelectorAll('form[data-resched]').forEach(form =>
-      form.addEventListener('submit', async e => {
-        e.preventDefault();
-        const code = form.dataset.resched;
-        const arrival = form.arrival.value;
-        if (!arrival) return;
-        const btn = form.querySelector('button');
-        btn.disabled = true; btn.textContent = 'Menyimpan…';
-        const res = await fetch(`/api/my/bookings/${encodeURIComponent(code)}/reschedule`, {
-          method: 'POST', credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ arrival }),
-        });
-        const data = await res.json().catch(() => ({}));
-        btn.disabled = false; btn.textContent = 'Ubah Jadwal';
-        if (!res.ok) {
-          form.ownerDocument.querySelector('#toast') &&
-            ($('#toast').textContent = data.error ?? 'Gagal mengubah jadwal');
-          return;
-        }
-        window.location.reload();
-      }));
   </script>
-
-  <ETicketModal />
 </Base>

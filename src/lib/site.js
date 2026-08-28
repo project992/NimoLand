@@ -5,9 +5,9 @@ export const SITE = {
   title: 'Nimo Land Group — Jaringan Destinasi Wisata Nasional',
   titleEn: 'Nimo Land Group — Indonesia\'s Nationwide Tourism Network',
   description:
-    'Nimo Land Group mengelola destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga Danau Toba. Pesan tiket dan kamar online.',
+    'Nimo Land Group mengelola destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga Danau Toba. Pesan kamar online.',
   descriptionEn:
-    'Nimo Land Group manages tourist destinations & resorts across Indonesia — from Bandung tea plantations to Lake Toba. Book tickets and rooms online.',
+    'Nimo Land Group manages tourist destinations & resorts across Indonesia — from Bandung tea plantations to Lake Toba. Book rooms online.',
   url: 'https://nimo-land.vercel.app',
   lang: 'id',
   email: 'official@nimoenterprise.com',
@@ -37,13 +37,6 @@ export const SITE = {
     postalCode: null,
     country: 'ID',
   },
-  // Nimo Highland, the flagship destination (KontakView map embed).
-  coordinate: { lat: -7.219462, lng: 107.57742 },
-  addressHighland: 'Banjarsari, Pangalengan, Kabupaten Bandung, Jawa Barat 40378',
-  hours: [
-    { dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '17:00' },
-    { dayOfWeek: ['Saturday', 'Sunday'], opens: '05:00', closes: '17:00' },
-  ],
 };
 
 /** Site title/description per locale. */

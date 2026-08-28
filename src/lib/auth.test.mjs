@@ -1,5 +1,5 @@
 /* Checks for the logic that is expensive to get wrong: password hashing,
-   session signing, the rate limiter, and server-side pricing.
+   session signing, and the rate limiter.
 
    Run: npm test   (node --test, no framework) */
 import { test } from 'node:test';
@@ -11,7 +11,6 @@ process.env.SESSION_SECRET = 'test-secret-that-is-definitely-long-enough-32';
 const { hashPassword, verifyPassword, assertPassword } = await import('./password.js');
 const { createSession, readSession } = await import('./session.js');
 const rateLimit = await import('./rateLimit.js');
-const { priceTicket, parseISODate, unitPrice, PACKAGES } = await import('./data.js');
 const { safeNext } = await import('./redirect.js');
 
 /* ---------------- password ---------------- */
@@ -160,75 +159,4 @@ test('jsonForScript: escapes U+2028 / U+2029 but preserves the value', () => {
 test('jsonForScript: null and undefined both serialise to null', () => {
   assert.equal(jsonForScript(null), 'null');
   assert.equal(jsonForScript(undefined), 'null');
-});
-
-/* ---------------- pricing ---------------- */
-
-test('pricing: weekend costs the weekend rate, weekday the weekday rate', () => {
-  // 2026-08-08 is a Saturday, 2026-08-06 a Thursday.
-  const saturday = parseISODate('2026-08-08');
-  const thursday = parseISODate('2026-08-06');
-  assert.equal(saturday.getDay(), 6);
-  assert.equal(thursday.getDay(), 4);
-
-  const regular = PACKAGES.find(p => p.id === 'regular');
-  assert.equal(unitPrice('regular', 'domestik', 'adult', thursday), regular.price.domestik.adult[0]);
-  assert.equal(unitPrice('regular', 'domestik', 'adult', saturday), regular.price.domestik.adult[1]);
-});
-
-test('pricing: total is units × counts, and expiry is arrival + 3 days', () => {
-  const arrival = parseISODate('2026-08-06'); // Thursday
-  const q = priceTicket({ packageId: 'regular', nationality: 'domestik', adult: 2, child: 1, arrival });
-
-  assert.equal(q.total, q.adultUnit * 2 + q.childUnit * 1);
-  assert.equal(q.expiry.getDate(), 9, 'ticket must stay valid for 3 days after arrival');
-});
-
-test('pricing: an unknown package is rejected rather than priced at zero', () => {
-  const arrival = parseISODate('2026-08-06');
-  assert.throws(() =>
-    priceTicket({ packageId: 'free-please', nationality: 'domestik', adult: 1, child: 0, arrival }));
-});
-
-test('parseISODate: rejects malformed input instead of returning Invalid Date', () => {
-  for (const bad of ['not-a-date', '2026-13-45', '06/08/2026', '', null, 42]) {
-    const result = parseISODate(bad);
-    assert.ok(result === null || !Number.isNaN(result.getTime()), `bad input leaked through: ${bad}`);
-  }
-  assert.equal(parseISODate('06/08/2026'), null);
-});
-
-/* ---------------- promo (Buy 1 Get 1) ---------------- */
-
-const { computePromo, promoMatches, promoNoteText } = await import('./promo.js');
-
-test('promo: buy 1 get 1 doubles the quantity for paid tickets', () => {
-  const promo = { promo_type: 'buy_n_get_m', buy_qty: 1, free_qty: 1, target_package: null };
-  assert.equal(computePromo(promo, { packageId: 'regular', adult: 1, child: 0 }).bonusQty, 1);
-  assert.equal(computePromo(promo, { packageId: 'regular', adult: 3, child: 1 }).bonusQty, 4);
-});
-
-test('promo: buy 2 get 1 grants one free per two paid', () => {
-  const promo = { promo_type: 'buy_n_get_m', buy_qty: 2, free_qty: 1, target_package: null };
-  assert.equal(computePromo(promo, { packageId: 'regular', adult: 1, child: 0 }).bonusQty, 0);
-  assert.equal(computePromo(promo, { packageId: 'regular', adult: 2, child: 0 }).bonusQty, 1);
-  assert.equal(computePromo(promo, { packageId: 'regular', adult: 5, child: 0 }).bonusQty, 2);
-});
-
-test('promo: does not apply to a different target package', () => {
-  const promo = { promo_type: 'buy_n_get_m', buy_qty: 1, free_qty: 1, target_package: 'nimo-eye' };
-  assert.ok(!promoMatches(promo, 'regular'));
-  assert.equal(computePromo(promo, { packageId: 'regular', adult: 2, child: 0 }).applied, false);
-  assert.equal(computePromo(promo, { packageId: 'nimo-eye', adult: 2, child: 0 }).applied, true);
-});
-
-test('promo: free qty never exceeds the ticket ceiling', () => {
-  const promo = { promo_type: 'buy_n_get_m', buy_qty: 1, free_qty: 1, target_package: null };
-  const { bonusQty } = computePromo(promo, { packageId: 'regular', adult: 50, child: 0 });
-  assert.ok(bonusQty <= 50, 'bonus must not push past MAX_TICKETS');
-});
-
-test('promo: note text is human-readable', () => {
-  const promo = { promo_type: 'buy_n_get_m', title: 'Buy 1 Get 1', buy_qty: 1, free_qty: 1 };
-  assert.match(promoNoteText(promo), /Buy 1 Get 1/);
 });

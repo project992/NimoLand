@@ -4,52 +4,10 @@ import ChevronRight from '@lucide/astro/icons/chevron-right';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import MapPin from '@lucide/astro/icons/map-pin';
 import Sunrise from '@lucide/astro/icons/sunrise';
-import Ticket from '@lucide/astro/icons/ticket';
-import Sparkles from '@lucide/astro/icons/sparkles';
-import RatingBadge from '../RatingBadge.astro';
-import { DESTINATIONS, HERO_SLIDES, PACKAGES, EYE_TARIFFS, rupiah, localSrc } from '../../lib/data.js';
-import { formatPrice } from '../../lib/i18n.js';
+import { DESTINATIONS, HERO_SLIDES, localSrc } from '../../lib/data.js';
 
-const { ratings = {}, class: cls = 'view' } = Astro.props;
-const locale = Astro.locals.locale ?? 'id';
+const { class: cls = 'view' } = Astro.props;
 const t = key => Astro.locals.t(key);
-const headline = ratings['nimo-highland'] ?? null;
-
-const facilitiesTop = locale === 'en'
-  ? ['Restaurant', 'Sky Bridge', 'Bean Bag & Net Area', 'Glass Sky Bridge', 'Flying Fox', 'F&B Stand', 'Souvenir Shop']
-  : ['Restaurant', 'Sky Bridge', 'Bean Bag & Net Area', 'Glass Sky Bridge', 'Flying Fox', 'F&B Stand', 'Souvenir Shop'];
-const facilitiesBottom = locale === 'en'
-  ? ['Nimo Zoo', 'Food Court', 'Souvenir Shop', 'Mushola', 'Playground', 'Parking', 'Toilet', 'Local Shuttle']
-  : ['Nimo Zoo', 'Food Court', 'Souvenir Shop', 'Musholla', 'Playground', 'Parkir', 'Toilet', 'Shuttle lokal'];
-
-const regular = PACKAGES.find(p => p.id === 'regular');
-const priceTables = [
-  {
-    label: t('booking.domestik'),
-    rows: [
-      [`${t('booking.dewasa')} · Weekday`, formatPrice(regular.price.domestik.adult[0], 'IDR', locale)],
-      [`${t('booking.dewasa')} · Weekend`, formatPrice(regular.price.domestik.adult[1], 'IDR', locale)],
-      [`${t('booking.anak')} · Weekday`, formatPrice(regular.price.domestik.child[0], 'IDR', locale)],
-      [`${t('booking.anak')} · Weekend`, formatPrice(regular.price.domestik.child[1], 'IDR', locale)],
-    ],
-  },
-  {
-    label: t('booking.mancanegara'),
-    rows: [
-      [`${t('booking.dewasa')} · Weekday`, formatPrice(regular.price.manca.adult[0], 'IDR', locale)],
-      [`${t('booking.dewasa')} · Weekend`, formatPrice(regular.price.manca.adult[1], 'IDR', locale)],
-      [`${t('booking.anak')} · Weekday`, formatPrice(regular.price.manca.child[0], 'IDR', locale)],
-      [`${t('booking.anak')} · Weekend`, formatPrice(regular.price.manca.child[1], 'IDR', locale)],
-    ],
-  },
-  {
-    label: 'Nimo Eye · Bianglala',
-    rows: EYE_TARIFFS.map(([name, value]) => [name, formatPrice(value, 'IDR', locale)]),
-    note: locale === 'en'
-      ? 'Regular cabin 4 pax, 1 rotation ± 10 minutes. Tallest ferris wheel in Indonesia (MURI record).'
-      : 'Kabin regular 4 pax, 1 putaran ± 10 menit. Bianglala tertinggi di Indonesia (rekor MURI).',
-  },
-];
 ---
 <div class={cls} data-view="beranda">
 
@@ -96,12 +54,8 @@ const priceTables = [
       </p>
 
       <div class="flex flex-wrap items-center gap-4 mt-8">
-        <button type="button" data-open-booking="ticket" class="btn-accent px-7 py-3.5 sm:text-base">
-          <Ticket class="w-4 h-4" /> {t('hero.beliTiketSekarang')}
-          <ArrowRight class="w-4 h-4" />
-        </button>
         <a href="/penginapan" data-route="hotels"
-           class="inline-flex items-center gap-2 text-white/90 font-heading text-sm sm:text-base border-b border-white/40 hover:border-white pb-1 transition-colors">
+           class="btn-accent px-7 py-3.5 sm:text-base">
           {t('hero.lihatPenginapan')}
         </a>
       </div>
@@ -120,15 +74,6 @@ const priceTables = [
           <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
             {t('tentang.judul')}
           </h2>
-
-          {headline && (
-            <div class="flex items-center gap-3 mt-5">
-              <RatingBadge rating={headline} size="lg" />
-              {headline.source && (
-                <span class="text-xs text-muted">Rating resmi · {headline.source}</span>
-              )}
-            </div>
-          )}
 
           <p class="text-muted text-sm sm:text-base leading-relaxed mt-6 max-w-lg">
             {t('tentang.paragraf1')}
@@ -240,75 +185,6 @@ const priceTables = [
       <p id="filterCount" class="text-xs text-muted mb-8" aria-live="polite"></p>
       <div id="wahanaGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
       <p id="wahanaEmpty" class="hidden text-center text-muted text-sm py-12">{t('wahana.kosong')}</p>
-    </div>
-  </section>
-
-  <!-- ============ TIKET ============ -->
-  <section id="tiket" class="bg-bark py-20 lg:py-28">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-      <div class="max-w-2xl mb-14 reveal">
-        <p class="eyebrow text-white/70 mb-4">
-          <span class="w-6 h-px bg-white/40"></span> {t('tiket.eyebrow')}
-        </p>
-        <h2 class="font-heading font-bold text-white text-3xl sm:text-4xl lg:text-5xl leading-tight">{t('tiket.judul')}</h2>
-        <p class="text-white/65 text-sm sm:text-base mt-4">
-          {t('tiket.desc')}
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {priceTables.map(t => (
-          <div class="bg-white/5 border border-white/10 rounded-2xl p-7">
-            <p class="text-white/70 font-heading font-medium uppercase text-xs tracking-widest mb-4">{t.label}</p>
-            <ul class="text-sm divide-y divide-white/10">
-              {t.rows.map(([name, price]) => (
-                <li class="flex justify-between py-2.5">
-                  <span class="text-white/60">{name}</span>
-                  <span class="text-white font-medium">{price}</span>
-                </li>
-              ))}
-            </ul>
-            {t.note && <p class="text-xs text-white/45 mt-4 leading-relaxed">{t.note}</p>}
-          </div>
-        ))}
-      </div>
-
-      <div class="flex justify-center mt-12">
-        <button type="button" data-open-booking="ticket" class="btn-accent px-8 py-3.5 sm:text-base">
-          <Ticket class="w-4 h-4" /> {t('tiket.pesanOnline')}
-          <ArrowRight class="w-4 h-4" />
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FASILITAS ============ -->
-  <section id="fasilitas" class="bg-canvas py-20 lg:py-28">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-      <div class="mb-12 reveal">
-        <p class="eyebrow text-sage-deep mb-4">
-          <span class="w-6 h-px bg-sage"></span> {t('fasilitas.eyebrow')}
-        </p>
-        <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
-          {t('fasilitas.judul')}
-        </h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-6">
-        {[[t('fasilitas.atas'), facilitiesTop, 'bg-sage'], [t('fasilitas.bawah'), facilitiesBottom, 'bg-clay']].map(
-          ([title, items, dot]) => (
-            <div class="card p-7 reveal">
-              <h3 class="font-heading font-semibold text-ink text-lg mb-5">{title}</h3>
-              <ul class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm text-muted">
-                {items.map(f => (
-                  <li class="flex items-center gap-2">
-                    <span class:list={['w-1.5 h-1.5 rounded-full shrink-0', dot]}></span>{f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ),
-        )}
-      </div>
     </div>
   </section>
 

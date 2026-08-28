@@ -4,7 +4,6 @@
     "destinations": "Destinations",
     "hotels": "Hotels",
     "galeri": "Gallery",
-    "tiket": "Tickets",
     "kontak": "Contact",
     "katalogDestinasi": "Destination Catalog",
     "lihatSemuaDestinasi": "View all destinations",
@@ -14,7 +13,7 @@
     "keluar": "Sign Out",
     "masuk": "Sign In",
     "masukAtauDaftar": "Sign In or Register",
-    "beliTiket": "Buy Ticket"
+    "pesanKamar": "Book a Room"
   },
   "hero": {
     "lokasi": "National Destination Network",
@@ -27,7 +26,7 @@
     "eyebrow": "About Nimo Land Group",
     "judul": "One Vision, Across the Archipelago",
     "paragraf1": "Nimo Land Group is an integrated tourism destination network committed to delivering world-class experiences across Indonesia. From highland tea plantations to the world's largest volcanic lake — each destination is designed with an authentic local touch.",
-    "paragraf2": "With an integrated digital ticketing system and a growing network of resorts, we ensure every visit is effortless, safe, and unforgettable.",
+    "paragraf2": "With an integrated network of resorts that keeps growing, we ensure every visit is effortless, safe, and unforgettable.",
     "panorama": "Destinations spread across",
     "wahana": "Cities & provinces",
     "buka": "Resorts & hotels",
@@ -44,12 +43,6 @@
     "judul": "One Hill, Endless Stories",
     "desc": "Choose a category to filter the attractions list. All available in the Nimo Highland area.",
     "kosong": "No attractions in this category yet."
-  },
-  "tiket": {
-    "eyebrow": "Tickets & Promotions",
-    "judul": "Ticket Prices",
-    "desc": "Online booking is available at least 1 day before arrival, and tickets are valid for up to 3 days from the selected arrival date.",
-    "pesanOnline": "Book Tickets Online"
   },
   "fasilitas": {
     "eyebrow": "Facilities",
@@ -192,7 +185,7 @@
     "sudahPunya": "Already have an account?",
     "loginDisini": "Sign in here",
     "judulGate": "Sign in to continue",
-    "descGate": "Booking tickets and rooms requires an account so your order history and e-tickets are saved and can be accessed anytime.",
+    "descGate": "Booking a room requires an account so your order history is saved and can be accessed anytime.",
     "daftarAkunBaru": "Create New Account",
     "nantiSaja": "Later"
   },
@@ -207,12 +200,10 @@
     "jelajah": "Explore",
     "beranda": "Home",
     "informasi": "Information",
-    "hargaTiket": "Ticket Prices",
     "faq": "FAQ",
     "kontak": "Contact",
     "legal": "Legal",
     "tentangKami": "About Us",
-    "syaratKetentuan": "Terms & Conditions",
     "kebijakanPrivasi": "Privacy Policy",
     "pembatalanRefund": "Cancellation & Refund",
     "namaBadanHukum": "Legal Entity Name",
@@ -297,12 +288,12 @@
   "auth": {
     "loginTitle": "Sign in to your account",
     "loginSubtitleGate": "After signing in, you'll return to the booking page you were on.",
-    "loginSubtitle": "Sign in to book tickets, save e-tickets, and view your order history.",
+    "loginSubtitle": "Sign in to book a room and view your order history.",
     "loginBtn": "Sign In",
     "noAccount": "Don't have an account?",
     "registerNow": "Register now",
     "loginPageTitle": "Sign In — Nimo Land Group",
-    "loginPageDesc": "Sign in to your Nimo Land Group account to book tickets and rooms.",
+    "loginPageDesc": "Sign in to your Nimo Land Group account to book a room.",
     "loginErrorEmpty": "Email and password are required.",
     "loginLoading": "Checking…",
     "loginErrorConn": "Cannot reach the server. Check your connection.",
@@ -313,7 +304,7 @@
     "hasAccount": "Already have an account?",
     "loginHere": "Sign in here",
     "registerPageTitle": "Register — Nimo Land Group",
-    "registerPageDesc": "Create a Nimo Land Group account to book tickets and rooms.",
+    "registerPageDesc": "Create a Nimo Land Group account to book a room.",
     "registerName": "Full Name",
     "registerNamePh": "Name as on your ID",
     "registerEmail": "Email",

@@ -1,14 +1,8 @@
-/* Content + pricing data, shared by the server and the client SPA.
-
-   ALL prices live in src/data/pricing.json (single source of truth),
-   imported below. Nothing is ever hard-coded here or in any component.
-   The booking endpoint recomputes totals server-side using the same data;
-   the browser's numbers are a display convenience, the server's are the
-   ones that get charged. */
+/* Content + data, shared by the server and the client SPA. Hotel room rates
+   live in src/data/pricing.json (single source of truth), imported below. */
 
 import pricing from '../data/pricing.json' with { type: 'json' };
 
-const PRICE = pricing.destinations;
 const HOTEL_RATES = pricing.hotel_rates;
 
 /** Master switch for the whole situs: while true, every "simulation / demo /
@@ -124,55 +118,55 @@ export const DESTINATIONS = [
     tag:'Unggulan', img:'/brand/nimo-highland/nh-hero.jpg', fb:'/brand/nimo-highland/nh-hero.jpg',
     desc:'Kebun teh dengan Sky Bridge berbentuk U dan panorama 360°. Datang subuh untuk menyaksikan kabut yang perlahan larut oleh matahari terbit.',
     highlights:['Glass Sky Bridge','Sunrise Point','ATV & Flying Fox','Nimo Zoo'],
-    gallery:[NH(1), NH(2), NH(3), NH(4)], price:PRICE['nimo-highland'], bookable:true },
+    gallery:[NH(1), NH(2), NH(3), NH(4)] },
 
   { id:'nimo-eye', name:'Nimo Eye', type:'alam', area:'Pangalengan, Bandung',
     tag:'Rekor MURI', img:NE(1), fb:NE(1),
     desc:'Bianglala tertinggi di Indonesia pada ketinggian sekitar 1.400 mdpl, dengan pemandangan kebun teh dari ketinggian ekstrem.',
     highlights:['Kabin Regular & VIP','Karaoke in the Sky','Dine in the Sky','360° view'],
-    gallery:[NE(1), NE(2), NE(3), NE(4)], price:PRICE['nimo-eye'], bookable:true },
+    gallery:[NE(1), NE(2), NE(3), NE(4)] },
 
   { id:'nimo-water-forest', name:'Nimo Water Forest', type:'air', area:'Jawa Barat',
     img:'/brand/nimo-water-forest/nwf-hero.jpg', fb:'/brand/nimo-water-forest/nwf-hero.jpg',
     desc:'Taman air keluarga dengan konsep hutan, memadukan wahana basah dan area teduh untuk bersantai.',
-    highlights:['Kolam anak','Wahana air','Area piknik'], gallery:[NWF(1), NWF(2), NWF(3)], price:'Mulai Rp 40.000', bookable:true },
+    highlights:['Kolam anak','Wahana air','Area piknik'], gallery:[NWF(1), NWF(2), NWF(3)] },
 
   { id:'bogor-aqua-game', name:'Bogor Aqua Game', type:'air', area:'Bogor',
     img:AQ(1), fb:AQ(1),
     desc:'Wahana watersport pertama di Indonesia yang menghadirkan permainan inflatable premium Wibit dari Jerman.',
-    highlights:['Wibit inflatable','Boqu War','Wahana interaktif'], gallery:[AQ(1), AQ(2), AQ(3)], price:'Mulai Rp 35.000', bookable:true },
+    highlights:['Wibit inflatable','Boqu War','Wahana interaktif'], gallery:[AQ(1), AQ(2), AQ(3)] },
 
   { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang',
     img:'/brand/malang-skyland/msk-hero.gif', fb:'/brand/malang-skyland/msk-hero.gif',
     desc:'Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360° di sekelilingnya.',
-    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8), MSKGIF(9), MSKGIF(10), MSKGIF(11)], price:'Mulai Rp 30.000', bookable:true },
+    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8), MSKGIF(9), MSKGIF(10), MSKGIF(11)] },
 
   { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
     img:PR(1), fb:PR(1),
     desc:'Taman rekreasi keluarga dengan area bermain, ruang hijau luas, dan wahana air — satu kawasan dengan New Dgyp Resort Ciater.',
     highlights:['Playground','Water slide','Area piknik','Tempat ibadah'],
-    gallery:[PR(1), PR(2), PR(3), PR(4), PR(5)], price:'Mulai Rp 30.000', bookable:true },
+    gallery:[PR(1), PR(2), PR(3), PR(4), PR(5)] },
 
   { id:'nimo-kaldera-toba', name:'Nimo Kaldera Toba', type:'alam', area:'Danau Toba, Sumut',
     img:KLT(1), fb:KLT(1),
     desc:'Destinasi di kawasan kaldera Danau Toba dengan panorama danau vulkanik terbesar di dunia.',
-    highlights:['Pemandangan danau','Spot foto','Udara sejuk'], gallery:[KLT(1), KLT(2), KLT(3), KLT(4)], price:'Mulai Rp 35.000', bookable:true },
+    highlights:['Pemandangan danau','Spot foto','Udara sejuk'], gallery:[KLT(1), KLT(2), KLT(3), KLT(4)] },
 
   { id:'nimo-zoo', name:'Nimo Zoo', type:'keluarga', area:'Area Nimo Highland',
     img:ZOO(1), fb:ZOO(1),
     desc:'Area edukasi satwa dengan interactive storytelling dan sesi feeding time yang aman untuk anak.',
     highlights:['Interactive storytelling','Feeding time','Edukasi satwa'],
-    gallery:[ZOO(1), ZOO(2), ZOO(3), ZOO(4)], price:PRICE['nimo-zoo'], bookable:true },
+    gallery:[ZOO(1), ZOO(2), ZOO(3), ZOO(4)] },
 
   { id:'punceling-park', name:'Punceling Park', type:'air', area:'Ciwidey, Bandung',
     img:PUN(1), fb:PUN(1),
     desc:'Oase ketenangan di Ciwidey — berkemah, berenang, dan bersantai di tengah hutan pinus dengan suara sungai.',
-    highlights:['Camping','Kolam air panas','Hutan pinus'], gallery:[PUN(1), PUN(2), PUN(3), PUN(4)], price:'Mulai Rp 30.000', bookable:true },
+    highlights:['Camping','Kolam air panas','Hutan pinus'], gallery:[PUN(1), PUN(2), PUN(3), PUN(4)] },
 
   { id:'nimo-ecomarine', name:'Nimo Ecomarine', type:'air', area:'Bali',
     img:ECO(1), fb:ECO(1),
     desc:'Petualangan air terbaru di Bali sebagai bagian dari keluarga besar Nimo Land Group.',
-    highlights:['Wahana air','Area pantai','Baru dibuka'], gallery:[ECO(1), ECO(2), ECO(3)], price:PRICE['nimo-ecomarine'], bookable:true },
+    highlights:['Wahana air','Area pantai','Baru dibuka'], gallery:[ECO(1), ECO(2), ECO(3)] },
 ];
 
 /* ---- Accommodation ----
@@ -376,52 +370,19 @@ export const GALLERY = [
   { img:PUN(1), fb:PUN(1) },
 ];
 
-/* ---- Ticket pricing ----
-   Read from src/data/pricing.json (single source of truth).
-   The old "combo" package was removed: it is not listed on the official
-   site. Each price value is [weekday, weekend]. */
-export const PACKAGES = pricing.packs;
-
-/* Nimo Eye display tariffs, taken from the official site (pricing.json). */
-export const EYE_TARIFFS = pricing.eye_tariffs;
-
-/** Packages (ticket categories) belonging to a destination. */
-export function packagesForDestination(destinationId) {
-  return PACKAGES.filter(p => p.destination === destinationId);
-}
-
-/** True if a destination offers bookable ticket packages. */
-export function destinationBookable(destinationId) {
-  return packagesForDestination(destinationId).length > 0;
-}
-
 export const FAQ_DATA = [
-  { q:'Apakah saya bisa membeli tiket untuk hari ini juga?',
-    a:'Tidak. Pemesanan online paling cepat untuk keesokan hari (H-1). Tanggal hari ini dan tanggal yang sudah lewat otomatis terkunci pada date picker.' },
-  { q:'Apakah saya harus punya akun untuk memesan tiket?',
-    a:'Ya. Pemesanan tiket dan kamar memerlukan akun agar riwayat pesanan dan e-tiket Anda tersimpan dan bisa dibuka kembali kapan saja. Pendaftaran hanya butuh nama, email, dan password.' },
-  { q:'Berapa lama tiket berlaku setelah dibeli?',
-    a:'Tiket berlaku maksimal 3 hari sejak tanggal kedatangan yang dipilih. Contoh: memilih kedatangan tanggal 11, maka tiket masih bisa dipakai sampai tanggal 14.' },
-  { q:'Apa saja pilihan paket tiketnya?',
-    a:'Ada dua: Tiket Masuk Regular untuk akses kebun teh, Sky Bridge, dan spot foto; serta Tiket Nimo Eye untuk naik bianglala tertinggi di Indonesia.' },
   { q:'Bagaimana cara memesan kamar untuk menginap?',
     a:'Buka menu Hotels, pilih tipe kamar yang diinginkan, lalu klik "Booking Kamar". Form pemesanan kamar akan terbuka langsung di halaman ini dengan pilihan tanggal check-in, check-out, dan jumlah tamu.' },
-  { q:'Bagaimana harga weekday dan weekend dihitung?',
-    a:'Sabtu dan Minggu dihitung sebagai weekend, hari lainnya weekday. Kalkulator pada form pemesanan menyesuaikan tarif otomatis begitu tanggal kedatangan dipilih.' },
-  { q:'Jam berapa Nimo Highland buka?',
-    a:'Senin sampai Jumat buka 08.00–17.00. Sabtu dan Minggu buka lebih awal, mulai 05.00–17.00, supaya pengunjung bisa mengejar sunrise di puncak.' },
+  { q:'Apakah saya harus punya akun untuk memesan kamar?',
+    a:'Ya. Pemesanan kamar memerlukan akun agar riwayat pesanan Anda tersimpan dan bisa dibuka kembali kapan saja. Pendaftaran hanya butuh nama, email, dan password.' },
 ];
 
 /* ---- Booking rules, in one place so the client and server agree ---- */
 export const RULES = {
-  MIN_LEAD_DAYS: 1,     // earliest arrival is tomorrow (H-1)
-  TICKET_VALID_DAYS: 3, // ticket usable for 3 days from arrival
-  MAX_TICKETS: 50,
+  MIN_LEAD_DAYS: 1,     // earliest check-in is tomorrow (H-1)
   MAX_ROOMS: 10,
   MAX_GUESTS: 40,
 };
-
-const isWeekend = date => date.getDay() === 0 || date.getDay() === 6;
 
 /** Parse a YYYY-MM-DD string as local midnight. Returns null if unparseable. */
 export function parseISODate(value) {
@@ -440,35 +401,6 @@ export function toISODate(d) {
   return d.getFullYear() + '-' +
     String(d.getMonth() + 1).padStart(2, '0') + '-' +
     String(d.getDate()).padStart(2, '0');
-}
-
-/**
- * Unit price for one visitor.
- * @param {string} packageId @param {'domestik'|'manca'} nationality
- * @param {'adult'|'child'} who @param {Date|null} arrival
- */
-export function unitPrice(packageId, nationality, who, arrival) {
-  const pkg = PACKAGES.find(p => p.id === packageId);
-  if (!pkg) throw new Error('Paket tiket tidak dikenal: ' + packageId);
-  const band = pkg.price[nationality];
-  if (!band) throw new Error('Kategori pengunjung tidak dikenal: ' + nationality);
-  return band[who][arrival && isWeekend(arrival) ? 1 : 0];
-}
-
-/**
- * Authoritative ticket total. Called by the browser for display and by the
- * booking endpoint for the amount actually recorded.
- * @returns {{total: number, adultUnit: number, childUnit: number, expiry: Date}}
- */
-export function priceTicket({ packageId, nationality, adult, child, arrival }) {
-  const adultUnit = unitPrice(packageId, nationality, 'adult', arrival);
-  const childUnit = unitPrice(packageId, nationality, 'child', arrival);
-  return {
-    adultUnit,
-    childUnit,
-    total: adultUnit * adult + childUnit * child,
-    expiry: addDays(arrival, RULES.TICKET_VALID_DAYS),
-  };
 }
 
 export const rupiah = n => 'Rp ' + Number(n).toLocaleString('id-ID');
