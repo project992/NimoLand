@@ -13,6 +13,13 @@
 -- key (service role melewati RLS). Karena itu setiap tabel di bawah
 -- mengaktifkan RLS TANPA policy apa pun: anon key yang terekspos di browser
 -- tidak bisa membaca atau menulis apa pun.
+--
+-- CATATAN PER 2026-08-28
+-- Sistem booking tiket, pembayaran (Midtrans), kuota harian, dan verifikasi
+-- tiket telah DIHAPUS dari aplikasi. Skema di bawah hanya mencakup reservasi
+-- kamar + akun pelanggan/karyawan + konten destinasi + log aktivitas ESS.
+-- Tabel lama (tickets, payments, daily_quotas, daily_slots) yang sudah ada
+-- di database TIDAK dihapus oleh skrip ini; berhenti dikelola oleh kode.
 -- =====================================================================
 
 
@@ -44,20 +51,6 @@ create table if not exists employees (
   created_at    timestamptz not null default now()
 );
 
--- ---------- TIKET PELANGGAN ----------
-create table if not exists tickets (
-  id            uuid primary key default gen_random_uuid(),
-  booking_code  text unique not null,
-  customer_name text not null,
-  ticket_type   text not null,
-  quantity      integer not null default 1,
-  total_price   numeric not null default 0,
-  visit_date    date not null,
-  expiry_date   date not null,
-  status        text not null default 'LUNAS',
-  created_at    timestamptz not null default now()
-);
-
 -- ---------- PEMESANAN KAMAR ----------
 create table if not exists room_bookings (
   id            uuid primary key default gen_random_uuid(),
@@ -79,8 +72,6 @@ create table if not exists room_bookings (
 
 -- ---------- RATING RESMI DESTINASI ----------
 -- Angka agregat resmi per destinasi (mis. dari Google Maps / kanal resmi).
--- Dibaca read-only oleh src/lib/ratings.js. Badge rating tidak dirender sama
--- sekali kalau barisnya tidak ada — angka rating tidak boleh dikarang.
 create table if not exists destination_ratings (
   destination_id text primary key,      -- cocokkan dengan id di src/lib/data.js
   rating         numeric(2,1) not null,
@@ -99,6 +90,19 @@ create table if not exists destination_videos (
   destination_id text primary key,      -- cocokkan dengan id di src/lib/data.js
   video_url      text not null,
   updated_at     timestamptz not null default now()
+);
+
+-- ---------- LOG AKTIVITAS ESS ----------
+-- Log siapa (NIK) melakukan aksi apa di Portal ESS (mis. LOGIN, mengelola
+-- akun karyawan). Ditulis lewat src/lib/payments.js -> logActivity(...).
+create table if not exists activity_log (
+  id          uuid primary key default gen_random_uuid(),
+  actor_nik   text not null,
+  actor_name  text,
+  action      text not null,            -- MISAL 'LOGIN', 'ACCOUNT_CREATE', 'ACCOUNT_UPDATE'
+  booking_code text,
+  meta        jsonb,
+  created_at  timestamptz not null default now()
 );
 
 
@@ -130,12 +134,6 @@ alter table employees add column if not exists created_at    timestamptz not nul
 --   npm run seed:employees -- NIK-0001 "Nama" "Jabatan" <password-baru>
 alter table employees drop column if exists password;
 
--- ---------- tickets ----------
-alter table tickets add column if not exists customer_id uuid;
-alter table tickets add column if not exists verified_at timestamptz;
-alter table tickets add column if not exists verified_by text;
-alter table tickets add column if not exists created_at  timestamptz not null default now();
-
 -- ---------- room_bookings ----------
 alter table room_bookings add column if not exists customer_id uuid;
 
@@ -147,35 +145,12 @@ alter table room_bookings add column if not exists customer_id uuid;
 -- =====================================================================
 
 -- ---------- Foreign key ke customers ----------
-alter table tickets       drop constraint if exists tickets_customer_id_fkey;
-alter table tickets       add  constraint tickets_customer_id_fkey
-  foreign key (customer_id) references customers (id) on delete set null;
-
 alter table room_bookings drop constraint if exists room_bookings_customer_id_fkey;
 alter table room_bookings add  constraint room_bookings_customer_id_fkey
   foreign key (customer_id) references customers (id) on delete set null;
 
 -- ---------- Aturan data ----------
 -- `not valid` = baris yang sudah ada tidak diperiksa, baris baru diperiksa.
--- Dipakai supaya satu baris lama yang menyimpang tidak menggagalkan seluruh
--- skrip ini. Untuk memeriksa data lama, jalankan manual:
---   alter table tickets validate constraint tickets_quantity_positive;
-alter table tickets drop constraint if exists tickets_quantity_positive;
-alter table tickets add  constraint tickets_quantity_positive
-  check (quantity > 0) not valid;
-
-alter table tickets drop constraint if exists tickets_price_non_negative;
-alter table tickets add  constraint tickets_price_non_negative
-  check (total_price >= 0) not valid;
-
-alter table tickets drop constraint if exists tickets_status_valid;
-alter table tickets add  constraint tickets_status_valid
-  check (status in ('LUNAS', 'TERPAKAI', 'EXPIRED')) not valid;
-
-alter table tickets drop constraint if exists tickets_expiry_after_visit;
-alter table tickets add  constraint tickets_expiry_after_visit
-  check (expiry_date >= visit_date) not valid;
-
 alter table room_bookings drop constraint if exists room_bookings_counts_positive;
 alter table room_bookings add  constraint room_bookings_counts_positive
   check (nights > 0 and rooms > 0 and guests > 0) not valid;
@@ -194,10 +169,9 @@ alter table destination_ratings add  constraint destination_ratings_count_non_ne
 
 -- ---------- Index ----------
 create index if not exists idx_customers_email          on customers (email);
-create index if not exists idx_tickets_booking          on tickets (booking_code);
-create index if not exists idx_tickets_status           on tickets (status);
-create index if not exists idx_tickets_customer         on tickets (customer_id);
 create index if not exists idx_room_bookings_customer   on room_bookings (customer_id);
+create index if not exists idx_activity_created         on activity_log (created_at desc);
+create index if not exists idx_activity_actor           on activity_log (actor_nik);
 
 
 -- =====================================================================
@@ -207,17 +181,14 @@ create index if not exists idx_room_bookings_customer   on room_bookings (custom
 -- =====================================================================
 alter table customers            enable row level security;
 alter table employees            enable row level security;
-alter table tickets              enable row level security;
 alter table room_bookings        enable row level security;
 alter table destination_ratings  enable row level security;
 alter table destination_videos   enable row level security;
+alter table activity_log         enable row level security;
 
 -- Hapus policy publik dari skema lama.
 -- Ini yang dulu membuat seluruh password karyawan dan seluruh nama serta
 -- nominal pesanan pelanggan bisa dibaca siapa saja dari console browser.
-drop policy if exists "tickets public select"   on tickets;
-drop policy if exists "tickets public insert"   on tickets;
-drop policy if exists "tickets public update"   on tickets;
 drop policy if exists "employees public select" on employees;
 
 
@@ -244,129 +215,13 @@ on conflict (destination_id) do update
 -- ---------- Akun karyawan ----------
 -- TIDAK diseed lewat SQL: password harus di-hash dengan scrypt, dan hash
 -- tidak boleh ikut ter-commit ke repo.
---   npm run seed:employees -- NIK-0001 "Idris" "Staff Tiket / Gate" <password>
+--   npm run seed:employees -- NIK-0001 "Idris" "Staff" <password>
 -- Jalankan setelah mengisi .env. Lihat scripts/seed-employees.mjs.
 
 
 -- =====================================================================
 -- CEK HASIL — jalankan setelah skrip di atas selesai.
--- Harus mengembalikan 3 baris: customer_id, verified_at, verified_by.
--- =====================================================================
--- select column_name
---   from information_schema.columns
---  where table_name = 'tickets'
---    and column_name in ('customer_id', 'verified_at', 'verified_by');
-
+--
 -- Karyawan yang masih perlu di-seed ulang (password_hash kosong):
 -- select nik, full_name from employees where password_hash is null;
-
-
--- =====================================================================
--- BAGIAN 6 — FASE 3: PEMBAYARAN NYATA + QR DATABASE + KUOTA + LOG
--- =====================================================================
-
--- ---------- payments (Midtrans) ----------
-create table if not exists payments (
-  id                   uuid primary key default gen_random_uuid(),
-  order_id             text unique not null,       -- order id di Midtrans
-  booking_code         text not null,              -- tiket kaitannya (booking_code)
-  amount               numeric not null,
-  currency             text not null default 'IDR',
-  method               text,                       -- qris / bank_transfer / echannel / dll (dari webhook)
-  status               text not null default 'PENDING',
-  midtrans_status      text,                       -- settlement / capture / deny / cancel / expire
-  midtrans_transaction_id text,
-  raw_fields          jsonb,                       -- snapshot isi webhook utk audit
-  paid_at             timestamptz,
-  created_at          timestamptz not null default now()
-);
-
--- ---------- Kuota harian (admin set dari ESS) ----------
--- quota NULL = tanpa batas (unlimited). Ini jumlah tiket maksimum per tanggal.
-create table if not exists daily_quotas (
-  visit_date date primary key,
-  quota      integer,                              -- NULL = tidak dibatasi
-  note       text,
-  updated_at timestamptz not null default now()
-);
-
--- ---------- Penghitung slot yang sudah dipesan (reservasi atomik) ----------
-create table if not exists daily_slots (
-  visit_date date primary key,
-  used       integer not null default 0,
-  updated_at timestamptz not null default now()
-);
-
--- Reservasi atomik dan anti-overbooking. Satu pemanggilan = satu transaksi:
---   _quota NULL   -> selalu diterima, hitung digunakan
---   _quota angka  -> ditolak bila used + qty > quota (update tak menyentuh baris)
--- Pakai RPC dari server: supabase.rpc('reserve_daily_slot', {_date, _qty, _quota}).
-create or replace function reserve_daily_slot(_date date, _qty integer, _quota integer)
-returns table (used bigint)
-language sql
-as $$
-  insert into daily_slots (visit_date, used) values (_date, 0)
-  on conflict (visit_date) do nothing;
-  update daily_slots
-     set used = used + _qty, updated_at = now()
-   where visit_date = _date
-     and (_quota is null or used + _qty <= _quota)
-  returning used;
-$$;
-
--- ---------- Log aktivitas (siapa verifikasi tiket apa & kapan) ----------
-create table if not exists activity_log (
-  id          uuid primary key default gen_random_uuid(),
-  actor_nik   text not null,
-  actor_name  text,
-  action      text not null,      -- MISAL 'VERIFY_OK','VERIFY_REUSE','VERIFY_EXPIRED','LOGIN','QUOTA_SET','PAYMENT'
-  booking_code text,
-  meta        jsonb,
-  created_at  timestamptz not null default now()
-);
-
--- ---------- MIGRASI kolom baru tickets ----------
-alter table tickets add column if not exists customer_email text;
-alter table tickets add column if not exists paid_at       timestamptz;
-alter table tickets add column if not exists payment_method text;   -- 'midtrans' | null
-alter table tickets add column if not exists order_id       text;   -- order_id Midtrans utk pembayarannya
-
--- Status baru: PENDING (belum bayar) dan CANCELED (gagal/batal). Ditambahkan
--- dengan drop+add supaya aman dijalankan berulang (PG tidak punya alter).
-alter table tickets drop constraint if exists tickets_status_valid;
-alter table tickets add  constraint tickets_status_valid
-  check (status in ('PENDING','LUNAS','TERPAKAI','EXPIRED','CANCELED')) not valid;
-
--- ---------- Foreign key & index ----------
-alter table payments drop constraint if exists payments_booking_fkey;
-alter table payments add  constraint payments_booking_fkey
-  foreign key (booking_code) references tickets (booking_code) on delete cascade;
-
-create index if not exists idx_tickets_order_id    on tickets (order_id);
-create index if not exists idx_payments_order      on payments (order_id);
-create index if not exists idx_payments_status     on payments (status);
-create index if not exists idx_activity_created    on activity_log (created_at desc);
-create index if not exists idx_activity_actor      on activity_log (actor_nik);
-
--- ---------- Row Level Security ----------
-alter table payments      enable row level security;
-alter table daily_quotas  enable row level security;
-alter table daily_slots   enable row level security;
-alter table activity_log  enable row level security;
-
--- Semua tabel tetap tanpa policy: server memakai SERVICE ROLE, dan
--- RLS aktif tanpa policy berarti anon/authenticated tidak punya akses.
-
-
--- =====================================================================
--- CATATAN
--- 1. Realtime tidak lagi dipakai. Dashboard ESS menarik data lewat
---    GET /api/ess/tickets (butuh sesi karyawan) dan me-refresh berkala.
--- 2. Anon key TIDAK lagi dipakai di mana pun. Server memakai
---    SUPABASE_SERVICE_ROLE_KEY (lihat .env.example).
--- 3. FASE 3:
---    - Status tiket sekarang meliputi PENDING (belum bayar) dan CANCELED.
---    - Kode unik tiket = booking_code (tersimpan, unik, menjadi isi QR).
---    - Pembayaran nyata lewat Midtrans: /api/payments/notification.
---    - Kuota harian: daily_quotas + daily_slots (reservasi atomik).
 -- =====================================================================
