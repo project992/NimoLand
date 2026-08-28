@@ -4,9 +4,11 @@ import ChevronRight from '@lucide/astro/icons/chevron-right';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import MapPin from '@lucide/astro/icons/map-pin';
 import Sunrise from '@lucide/astro/icons/sunrise';
+import Sparkles from '@lucide/astro/icons/sparkles';
 import { DESTINATIONS, HERO_SLIDES, localSrc } from '../../lib/data.js';
 
 const { class: cls = 'view' } = Astro.props;
+const locale = Astro.locals.locale ?? 'id';
 const t = key => Astro.locals.t(key);
 ---
 <div class={cls} data-view="beranda">
