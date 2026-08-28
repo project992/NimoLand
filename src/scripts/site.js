@@ -1,7 +1,6 @@
 /* Navigation for standalone pages that don't mount the full SPA (app.js),
    e.g. the legal pages. data-route links cross-navigate to the SPA's real
-   paths; the booking intent and ESS trigger go home where those live. */
-const INTENT_KEY = 'nimo:booking-intent';
+   paths; the ESS trigger goes home where it lives. */
 const ROUTE_PATHS = { beranda: '/', destinations: '/destinasi', hotels: '/penginapan', galeri: '/galeri', kontak: '/kontak' };
 
 document.addEventListener('click', (e) => {
@@ -9,16 +8,6 @@ document.addEventListener('click', (e) => {
   if (nav) {
     e.preventDefault();
     location.href = ROUTE_PATHS[nav.dataset.route] || '/';
-    return;
-  }
-
-  const book = e.target.closest('[data-open-booking]');
-  if (book) {
-    e.preventDefault();
-    try {
-      sessionStorage.setItem(INTENT_KEY, JSON.stringify({ tab: book.dataset.openBooking || 'room' }));
-    } catch { /* private mode: just go home */ }
-    location.href = '/';
     return;
   }
 

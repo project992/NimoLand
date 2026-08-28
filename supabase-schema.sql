@@ -15,11 +15,12 @@
 -- tidak bisa membaca atau menulis apa pun.
 --
 -- CATATAN PER 2026-08-28
--- Sistem booking tiket, pembayaran (Midtrans), kuota harian, dan verifikasi
--- tiket telah DIHAPUS dari aplikasi. Skema di bawah hanya mencakup reservasi
--- kamar + akun pelanggan/karyawan + konten destinasi + log aktivitas ESS.
--- Tabel lama (tickets, payments, daily_quotas, daily_slots) yang sudah ada
--- di database TIDAK dihapus oleh skrip ini; berhenti dikelola oleh kode.
+-- Sistem booking tiket, pembayaran (Midtrans), kuota harian, verifikasi tiket,
+-- dan pemesanan kamar telah DIHAPUS dari aplikasi. Skema di bawah hanya
+-- mencakup akun pelanggan/karyawan + konten destinasi + log aktivitas ESS.
+-- Tabel lama (tickets, payments, daily_quotas, daily_slots, room_bookings)
+-- yang sudah ada di database TIDAK dihapus oleh skrip ini; berhenti dikelola
+-- oleh kode.
 -- =====================================================================
 
 
@@ -29,7 +30,7 @@
 -- Untuk database lama, Bagian 2 yang melengkapinya.
 -- =====================================================================
 
--- ---------- PELANGGAN (akun booking) ----------
+-- ---------- PELANGGAN (akun) ----------
 create table if not exists customers (
   id            uuid primary key default gen_random_uuid(),
   email         text unique not null,
@@ -48,25 +49,6 @@ create table if not exists employees (
   full_name     text not null,
   role          text not null default 'Staff',
   active        boolean not null default true,
-  created_at    timestamptz not null default now()
-);
-
--- ---------- PEMESANAN KAMAR ----------
-create table if not exists room_bookings (
-  id            uuid primary key default gen_random_uuid(),
-  booking_code  text unique not null,
-  customer_name text not null,
-  hotel_id      text not null,
-  hotel_name    text not null,
-  room_id       text not null,
-  room_name     text not null,
-  check_in      date not null,
-  check_out     date not null,
-  nights        integer not null,
-  rooms         integer not null,
-  guests        integer not null,
-  total_price   numeric not null default 0,
-  status        text not null default 'DIKONFIRMASI',
   created_at    timestamptz not null default now()
 );
 
@@ -134,9 +116,6 @@ alter table employees add column if not exists created_at    timestamptz not nul
 --   npm run seed:employees -- NIK-0001 "Nama" "Jabatan" <password-baru>
 alter table employees drop column if exists password;
 
--- ---------- room_bookings ----------
-alter table room_bookings add column if not exists customer_id uuid;
-
 
 -- =====================================================================
 -- BAGIAN 3 — FOREIGN KEY, CONSTRAINT, INDEX
@@ -144,21 +123,8 @@ alter table room_bookings add column if not exists customer_id uuid;
 -- Postgres tidak punya `add constraint if not exists`.
 -- =====================================================================
 
--- ---------- Foreign key ke customers ----------
-alter table room_bookings drop constraint if exists room_bookings_customer_id_fkey;
-alter table room_bookings add  constraint room_bookings_customer_id_fkey
-  foreign key (customer_id) references customers (id) on delete set null;
-
 -- ---------- Aturan data ----------
 -- `not valid` = baris yang sudah ada tidak diperiksa, baris baru diperiksa.
-alter table room_bookings drop constraint if exists room_bookings_counts_positive;
-alter table room_bookings add  constraint room_bookings_counts_positive
-  check (nights > 0 and rooms > 0 and guests > 0) not valid;
-
-alter table room_bookings drop constraint if exists room_bookings_checkout_after_checkin;
-alter table room_bookings add  constraint room_bookings_checkout_after_checkin
-  check (check_out > check_in) not valid;
-
 alter table destination_ratings drop constraint if exists destination_ratings_rating_range;
 alter table destination_ratings add  constraint destination_ratings_rating_range
   check (rating >= 0 and rating <= 5) not valid;
@@ -169,7 +135,6 @@ alter table destination_ratings add  constraint destination_ratings_count_non_ne
 
 -- ---------- Index ----------
 create index if not exists idx_customers_email          on customers (email);
-create index if not exists idx_room_bookings_customer   on room_bookings (customer_id);
 create index if not exists idx_activity_created         on activity_log (created_at desc);
 create index if not exists idx_activity_actor           on activity_log (actor_nik);
 
@@ -181,7 +146,6 @@ create index if not exists idx_activity_actor           on activity_log (actor_n
 -- =====================================================================
 alter table customers            enable row level security;
 alter table employees            enable row level security;
-alter table room_bookings        enable row level security;
 alter table destination_ratings  enable row level security;
 alter table destination_videos   enable row level security;
 alter table activity_log         enable row level security;

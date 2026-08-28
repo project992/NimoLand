@@ -11,10 +11,10 @@ import { LOCALES, DEFAULT_LOCALE, t as translate } from './lib/i18n.js';
 const LOCALE_COOKIE = 'nl_lang';
 
 /** Pages that require a signed-in customer. Prefix match. */
-const PROTECTED_PAGES = ['/booking', '/akun', '/pesanan'];
+const PROTECTED_PAGES = [];
 
 /** API routes that require a signed-in customer. Prefix match. */
-const PROTECTED_API = ['/api/bookings', '/api/my'];
+const PROTECTED_API = [];
 
 /** Pages that require a signed-in employee. */
 const PROTECTED_EMPLOYEE_PAGES = [];

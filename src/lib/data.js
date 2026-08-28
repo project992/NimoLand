@@ -371,20 +371,12 @@ export const GALLERY = [
 ];
 
 export const FAQ_DATA = [
-  { q:'Bagaimana cara memesan kamar untuk menginap?',
-    a:'Buka menu Hotels, pilih tipe kamar yang diinginkan, lalu klik "Booking Kamar". Form pemesanan kamar akan terbuka langsung di halaman ini dengan pilihan tanggal check-in, check-out, dan jumlah tamu.' },
-  { q:'Apakah saya harus punya akun untuk memesan kamar?',
-    a:'Ya. Pemesanan kamar memerlukan akun agar riwayat pesanan Anda tersimpan dan bisa dibuka kembali kapan saja. Pendaftaran hanya butuh nama, email, dan password.' },
+  { q:'Bagaimana cara memesan / menginap?',
+    a:'Silakan hubungi tim reservasi kami melalui WhatsApp 0811-1112-1162 atau email official@nimoenterprise.com untuk pemesanan kamar dan pertanyaan lainnya.' },
+  { q:'Apakah saya bisa menghubungi resepsionis atau tim kami?',
+    a:'Tentu. Tim kami siap membantu melalui WhatsApp 0811-1112-1162 pada jam operasional. Untuk keperluan administrasi dapat melalui official@nimoenterprise.com.' },
 ];
 
-/* ---- Booking rules, in one place so the client and server agree ---- */
-export const RULES = {
-  MIN_LEAD_DAYS: 1,     // earliest check-in is tomorrow (H-1)
-  MAX_ROOMS: 10,
-  MAX_GUESTS: 40,
-};
-
-/** Parse a YYYY-MM-DD string as local midnight. Returns null if unparseable. */
 export function parseISODate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
   const date = new Date(value + 'T00:00:00');

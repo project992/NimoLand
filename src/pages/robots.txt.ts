@@ -10,7 +10,6 @@ Allow: /
 Disallow: /api/
 Disallow: /login
 Disallow: /register
-Disallow: /akun
 
 Sitemap: ${SITE.url}/sitemap.xml
 `,

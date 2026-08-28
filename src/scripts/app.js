@@ -3,17 +3,16 @@
 
    00. State      — session + data injected by the server
    01. Utilities  — image fallback, dates, toast, reveal
-   02. Auth       — session state, logout, the booking auth gate
+   02. Auth       — session state and logout
    03. Router     — path routing (/destinasi, /penginapan/…)
    04. Navbar     — scroll state + mobile menu
    05. Hero / MomentSlider
    06. Wahana / Destinations / Hotels / Gallery / FAQ
-   07. Booking    — room, priced by the server
-   08. ESS        — employee portal against /api/ess/*
+   07. ESS        — employee portal against /api/ess/*
    ===================================================================== */
 import {
   DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES, CATEGORIES, WAHANA,
-  MOMENTS, GALLERY, FAQ_DATA, RULES,
+  MOMENTS, GALLERY, FAQ_DATA,
   allRooms, parseISODate, addDays, toISODate, rupiah, localSrc,
 } from '../lib/data.js';
 import { icon } from '../lib/icons.js';
@@ -152,82 +151,17 @@ function coverMedia(d, className) {
 }
 
 /* ------------------------------------------------------------------
-   02. AUTH — session state and the booking gate
+   02. AUTH — session state and logout
 ------------------------------------------------------------------ */
-const INTENT_KEY = 'nimo:booking-intent';
-
 const Auth = {
   init() {
     document.querySelectorAll('[data-logout]').forEach(b =>
       b.addEventListener('click', () => this.logout()));
-
-    document.querySelectorAll('[data-close-authgate]').forEach(b =>
-      b.addEventListener('click', () => this.closeGate()));
-
-    const gate = document.getElementById('authGateModal');
-    gate?.addEventListener('click', e => { if (e.target === gate) this.closeGate(); });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !gate?.classList.contains('hidden')) this.closeGate();
-    });
-
-    // Coming back from a successful login with a stored intent? Resume it.
-    if (isCustomer()) this.resumeIntent();
-  },
-
-  /**
-   * The client-side half of the booking gate. The authoritative check is in
-   * src/middleware.js and POST /api/bookings — this only saves the visitor a
-   * wasted round trip and remembers what they were trying to do.
-   * @returns {boolean} true when the caller may proceed
-   */
-  requireCustomer(intent) {
-    if (isCustomer()) return true;
-
-    try {
-      sessionStorage.setItem(INTENT_KEY, JSON.stringify(intent));
-    } catch { /* private mode: the gate still works, the resume just won't */ }
-
-    // Return the visitor to this exact page, hash and all, after login.
-    const next = location.pathname + location.search + location.hash;
-    const q = `?next=${encodeURIComponent(next)}`;
-    document.getElementById('authGateLogin').href = '/login' + q;
-    document.getElementById('authGateRegister').href = '/register' + q;
-
-    document.getElementById('authGateModal').classList.remove('hidden');
-    lockScroll(true);
-    return false;
-  },
-
-  closeGate() {
-    document.getElementById('authGateModal').classList.add('hidden');
-    lockScroll(false);
-  },
-
-  resumeIntent() {
-    let intent = null;
-    try {
-      const raw = sessionStorage.getItem(INTENT_KEY);
-      if (!raw) return;
-      sessionStorage.removeItem(INTENT_KEY);
-      intent = JSON.parse(raw);
-    } catch {
-      return;
-    }
-    if (!intent) return;
-
-    // Wait for Booking.init() to have wired everything up.
-    setTimeout(() => {
-      if (intent.kind === 'room' && intent.roomId) Booking.openRoom(intent.roomId, { skipGate: true });
-      else Booking.open({ skipGate: true });
-      Toast.show(t('sukses.selamatDatang') + ' — ' + (State.locale === 'en' ? 'continue your booking' : 'lanjutkan pemesanan Anda'));
-    }, 150);
   },
 
   async logout() {
     await api('/api/auth/logout', { method: 'POST' });
-    // Full reload so every server-rendered fragment (navbar, booking header)
-    // re-renders from the now-absent session.
+    // Full reload so every server-rendered fragment (navbar) re-renders from the now-absent session.
     location.href = '/';
   },
 };
@@ -368,7 +302,7 @@ const Navbar = {
     });
 
     menu.addEventListener('click', e => {
-      if (e.target.closest('[data-route], [data-open-booking], [data-open-ess], [data-logout]')) close();
+      if (e.target.closest('[data-route], [data-open-ess], [data-logout]')) close();
     });
   },
 };
@@ -694,11 +628,8 @@ const Hotels = {
                 : `<p class="font-heading font-bold text-ink text-base">${State.locale === 'en' ? 'Contact reservations' : 'Hubungi reservasi'}</p>
                    <p class="text-xs text-muted">${State.locale === 'en' ? 'rate not yet published' : 'tarif belum dipublikasikan'}</p>`}
             </div>
-            ${r.rate
-              ? `<button type="button" data-book-room="${r.id}"
-                         class="bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Book Room' : 'Booking Kamar'}</button>`
-              : `<a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
-                    class="inline-flex items-center gap-2 border border-line text-sage-deep font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Contact WhatsApp' : 'Hubungi WhatsApp'}</a>`}
+            <a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
+              class="inline-flex items-center gap-2 bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Contact WhatsApp' : 'Hubungi WhatsApp'}</a>
           </div>
         </div>
       </article>`).join('');
@@ -728,8 +659,6 @@ const Hotels = {
     grid.innerHTML = roomCards + hotelCards;
 
     ImageFallback.bindAll(grid);
-    grid.querySelectorAll('[data-book-room]').forEach(b =>
-      b.addEventListener('click', () => Booking.openRoom(b.dataset.bookRoom)));
   },
 
   apply() {
@@ -854,252 +783,6 @@ const FAQ = {
 
     window.addEventListener('resize', () =>
       list.querySelectorAll('.faq-panel.open').forEach(p => { p.style.maxHeight = p.scrollHeight + 'px'; }));
-  },
-};
-
-/* ------------------------------------------------------------------
-   07. BOOKING
------------------------------------------------------------------- */
-const Booking = {
-  room: { roomId: null, checkIn: '', checkOut: '', rooms: 1, guests: 2 },
-
-  init() {
-    const modal = document.getElementById('bookingModal');
-
-    /* ---------- Room ---------- */
-    const minDate = DateUtil.addDays(DateUtil.today(), RULES.MIN_LEAD_DAYS);
-    const roomSelect = document.getElementById('roomSelect');
-    this.room.roomId = allRooms()[0].id;
-    roomSelect.value = this.room.roomId;
-
-    const ci = document.getElementById('checkInDate');
-    const co = document.getElementById('checkOutDate');
-    ci.min = DateUtil.toISO(minDate);
-    co.min = DateUtil.toISO(DateUtil.addDays(minDate, 1));
-    document.getElementById('stayHint').textContent =
-      t('booking.checkinHint') + DateUtil.long(minDate) + t('booking.checkinMinNight');
-
-    roomSelect.addEventListener('change', e => { this.room.roomId = e.target.value; this.updateRoom(); });
-    ['change', 'input'].forEach(ev => {
-      ci.addEventListener(ev, () => { this.room.checkIn = ci.value; this.syncCheckout(); this.updateRoom(); });
-      co.addEventListener(ev, () => { this.room.checkOut = co.value; this.updateRoom(); });
-    });
-    document.querySelectorAll('[data-rstep]').forEach(btn =>
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.rstep;
-        const max = key === 'rooms' ? RULES.MAX_ROOMS : RULES.MAX_GUESTS;
-        const next = this.room[key] + Number(btn.dataset.delta);
-        if (next < 1 || next > max) return;
-        this.room[key] = next;
-        this.updateRoom();
-      }));
-    document.getElementById('roomPayButton').addEventListener('click', () => this.checkoutRoom());
-
-    /* ---------- Open / close ---------- */
-    document.addEventListener('click', e => {
-      const b = e.target.closest('[data-open-booking]');
-      if (b && !e.target.closest('#destModal')) this.open({});
-    });
-    document.getElementById('closeBooking').addEventListener('click', () => this.close());
-    modal.addEventListener('click', e => { if (e.target === modal) this.close(); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !modal.classList.contains('hidden')) this.close();
-    });
-    document.getElementById('closeSuccess').addEventListener('click', () => {
-      document.getElementById('successModal').classList.add('hidden');
-      lockScroll(false);
-    });
-
-    this.updateRoom();
-  },
-
-  /** The booking gate. `skipGate` is only set when resuming after a login. */
-  open({ skipGate = false } = {}) {
-    if (!skipGate && !Auth.requireCustomer({ kind: 'room' })) return;
-    document.getElementById('bookingModal').classList.remove('hidden');
-    lockScroll(true);
-  },
-
-  close() {
-    document.getElementById('bookingModal').classList.add('hidden');
-    lockScroll(false);
-  },
-
-  openRoom(roomId, { skipGate = false } = {}) {
-    if (!skipGate && !Auth.requireCustomer({ kind: 'room', roomId })) return;
-    this.room.roomId = roomId;
-    document.getElementById('roomSelect').value = roomId;
-    this.updateRoom();
-    this.open({ skipGate: true });
-  },
-
-  /* ================= ROOM ================= */
-  getRoom() { return allRooms().find(r => r.id === this.room.roomId); },
-
-  syncCheckout() {
-    const s = this.room;
-    const co = document.getElementById('checkOutDate');
-    if (!s.checkIn) return;
-    const inDate = DateUtil.parseISO(s.checkIn);
-    if (!inDate) return;
-    const minOut = DateUtil.addDays(inDate, 1);
-    co.min = DateUtil.toISO(minOut);
-    const out = DateUtil.parseISO(s.checkOut);
-    if (!out || out <= inDate) {
-      co.value = DateUtil.toISO(minOut);
-      s.checkOut = co.value;
-    }
-  },
-
-  updateRoom() {
-    const s = this.room;
-    const room = this.getRoom();
-    const stayError = document.getElementById('stayError');
-    const capWarn = document.getElementById('capacityWarn');
-    const capSpacer = document.getElementById('capacitySpacer');
-
-    if (!room.rate) {
-      document.getElementById('roomMeta').textContent =
-        `${room.hotelName} · ${room.area} · ${t('booking.kapasitasTotal')} ${room.cap} ${t('booking.orang')} · ${t('booking.tarifBelumPub')}`;
-      document.getElementById('roomRateLabel').textContent = t('booking.hubungiTimReservasi');
-      document.getElementById('guestCapLabel').textContent = `${t('booking.kapasitasTotal')} ${room.cap * s.rooms} ${t('booking.orang')}`;
-      document.getElementById('roomsCount').textContent = s.rooms;
-      document.getElementById('guestsCount').textContent = s.guests;
-      document.querySelectorAll('[data-rstep]').forEach(btn => { btn.disabled = true; });
-      capWarn.classList.add('hidden');
-      capSpacer.classList.remove('hidden');
-      stayError.textContent = t('booking.tarifBelumPubDetail');
-      stayError.classList.remove('hidden');
-      document.getElementById('rsumHotel').textContent = room.hotelName;
-      document.getElementById('rsumRoom').textContent = `${room.name} · ${room.type}`;
-      document.getElementById('rsumIn').textContent = t('booking.tidakTersedia');
-      document.getElementById('rsumOut').textContent = t('booking.tidakTersedia');
-      document.getElementById('rsumNights').textContent = '—';
-      document.getElementById('rsumGuests').textContent = '—';
-      document.getElementById('rsumCalc').textContent = '—';
-      document.getElementById('rsumTotal').textContent = 'Rp 0';
-      document.getElementById('roomPayButton').disabled = true;
-      this._room = { valid: false };
-      return;
-    }
-
-    document.getElementById('roomMeta').textContent =
-      `${room.hotelName} · ${room.area} · ${t('booking.kapasitasTotal')} ${room.cap} ${t('booking.orang')} · ${rupiah(room.rate)} ${State.locale === 'en' ? 'per night' : 'per malam'}`;
-    document.getElementById('roomRateLabel').textContent = rupiah(room.rate) + ' ' + t('booking.perKamarMalam');
-    document.getElementById('guestCapLabel').textContent = `${t('booking.kapasitasTotal')} ${room.cap * s.rooms} ${t('booking.orang')}`;
-
-    document.getElementById('roomsCount').textContent = s.rooms;
-    document.getElementById('guestsCount').textContent = s.guests;
-    document.querySelectorAll('[data-rstep]').forEach(btn => {
-      const key = btn.dataset.rstep;
-      const delta = Number(btn.dataset.delta);
-      const max = key === 'rooms' ? RULES.MAX_ROOMS : RULES.MAX_GUESTS;
-      btn.disabled = (delta < 0 && s[key] <= 1) || (delta > 0 && s[key] >= max);
-    });
-
-    let valid = false;
-    let inDate = null;
-    let outDate = null;
-    let nights = 0;
-
-    if (s.checkIn && s.checkOut) {
-      inDate = DateUtil.parseISO(s.checkIn);
-      outDate = DateUtil.parseISO(s.checkOut);
-      const min = DateUtil.addDays(DateUtil.today(), RULES.MIN_LEAD_DAYS);
-
-      if (!inDate || !outDate) {
-        stayError.textContent = t('booking.tglTidakTerbaca');
-        stayError.classList.remove('hidden');
-      } else if (inDate < min) {
-        stayError.textContent = t('booking.checkinMinBesok');
-        stayError.classList.remove('hidden');
-        document.getElementById('checkInDate').value = '';
-        s.checkIn = '';
-      } else if (outDate <= inDate) {
-        stayError.textContent = t('booking.checkoutSetelahCheckin');
-        stayError.classList.remove('hidden');
-      } else {
-        stayError.classList.add('hidden');
-        valid = true;
-        nights = DateUtil.nights(inDate, outDate);
-      }
-    } else {
-      stayError.classList.add('hidden');
-    }
-
-    const overCap = s.guests > room.cap * s.rooms;
-    capWarn.classList.toggle('hidden', !overCap);
-    capSpacer.classList.toggle('hidden', overCap);
-    if (overCap) {
-      capWarn.textContent =
-        `${s.guests} ${t('booking.tamu')} ${t('booking.tamuMelebihiKapasitas')} ${room.cap * s.rooms} ${t('booking.orang')}. ${t('booking.tambahKamar')}`;
-    }
-
-    const total = valid ? room.rate * nights * s.rooms : 0;
-
-    document.getElementById('rsumHotel').textContent = room.hotelName;
-    document.getElementById('rsumRoom').textContent = `${room.name} · ${room.type}`;
-    document.getElementById('rsumIn').textContent = valid ? DateUtil.long(inDate) : t('booking.belumDipilih');
-    document.getElementById('rsumOut').textContent = valid ? DateUtil.long(outDate) : t('booking.belumDipilih');
-    document.getElementById('rsumNights').textContent = valid ? `${nights} ${t('booking.malam')}` : '—';
-    document.getElementById('rsumGuests').textContent = `${s.guests} ${t('booking.tamu')} · ${s.rooms} ${t('booking.kamar')}`;
-    document.getElementById('rsumCalc').textContent =
-      valid ? `${rupiah(room.rate)} × ${nights} ${t('booking.malam')} × ${s.rooms} ${t('booking.kamar')}` : '—';
-    document.getElementById('rsumTotal').textContent = rupiah(total);
-
-    document.getElementById('roomPayButton').disabled = !valid || overCap || total <= 0;
-    this._room = { valid, inDate, outDate, nights, total };
-  },
-
-  async checkoutRoom() {
-    const r = this._room;
-    if (!r?.valid) return;
-
-    const s = this.room;
-    const btn = document.getElementById('roomPayButton');
-    const errEl = document.getElementById('roomApiError');
-
-    errEl.classList.add('hidden');
-    btn.disabled = true;
-
-    const { ok, status, data } = await api('/api/bookings', {
-      method: 'POST',
-      body: JSON.stringify({
-        kind: 'room',
-        roomId: s.roomId,
-        checkIn: s.checkIn,
-        checkOut: s.checkOut,
-        rooms: s.rooms,
-        guests: s.guests,
-      }),
-    });
-
-    btn.disabled = false;
-
-    if (!ok) {
-      if (status === 401) {
-        State.user = null;
-        this.close();
-        Auth.requireCustomer({ kind: 'room', roomId: s.roomId });
-        return;
-      }
-      errEl.textContent = data?.error ?? t('booking.pemesananGagal');
-      errEl.classList.remove('hidden');
-      return;
-    }
-
-    const b = data.booking;
-    document.getElementById('successTitle').textContent = t('booking.pemesananKamarBerhasilTitle');
-    document.getElementById('successDetail').textContent =
-      `${b.rooms} × ${b.room_name} ${State.locale === 'en' ? 'at' : 'di'} ${b.hotel_name} ${t('booking.untuk')} ${b.guests} ${t('booking.tamu')}, ` +
-      `${DateUtil.short(DateUtil.parseISO(b.check_in))} – ${DateUtil.short(DateUtil.parseISO(b.check_out))} ` +
-      `(${b.nights} ${t('booking.malam')}). ${t('booking.totalLabel')} ${rupiah(Number(b.total_price))}.`;
-    document.getElementById('bookingCode').textContent = b.booking_code;
-
-    this.close();
-    document.getElementById('successModal').classList.remove('hidden');
-    lockScroll(true);
-    Toast.show(t('booking.pemesananKamarBerhasil'));
   },
 };
 
@@ -1401,7 +1084,6 @@ function boot() {
   Hotels.init();
   Gallery.init();
   FAQ.init();
-  Booking.init();
   ESS.init();
   Router.init(); // last: every view must exist before the first route renders
 }

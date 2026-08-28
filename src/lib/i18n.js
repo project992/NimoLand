@@ -113,7 +113,6 @@ const SLUG_MAP = {
   '/pembatalan-refund': '/cancellation-refund',
   '/login': '/login',
   '/register': '/register',
-  '/akun': '/account',
   '/ess': '/ess',
 };
 

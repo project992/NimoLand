@@ -1,33 +1,15 @@
 ---
 import X from '@lucide/astro/icons/x';
-import Check from '@lucide/astro/icons/check';
 import ChevronLeft from '@lucide/astro/icons/chevron-left';
 import ChevronRight from '@lucide/astro/icons/chevron-right';
 
-/* Three small modals kept together rather than in three near-empty files:
-   destination detail (body injected by the SPA), booking success, and the
-   gallery lightbox. */
+/* Two small modals kept together rather than in two near-empty files:
+   destination detail (body injected by the SPA) and the gallery lightbox. */
 ---
 <!-- MODAL: DETAIL DESTINASI -->
 <div id="destModal" class="hidden fixed inset-0 z-92 bg-bark/50 p-0 sm:p-4 overflow-y-auto"
      role="dialog" aria-modal="true" aria-label="Detail destinasi">
   <div id="destModalBody" class="bg-surface sm:rounded-2xl w-full sm:max-w-2xl mx-auto min-h-full sm:min-h-0 sm:my-6 shadow-lg overflow-hidden"></div>
-</div>
-
-<!-- MODAL: SUKSES -->
-<div id="successModal" class="hidden fixed inset-0 z-95 flex items-center justify-center p-4 bg-bark/50"
-     role="dialog" aria-modal="true" aria-labelledby="successTitle">
-  <div class="bg-surface rounded-2xl w-full max-w-sm p-8 text-center shadow-lg">
-    <div class="w-16 h-16 rounded-full bg-sage-tint flex items-center justify-center mx-auto mb-5">
-      <Check class="w-8 h-8 text-sage-deep" />
-    </div>
-    <h3 id="successTitle" class="font-heading font-bold text-ink text-xl mb-2">Pemesanan Berhasil</h3>
-    <p id="successDetail" class="text-muted text-sm leading-relaxed"></p>
-    <p class="text-xs text-muted mt-4">
-      Kode booking: <span id="bookingCode" class="font-heading font-semibold text-ink"></span>
-    </p>
-    <button id="closeSuccess" type="button" class="btn-dark w-full mt-6">Selesai</button>
-  </div>
 </div>
 
 <!-- MODAL: LIGHTBOX -->
