@@ -308,44 +308,8 @@ const Navbar = {
 };
 
 /* ------------------------------------------------------------------
-   05. HERO + MOMENT SLIDER
+   05. MOMENT SLIDER
 ------------------------------------------------------------------ */
-const HeroCarousel = {
-  init() {
-    const track = document.getElementById('heroTrack');
-    const dotsWrap = document.getElementById('heroDots');
-    const slides = [...track.querySelectorAll('.hero-slide')];
-    if (slides.length === 0) return;
-
-    let index = 0;
-    let timer = null;
-
-    dotsWrap.innerHTML = slides.map((_, i) =>
-      `<button type="button" aria-label="Slide ${i + 1}" data-dot="${i}"
-               class="h-1.5 rounded-full bg-white/40 transition-all duration-300" style="width:20px"></button>`,
-    ).join('');
-    const dots = [...dotsWrap.children];
-
-    const go = i => {
-      index = (i + slides.length) % slides.length;
-      slides.forEach((s, n) => s.classList.toggle('active', n === index));
-      dots.forEach((d, n) => {
-        d.classList.toggle('bg-white', n === index);
-        d.classList.toggle('bg-white/40', n !== index);
-        d.style.width = n === index ? '40px' : '20px';
-      });
-    };
-    const restart = () => { clearInterval(timer); timer = setInterval(() => go(index + 1), 6000); };
-
-    dots.forEach(d => d.addEventListener('click', () => { go(Number(d.dataset.dot)); restart(); }));
-    document.getElementById('heroPrev').addEventListener('click', () => { go(index - 1); restart(); });
-    document.getElementById('heroNext').addEventListener('click', () => { go(index + 1); restart(); });
-
-    go(0);
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) restart();
-  },
-};
-
 const MomentSlider = {
   init() {
     const wrap = document.getElementById('momentSlider');
@@ -1077,7 +1041,6 @@ function boot() {
   Reveal.init();
   Auth.init();
   Navbar.init();
-  HeroCarousel.init();
   MomentSlider.init();
   WahanaFilter.init();
   Destinations.init();

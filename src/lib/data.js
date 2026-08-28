@@ -335,10 +335,7 @@ export const WAHANA = [
 ];
 
 export const HERO_SLIDES = [
-  { img:TR(1), fb:TR(1), alt:'' },
-  { img:RC(1), fb:RC(1), alt:'' },
-  { img:SV(1), fb:SV(1), alt:'' },
-  { img:PR(1), fb:PR(1), alt:'' },
+  { img:'/beranda-highlight.jpg', fb:'/beranda-highlight.jpg', alt:'' },
 ];
 
 export const MOMENTS = [
