@@ -296,6 +296,7 @@ export const FOOTAGE = {
   'nimo-resort-ciater':  { aerial: '/videos/nimo-resort-ciater/aerial.mp4',  ad: '/videos/nimo-resort-ciater/ad.mp4' },
   'savia-hotel-resort':  { aerial: '/videos/savia-hotel-resort/aerial.mp4' },
   'pinaru-park':         { aerial: '/brand/pinaru-park/unnamed-1.jpg' },
+  'punceling-park':      { aerial: '/brand/punceling-park/4320b925-e19f-458d-9c87-cd9f0036b6c4.jpg' },
 };
 
 /** Flat list of every room with its parent hotel folded in. */
