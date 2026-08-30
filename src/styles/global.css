@@ -55,7 +55,7 @@ body { overflow-x: clip; }
   --color-danger:     #A35A52;
   --color-danger-tint:#F7EDEC;
 
-  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-heading: 'Spectral', Georgia, 'Times New Roman', serif;
   --font-body:    'Inter', ui-sans-serif, system-ui, sans-serif;
 
   /* One soft shadow scale — no heavy drop shadows */
