@@ -95,6 +95,7 @@ const NE = n => `/brand/nimo-eye/nimo-eye-${String(n).padStart(2, '0')}.jpg`;
 const MSK = n => `/brand/malang-skyland/malang-skyland-${String(n).padStart(2, '0')}.jpg`;
 const MSKGIF = n => `/brand/malang-skyland/malang-skyland-${String(n).padStart(2, '0')}.gif`;
 const ECO = n => `/brand/nimo-ecomarine/nimo-ecomarine-${String(n).padStart(2, '0')}.jpg`;
+const ECOGIF = n => `/brand/nimo-ecomarine/nimo-ecomarine-${String(n).padStart(2, '0')}.gif`;
 const KLT = n => `/brand/nimo-kaldera-toba/nimo-kaldera-toba-${String(n).padStart(2, '0')}.jpg`;
 const ZOO = n => `/brand/nimo-zoo/nimo-zoo-${String(n).padStart(2, '0')}.jpg`;
 const PUN = n => brandPath('punceling-park', n, { 8:'png', 9:'png', 10:'png', 11:'png', 12:'png' });
@@ -166,7 +167,7 @@ export const DESTINATIONS = [
   { id:'nimo-ecomarine', name:'Nimo Ecomarine', type:'air', area:'Bali',
     img:ECO(1), fb:ECO(1),
     desc:'Petualangan air tak terlupakan di destinasi rekreasi terbaru kami di Bali. Sebagai bagian dari keluarga besar Nimo yang sukses dengan Nimo Highland dan Nimo Water Forest, kami hadirkan Nimo Ecomarine dengan wahana Wibit inflatable water park yang inovatif untuk segala usia, berlokasi strategis di tengah keindahan Nusa Penida dan Pantai Sanur.',
-    highlights:['Wibit inflatable','Wahana air inovatif','Nusa Penida & Sanur','Baru dibuka'], gallery:[ECO(1), ECO(2), ECO(3), ECO(4)] },
+    highlights:['Wibit inflatable','Wahana air inovatif','Nusa Penida & Sanur','Baru dibuka'], gallery:[ECO(1), ECO(2), ECO(3), ECO(4), ECOGIF(5)] },
 ];
 
 /* ---- Accommodation ----
