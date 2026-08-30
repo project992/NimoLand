@@ -11,8 +11,8 @@ export const SITE = {
   url: 'https://nimo-land.vercel.app',
   lang: 'id',
   email: 'official@nimoenterprise.com',
-  phoneDisplay: '0811-1112-1162',
-  phoneWa: '6281111121162',
+  phoneDisplay: '0821-6402-2221',
+  phoneWa: '628216402221',
   // Absolute URL shown when a page is shared on WhatsApp / Instagram.
   // Points at the local copy of the hero photo (mirrored by
   // scripts/seed-live-assets.mjs into public/aimg/).

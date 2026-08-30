@@ -551,7 +551,7 @@ const Hotels = {
                 : `<p class="font-heading font-bold text-ink text-base">${State.locale === 'en' ? 'Contact reservations' : 'Hubungi reservasi'}</p>
                    <p class="text-xs text-muted">${State.locale === 'en' ? 'rate not yet published' : 'tarif belum dipublikasikan'}</p>`}
             </div>
-            <a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
+            <a href="https://wa.me/628216402221" target="_blank" rel="noopener"
               class="inline-flex items-center gap-2 bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Contact WhatsApp' : 'Hubungi WhatsApp'}</a>
           </div>
         </div>
@@ -573,7 +573,7 @@ const Hotels = {
               `<span class="text-[11px] bg-paper border border-line-soft text-muted px-2.5 py-1 rounded-full">${esc(f)}</span>`).join('')}
           </div>
           <div class="mt-auto pt-5">
-            <a href="https://wa.me/6281111121162" target="_blank" rel="noopener"
+            <a href="https://wa.me/628216402221" target="_blank" rel="noopener"
                class="inline-flex items-center gap-2 bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Contact Reservation Team' : 'Hubungi Tim Reservasi'}</a>
           </div>
         </div>
