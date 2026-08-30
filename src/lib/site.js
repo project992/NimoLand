@@ -5,9 +5,9 @@ export const SITE = {
   title: 'Nimo Land Group — Jaringan Destinasi Wisata Nasional',
   titleEn: 'Nimo Land Group — Indonesia\'s Nationwide Tourism Network',
   description:
-    'Nimo Land Group mengelola destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga Danau Toba. Pesan kamar online.',
+    'Nimo Land Group mengelola destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga danau vulkanik Toba, bianglala tertinggi di Indonesia, hingga ecomarine di Bali.',
   descriptionEn:
-    'Nimo Land Group manages tourist destinations & resorts across Indonesia — from Bandung tea plantations to Lake Toba. Book rooms online.',
+    'Nimo Land Group manages tourist destinations & resorts across Indonesia — from Bandung tea plantations to Lake Toba, Indonesia\'s tallest Ferris wheel, and the Ecomarine in Bali.',
   url: 'https://nimo-land.vercel.app',
   lang: 'id',
   email: 'official@nimoenterprise.com',
@@ -18,7 +18,7 @@ export const SITE = {
   // scripts/seed-live-assets.mjs into public/aimg/).
   ogImage: 'https://nimo-land.vercel.app/aimg/tAG8ngQWBpj62NH-sryt3zUUZ3FH7.jpg',
   social: {
-    instagram: 'https://www.instagram.com/nimohighland/',
+    instagram: 'https://www.instagram.com/ilhamsunaryanto_/',
     instagramEye: 'https://www.instagram.com/nimo_eye/',
     tiktok: 'https://www.tiktok.com/@nimohighland',
     youtube: 'https://www.youtube.com/@Nimo_Land_Group',

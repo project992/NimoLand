@@ -114,43 +114,43 @@ export const DEST_FILTERS = [
 ];
 
 export const DESTINATIONS = [
-  { id:'nimo-highland', name:'Nimo Highland', type:'alam', area:'Pangalengan, Bandung',
+  { id:'nimo-highland', name:'Nimo Highland', type:'alam', area:'Banjarsari, Pangalengan, Bandung',
     tag:'Unggulan', img:'/brand/nimo-highland/nh-hero.jpg', fb:'/brand/nimo-highland/nh-hero.jpg',
-    desc:'Kebun teh dengan Sky Bridge berbentuk U dan panorama 360°. Datang subuh untuk menyaksikan kabut yang perlahan larut oleh matahari terbit.',
-    highlights:['Glass Sky Bridge','Sunrise Point','ATV & Flying Fox','Nimo Zoo'],
+    desc:'Destinasi kebun teh di Pangalengan, Bandung dengan Sky Bridge ikonis berbentuk U yang membentang di atas hamparan kebun teh, menawarkan panorama 360° yang memukau. Nikmati udara pegunungan yang segar sambil mengagumi hamparan hijau yang luas.',
+    highlights:['Sky Bridge','Glass Sky Bridge','ATV','Paintball','Jimny Adventure','Flying Fox','Rafting','Nimo Zoo','Virtual Reality','Photo Ethnic Studio'],
     gallery:[NH(1), NH(2), NH(3), NH(4)] },
 
-  { id:'nimo-eye', name:'Nimo Eye', type:'alam', area:'Pangalengan, Bandung',
+  { id:'nimo-eye', name:'Nimo Eye', type:'alam', area:'Banjarsari, Pangalengan, Bandung',
     tag:'Rekor MURI', img:NE(1), fb:NE(1),
-    desc:'Bianglala tertinggi di Indonesia pada ketinggian sekitar 1.400 mdpl, dengan pemandangan kebun teh dari ketinggian ekstrem.',
+    desc:'Bianglala dengan elevasi tertinggi di Indonesia, berada di ketinggian sekitar 1.400 mdpl dan memecahkan rekor MURI. Pemandangan kebun teh dari ketinggian ekstrem menjadikannya wahana wisata baru yang populer.',
     highlights:['Kabin Regular & VIP','Karaoke in the Sky','Dine in the Sky','360° view'],
     gallery:[NE(1), NE(2), NE(3), NE(4)] },
 
-  { id:'nimo-water-forest', name:'Nimo Water Forest', type:'air', area:'Jawa Barat',
+  { id:'nimo-water-forest', name:'Nimo Water Forest', type:'air', area:'Purwakarta, Jawa Barat',
     img:'/brand/nimo-water-forest/nwf-hero.jpg', fb:'/brand/nimo-water-forest/nwf-hero.jpg',
-    desc:'Taman air keluarga dengan konsep hutan, memadukan wahana basah dan area teduh untuk bersantai.',
-    highlights:['Kolam anak','Wahana air','Area piknik'], gallery:[NWF(1), NWF(2), NWF(3)] },
+    desc:'Konsep pantai pertama di Purwakarta — perpaduan harmonis hutan tropis yang rimbun dengan petualangan air yang menyegarkan. Dirancang untuk keluarga, pencari sensasi, dan pecinta alam.',
+    highlights:['Kolam anak','Wahana air','Area piknik','Nimo Zoo','Virtual Reality'], gallery:[NWF(1), NWF(2), NWF(3)] },
 
-  { id:'bogor-aqua-game', name:'Bogor Aqua Game', type:'air', area:'Bogor',
+  { id:'bogor-aqua-game', name:'Bogor Aqua Game', type:'air', area:'Bogor, Jawa Barat',
     img:AQ(1), fb:AQ(1),
-    desc:'Wahana watersport pertama di Indonesia yang menghadirkan permainan inflatable premium Wibit dari Jerman.',
-    highlights:['Wibit inflatable','Boqu War','Wahana interaktif'], gallery:[AQ(1), AQ(2), AQ(3)] },
+    desc:'Wahana watersport pertama di Indonesia yang menghadirkan permainan inflatable premium Wibit dari Jerman. Keseruan semakin lengkap dengan wahana interaktif seperti Boqu War, Caterpillar Race, paddle board, dan berbagai permainan menarik lainnya.',
+    highlights:['Wibit inflatable','Boqu War','Caterpillar Race','Paddle Boat'], gallery:[AQ(1), AQ(2), AQ(3)] },
 
-  { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang',
+  { id:'malang-skyland', name:'Malang Skyland', type:'alam', area:'Kabupaten Malang, Jawa Timur',
     img:'/brand/malang-skyland/msk-hero.gif', fb:'/brand/malang-skyland/msk-hero.gif',
-    desc:'Destinasi modern di ketinggian dengan sunrise, sunset, dan pemandangan 360° di sekelilingnya.',
-    highlights:['Sunrise & sunset','360° view','Spot foto'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8), MSKGIF(9), MSKGIF(10), MSKGIF(11)] },
+    desc:'Destinasi wisata modern di Kabupaten Malang yang menawarkan pengalaman di ketinggian dengan pemandangan alam serta gemerlap lampu Kota Malang dan Kota Batu. Terkenal dengan jembatan kaca (Glass Sky Bridge), wahana seperti ATV, dan kafe berkonsep futuristik — cocok untuk keluarga dan pasangan.',
+    highlights:['Glass Sky Bridge','ATV','Kidszone','SkyZone','Cafe futuristik'], gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(6), MSK(7), MSK(8), MSKGIF(9), MSKGIF(10), MSKGIF(11)] },
 
   { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
     img:PR(1), fb:PR(1),
-    desc:'Taman rekreasi keluarga dengan area bermain, ruang hijau luas, dan wahana air — satu kawasan dengan New Dgyp Resort Ciater.',
-    highlights:['Playground','Water slide','Area piknik','Tempat ibadah'],
+    desc:'Destinasi ramah keluarga yang memadukan keseruan wahana modern dengan kesegaran alam pegunungan. Berada di bawah rindangnya pohon pinus, kami menghadirkan area bermain yang aman dan menyenangkan untuk segala usia — dari wahana yang memacu adrenalin di seluncuran pelangi ikonik hingga bersantai di udara segar.',
+    highlights:['Rainbow Slide','Water Slide','ATV','Luge Car','Jacuzzi','Aviary & Mini Zoo'],
     gallery:[PR(1), PR(2), PR(3), PR(4), PR(5)] },
 
   { id:'nimo-kaldera-toba', name:'Nimo Kaldera Toba', type:'alam', area:'Danau Toba, Sumut',
     img:KLT(1), fb:KLT(1),
-    desc:'Destinasi di kawasan kaldera Danau Toba dengan panorama danau vulkanik terbesar di dunia.',
-    highlights:['Pemandangan danau','Spot foto','Udara sejuk'], gallery:[KLT(1), KLT(2), KLT(3), KLT(4)] },
+    desc:'Destinasi di kawasan kaldera Danau Toba, danau vulkanik terbesar di dunia. Saat kabut menyapu, keindahan Danau Toba terbentang luas — nikmati pesona alam yang menenangkan di ketinggian, unik dan luar biasa.',
+    highlights:['Pemandangan danau','Spot foto','Udara sejuk','Calandra berkuda'], gallery:[KLT(1), KLT(2), KLT(3), KLT(4)] },
 
   { id:'nimo-zoo', name:'Nimo Zoo', type:'keluarga', area:'Area Nimo Highland',
     img:ZOO(1), fb:ZOO(1),
@@ -160,8 +160,8 @@ export const DESTINATIONS = [
 
   { id:'punceling-park', name:'Punceling Park', type:'air', area:'Ciwidey, Bandung',
     img:PUN(1), fb:PUN(1),
-    desc:'Oase ketenangan di Ciwidey — berkemah, berenang, dan bersantai di tengah hutan pinus dengan suara sungai.',
-    highlights:['Camping','Kolam air panas','Hutan pinus'], gallery:[PUN(1), PUN(2), PUN(3), PUN(4)] },
+    desc:'Oase ketenangan di Ciwidey, Bandung — destinasi dengan udara sejuk khas pegunungan. Nikmati fasilitas water boom slided usai berkemah atau bersantai, dan lepas penat menikmati alam hijau pegunungan.',
+    highlights:['Waterboom','Camping','Kolam air panas','Hutan pinus','Tempat ibadah'], gallery:[PUN(1), PUN(2), PUN(3), PUN(4)] },
 
   { id:'nimo-ecomarine', name:'Nimo Ecomarine', type:'air', area:'Bali',
     img:ECO(1), fb:ECO(1),
