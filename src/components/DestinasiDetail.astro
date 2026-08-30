@@ -4,10 +4,14 @@ import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import NimoImage from './NimoImage.astro';
 import { SITE } from '../lib/site.js';
 import { FOOTAGE } from '../lib/data.js';
+import { BEST_PHOTOS } from '../lib/best-photos.js';
+
+const { d } = Astro.props;
+const brandSlug = (d.img || '').split('/')[2];
+const bestPhotos = brandSlug ? BEST_PHOTOS[brandSlug] : undefined;
 
 /* Server-rendered detail view for /destinasi/[slug]. The `.view` + data-view
    contract lets the client Router keep navigating the whole app from here. */
-const { d } = Astro.props;
 const flagship = d.id === 'nimo-highland';
 const video = FOOTAGE[d.id]?.aerial;
 const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
@@ -47,12 +51,13 @@ const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
         </div>
 
         <div>
-          <h2 class="font-heading font-semibold text-ink text-xl mb-4">Galeri</h2>
+          <h2 class="font-heading font-semibold text-ink text-xl mb-4">{bestPhotos ? '6 Foto Terbaik' : 'Galeri'}</h2>
           <div class="grid grid-cols-2 gap-3">
-            {d.gallery.map((src, i) => (
+            {(bestPhotos ?? d.gallery).map((p, i) => (
               <div class="aspect-[4/3] rounded-xl overflow-hidden img-shell">
-                <NimoImage remote={src} alt={`${d.name} — galeri ${i + 1}`} fill
-                           sizes="(min-width:1024px) 40vw, 100vw" />
+                {bestPhotos
+                  ? <img src={p} alt={`${d.name} — foto ${i + 1}`} class="w-full h-full object-cover" loading="lazy" />
+                  : <NimoImage remote={p} alt={`${d.name} — galeri ${i + 1}`} fill sizes="(min-width:1024px) 40vw, 100vw" />}
               </div>
             ))}
           </div>

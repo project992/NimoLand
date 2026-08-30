@@ -6,6 +6,7 @@ import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import MessageCircle from '@lucide/astro/icons/message-circle';
 import BrandIcon from './BrandIcon.astro';
 import NimoImage from './NimoImage.astro';
+import BestPhotos from './BestPhotos.astro';
 import { rupiah, FOOTAGE } from '../lib/data.js';
 
 /* Server-rendered detail view for /penginapan/[slug]. `.view` + data-view
@@ -121,6 +122,8 @@ const video = FOOTAGE[h.id]?.aerial;
           </div>
         </div>
       )}
+
+      <BestPhotos src={h.img} name={h.name} className="mt-12" />
 
       {video && (
         <div class="mt-12">

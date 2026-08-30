@@ -12,7 +12,7 @@
    ===================================================================== */
 import {
   DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES,
-  MOMENTS, GALLERY,
+  MOMENTS, GALLERY, GALLERY_FEATURED,
   allRooms, parseISODate, addDays, toISODate, rupiah, localSrc,
 } from '../lib/data.js';
 import { icon } from '../lib/icons.js';
@@ -616,7 +616,9 @@ const Gallery = {
     const lbImg = document.getElementById('lightboxImg');
     let current = 0;
 
-    grid.innerHTML = GALLERY.map((g, i) => `
+    const featuredGrid = document.getElementById('featuredGrid');
+    const combined = GALLERY.concat(GALLERY_FEATURED);
+    const tileHTML = (g, i) => `
       <button type="button" data-index="${i}"
               class="gallery-item group relative aspect-square rounded-xl overflow-hidden img-shell">
         <img src="${localSrc(g.img)}" data-fallback="${localSrc(g.fb)}" alt="" loading="lazy"
@@ -626,25 +628,30 @@ const Gallery = {
             ${icon('zoom-in', 'w-8 h-8')}
           </span>
         </span>
-      </button>`).join('');
+      </button>`;
+    grid.innerHTML = GALLERY.map((g, i) => tileHTML(g, i)).join('');
+    if (featuredGrid) featuredGrid.innerHTML = GALLERY_FEATURED.map((g, i) => tileHTML(g, GALLERY.length + i)).join('');
     ImageFallback.bindAll(grid);
+    if (featuredGrid) ImageFallback.bindAll(featuredGrid);
     ImageFallback.bind(lbImg);
 
     const render = () => {
-      const item = GALLERY[current];
+      const item = combined[current];
       lbImg.src = localSrc(item.img);
       lbImg.dataset.fallback = localSrc(item.fb);
       lbImg.alt = '';
       lbImg.style.visibility = '';
       document.getElementById('lightboxTitle').textContent = '';
-      document.getElementById('lightboxCounter').textContent = `${current + 1} / ${GALLERY.length}`;
+      document.getElementById('lightboxCounter').textContent = `${current + 1} / ${combined.length}`;
     };
     const open = i => { current = i; render(); lightbox.classList.remove('hidden'); lockScroll(true); };
     const close = () => { lightbox.classList.add('hidden'); lockScroll(false); };
-    const next = () => { current = (current + 1) % GALLERY.length; render(); };
-    const prev = () => { current = (current - 1 + GALLERY.length) % GALLERY.length; render(); };
+    const next = () => { current = (current + 1) % combined.length; render(); };
+    const prev = () => { current = (current - 1 + combined.length) % combined.length; render(); };
 
     grid.querySelectorAll('.gallery-item').forEach(el =>
+      el.addEventListener('click', () => open(Number(el.dataset.index))));
+    if (featuredGrid) featuredGrid.querySelectorAll('.gallery-item').forEach(el =>
       el.addEventListener('click', () => open(Number(el.dataset.index))));
     document.getElementById('lightboxClose').addEventListener('click', close);
     document.getElementById('lightboxNext').addEventListener('click', next);

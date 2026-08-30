@@ -354,6 +354,16 @@ export const GALLERY = [
   { img:PUN(2), fb:PUN(2) },
 ];
 
+/* Curated "best of" row shown above the full grid on the Galeri page. */
+export const GALLERY_FEATURED = [
+  { img:'/brand/nimo-water-forest/nwf-hero.jpg', fb:'/brand/nimo-water-forest/nwf-hero.jpg' },
+  { img:'/brand/pinaru-park/unnamed-1.jpg',      fb:'/brand/pinaru-park/unnamed-1.jpg' },
+  { img:MSK(1), fb:MSK(1) },
+  { img:NE(6),  fb:NE(6) },
+  { img:KLT(1), fb:KLT(1) },
+  { img:RC(9),  fb:RC(9) },
+];
+
 export function parseISODate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
   const date = new Date(value + 'T00:00:00');
