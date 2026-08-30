@@ -359,7 +359,7 @@ export const GALLERY = [
 
 /* Curated "best of" row shown above the full grid on the Galeri page. Distinct from GALLERY. */
 export const GALLERY_FEATURED = [
-  { img:NWF(2), fb:NWF(2) },
+  { img:NWF(5), fb:NWF(5) },
   { img:PR(3),  fb:PR(3) },
   { img:MSK(7), fb:MSK(7) },
   { img:NE(3),  fb:NE(3) },
