@@ -209,14 +209,6 @@ body { overflow-x: clip; }
 .view.active { display: block; animation: viewIn .4s ease both; }
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
-/* ---- FAQ ---- */
-.faq-panel {
-  max-height: 0; overflow: hidden; opacity: 0;
-  transition: max-height .35s cubic-bezier(.4, 0, .2, 1), opacity .25s ease;
-}
-.faq-panel.open { opacity: 1; }
-.faq-chevron { transition: transform .3s ease; }
-
 /* ---- Hero ---- */
 .hero-slide { opacity: 0; transition: opacity .9s ease; }
 .hero-slide.active { opacity: 1; }

@@ -366,13 +366,6 @@ export const GALLERY = [
   { img:PUN(1), fb:PUN(1) },
 ];
 
-export const FAQ_DATA = [
-  { q:'Bagaimana cara memesan / menginap?',
-    a:'Silakan hubungi tim reservasi kami melalui WhatsApp 0811-1112-1162 atau email official@nimoenterprise.com untuk pemesanan kamar dan pertanyaan lainnya.' },
-  { q:'Apakah saya bisa menghubungi resepsionis atau tim kami?',
-    a:'Tentu. Tim kami siap membantu melalui WhatsApp 0811-1112-1162 pada jam operasional. Untuk keperluan administrasi dapat melalui official@nimoenterprise.com.' },
-];
-
 export function parseISODate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
   const date = new Date(value + 'T00:00:00');

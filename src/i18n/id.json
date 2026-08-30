@@ -48,10 +48,6 @@
     "atas": "Area Atas Bukit",
     "bawah": "Area Bawah Bukit"
   },
-  "faq": {
-    "eyebrow": "FAQ",
-    "judul": "Pertanyaan Umum"
-  },
   "destinasi": {
     "eyebrow": "Katalog Destinasi",
     "judul": "Semua Destinasi Nimo",
@@ -112,7 +108,6 @@
     "jelajah": "Jelajah",
     "beranda": "Beranda",
     "informasi": "Informasi",
-    "faq": "FAQ",
     "kontak": "Kontak",
     "legal": "Legal",
     "tentangKami": "Tentang Kami",

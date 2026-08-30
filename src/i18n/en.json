@@ -48,10 +48,6 @@
     "atas": "Upper Hill Area",
     "bawah": "Lower Hill Area"
   },
-  "faq": {
-    "eyebrow": "FAQ",
-    "judul": "Frequently Asked Questions"
-  },
   "destinasi": {
     "eyebrow": "Destination Catalog",
     "judul": "All Nimo Destinations",
@@ -112,7 +108,6 @@
     "jelajah": "Explore",
     "beranda": "Home",
     "informasi": "Information",
-    "faq": "FAQ",
     "kontak": "Contact",
     "legal": "Legal",
     "tentangKami": "About Us",

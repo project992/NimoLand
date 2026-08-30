@@ -12,7 +12,7 @@
    ===================================================================== */
 import {
   DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES, CATEGORIES, WAHANA,
-  MOMENTS, GALLERY, FAQ_DATA,
+  MOMENTS, GALLERY,
   allRooms, parseISODate, addDays, toISODate, rupiah, localSrc,
 } from '../lib/data.js';
 import { icon } from '../lib/icons.js';
@@ -704,53 +704,6 @@ const Gallery = {
 };
 
 /* ------------------------------------------------------------------
-   06e. FAQ
------------------------------------------------------------------- */
-const FAQ = {
-  init() {
-    const list = document.getElementById('faqList');
-    list.innerHTML = FAQ_DATA.map((f, i) => `
-      <div class="faq-item border border-line rounded-xl overflow-hidden bg-surface">
-        <button type="button" aria-expanded="false" aria-controls="faq-panel-${i}"
-                class="faq-trigger w-full flex items-center justify-between gap-4 px-5 py-4 text-left font-heading font-semibold text-ink text-sm sm:text-base hover:bg-paper transition-colors">
-          ${esc(f.q)}
-          <span class="faq-chevron shrink-0 text-muted">${icon('chevron-down', 'w-4 h-4')}</span>
-        </button>
-        <div id="faq-panel-${i}" class="faq-panel">
-          <p class="px-5 pb-5 pt-1 text-sm text-muted leading-relaxed">${esc(f.a)}</p>
-        </div>
-      </div>`).join('');
-
-    const items = [...list.querySelectorAll('.faq-item')];
-    items.forEach(item => {
-      const trigger = item.querySelector('.faq-trigger');
-      const panel = item.querySelector('.faq-panel');
-      const chevron = item.querySelector('.faq-chevron');
-
-      trigger.addEventListener('click', () => {
-        const isOpen = panel.classList.contains('open');
-        items.forEach(o => {
-          const p = o.querySelector('.faq-panel');
-          p.classList.remove('open');
-          p.style.maxHeight = '0px';
-          o.querySelector('.faq-chevron').style.transform = '';
-          o.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
-        });
-        if (!isOpen) {
-          panel.classList.add('open');
-          panel.style.maxHeight = panel.scrollHeight + 'px';
-          chevron.style.transform = 'rotate(180deg)';
-          trigger.setAttribute('aria-expanded', 'true');
-        }
-      });
-    });
-
-    window.addEventListener('resize', () =>
-      list.querySelectorAll('.faq-panel.open').forEach(p => { p.style.maxHeight = p.scrollHeight + 'px'; }));
-  },
-};
-
-/* ------------------------------------------------------------------
    08. ESS — Employee Self-Service
 ------------------------------------------------------------------ */
 const ESS = {
@@ -1046,7 +999,6 @@ function boot() {
   Destinations.init();
   Hotels.init();
   Gallery.init();
-  FAQ.init();
   ESS.init();
   Router.init(); // last: every view must exist before the first route renders
 }
