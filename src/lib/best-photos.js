@@ -13,8 +13,8 @@ export const BEST_PHOTOS = {
     "/brand/malang-skyland/malang-skyland-01.jpg",
     "/brand/malang-skyland/malang-skyland-02.jpg",
     "/brand/malang-skyland/malang-skyland-03.jpg",
-    "/brand/malang-skyland/malang-skyland-06.jpg",
-    "/brand/malang-skyland/malang-skyland-07.jpg",
+    "/brand/malang-skyland/malang-skyland-04.jpg",
+    "/brand/malang-skyland/malang-skyland-05.jpg",
     "/brand/malang-skyland/malang-skyland-08.jpg"
   ],
   "nimo-eye": [
