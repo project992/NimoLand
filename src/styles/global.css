@@ -55,7 +55,7 @@ body { overflow-x: clip; }
   --color-danger:     #A35A52;
   --color-danger-tint:#F7EDEC;
 
-  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-body:    'Inter', ui-sans-serif, system-ui, sans-serif;
 
   /* One soft shadow scale — no heavy drop shadows */
@@ -86,6 +86,7 @@ body { overflow-x: clip; }
   .btn, .btn-primary, .btn-accent, .btn-dark, .btn-outline, .btn-ghost-light {
     @apply inline-flex items-center justify-center gap-2 font-heading font-semibold
            text-sm rounded-full px-6 py-3 transition-colors;
+    font-family: var(--font-body);
   }
   .btn:disabled, .btn-primary:disabled, .btn-accent:disabled,
   .btn-dark:disabled, .btn-outline:disabled {
@@ -123,7 +124,7 @@ body { overflow-x: clip; }
   .field:focus { @apply outline-none border-sage ring-2 ring-sage/25; }
   .field-error { @apply border-danger; }
 
-  .label { @apply block font-heading text-sm font-semibold text-ink mb-1.5; }
+  .label { @apply block font-heading text-sm font-semibold text-ink mb-1.5; font-family: var(--font-body); }
 
   /* ---- Inline messages ---- */
   .note, .note-error, .note-warn, .note-info {
@@ -137,6 +138,7 @@ body { overflow-x: clip; }
   .pill {
     @apply font-heading text-sm font-medium px-5 py-2.5 rounded-full border
            border-line bg-surface text-ink transition-colors;
+    font-family: var(--font-body);
   }
   .pill:hover { @apply bg-paper; }
   .pill[aria-pressed="true"] { @apply bg-sage border-sage text-white; }
