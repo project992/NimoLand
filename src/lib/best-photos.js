@@ -5,9 +5,9 @@ export const BEST_PHOTOS = {
     "/brand/aqua-game/aqua-game-01.jpg",
     "/brand/aqua-game/aqua-game-02.jpg",
     "/brand/aqua-game/aqua-game-03.jpg",
-    "/brand/aqua-game/aqua-game-03.png",
     "/brand/aqua-game/aqua-game-04.jpg",
-    "/brand/aqua-game/aqua-game-05.jpg"
+    "/brand/aqua-game/aqua-game-05.jpg",
+    "/brand/aqua-game/aqua-game-06.jpg"
   ],
   "dgyp": [
     "/brand/dgyp/junior-private-pool-1.jpg",
@@ -20,8 +20,8 @@ export const BEST_PHOTOS = {
   "malang-skyland": [
     "/brand/malang-skyland/malang-skyland-01.jpg",
     "/brand/malang-skyland/malang-skyland-02.jpg",
+    "/brand/malang-skyland/malang-skyland-03.jpg",
     "/brand/malang-skyland/malang-skyland-04.jpg",
-    "/brand/malang-skyland/malang-skyland-unnamed-1.gif",
     "/brand/malang-skyland/malang-skyland-05.jpg",
     "/brand/malang-skyland/malang-skyland-08.jpg"
   ],
@@ -39,15 +39,15 @@ export const BEST_PHOTOS = {
     "/brand/nimo-highland/nh-03.jpg",
     "/brand/nimo-highland/nh-04.jpg",
     "/brand/nimo-highland/nh-05.jpg",
-    "/brand/nimo-highland/nh-06.jpg"
+    "/brand/nimo-highland/nh-07.jpg"
   ],
   "nimo-kaldera-toba": [
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg",
-    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-02.jpg",
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-03.jpg",
-    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-04.jpg",
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-05.jpg",
-    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-06.jpg"
+    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-06.jpg",
+    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-07.jpg",
+    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-02.png"
   ],
   "nimo-resort-ciater": [
     "/brand/nimo-resort-ciater/nimo-resort-ciater-01.png",
@@ -85,17 +85,25 @@ export const BEST_PHOTOS = {
     "/brand/pinaru-park/pinaru-park-01.png",
     "/brand/pinaru-park/pinaru-park-02.png",
     "/brand/pinaru-park/pinaru-park-03.png",
-    "/brand/pinaru-park/pinaru-park-04.jpg",
     "/brand/pinaru-park/pinaru-park-05.jpg",
-    "/brand/pinaru-park/pinaru-park-06.jpg"
+    "/brand/pinaru-park/pinaru-park-06.jpg",
+    "/brand/pinaru-park/pinaru-park-07.jpg"
   ],
   "punceling-park": [
-    "/brand/punceling-park/4320b925-e19f-458d-9c87-cd9f0036b6c4.jpg",
     "/brand/punceling-park/punceling-park-01.jpg",
     "/brand/punceling-park/punceling-park-03.jpg",
     "/brand/punceling-park/punceling-park-04.jpg",
     "/brand/punceling-park/punceling-park-05.jpg",
-    "/brand/punceling-park/punceling-park-06.jpg"
+    "/brand/punceling-park/punceling-park-06.jpg",
+    "/brand/punceling-park/punceling-park-07.jpg"
+  ],
+  "nimo-ecomarine": [
+    "/brand/nimo-ecomarine/nimo-ecomarine-01.jpg",
+    "/brand/nimo-ecomarine/nimo-ecomarine-02.jpg",
+    "/brand/nimo-ecomarine/nimo-ecomarine-03.jpg",
+    "/brand/nimo-ecomarine/nimo-ecomarine-04.jpg",
+    "/brand/nimo-ecomarine/nimo-ecomarine-05.gif",
+    "/brand/nimo-ecomarine/nimo-ecomarine-06.jpg"
   ],
   "savia-hotel-resort": [
     "/brand/savia-hotel-resort/savia-hotel-resort-01.png",

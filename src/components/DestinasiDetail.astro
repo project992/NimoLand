@@ -65,8 +65,8 @@ const flagship = d.id === 'nimo-highland';
         )}
 
         <div>
-          <h2 class="font-heading font-semibold text-ink text-xl mb-4">{bestPhotos ? '6 Foto Terbaik' : 'Galeri'}</h2>
-          <div class="grid grid-cols-2 gap-3">
+          <h2 class="font-heading font-semibold text-ink text-xl mb-4">Galeri (6 Footage)</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {(bestPhotos ?? d.gallery).map((p, i) => (
               <div class="aspect-[4/3] rounded-xl overflow-hidden img-shell">
                 {bestPhotos

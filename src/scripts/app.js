@@ -394,6 +394,9 @@ const Destinations = {
         <div class="relative aspect-[16/10] img-shell overflow-hidden">
           ${coverMedia(d, 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-500')}
           ${d.tag ? `<span class="absolute top-3 left-3 bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">${esc(d.tag)}</span>` : ''}
+          <span class="absolute bottom-3 right-3 bg-bark/75 backdrop-blur-xs text-white text-[11px] font-heading font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+            ${icon('camera', 'w-3 h-3')} 6 Footage
+          </span>
         </div>
         <div class="p-5 flex flex-col flex-1">
           <p class="font-heading font-bold text-ink text-lg">${esc(d.name)}</p>
@@ -404,7 +407,7 @@ const Destinations = {
           <div class="flex items-center justify-between mt-5 pt-4 border-t border-line-soft">
             <button type="button" data-dest-detail="${d.id}"
                     class="inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-sage-deep border-b-2 border-sage pb-0.5 transition-colors">
-              ${State.locale === 'en' ? 'View details' : 'Lihat detail'} ${icon('arrow-right', 'w-3.5 h-3.5')}
+              ${State.locale === 'en' ? 'View 6 footages' : 'Lihat 6 footage'} ${icon('arrow-right', 'w-3.5 h-3.5')}
             </button>
           </div>
         </div>
@@ -468,8 +471,8 @@ const Destinations = {
             `<span class="text-xs bg-paper border border-line-soft text-muted px-3 py-1.5 rounded-full">${esc(h)}</span>`).join('')}
         </div>
 
-        <p class="font-heading font-semibold text-ink text-sm mt-6 mb-3">${State.locale === 'en' ? 'Gallery' : 'Galeri'}</p>
-        <div class="grid grid-cols-2 gap-3">
+        <p class="font-heading font-semibold text-ink text-sm mt-6 mb-3">${State.locale === 'en' ? 'Gallery (6 Footage)' : 'Galeri (6 Footage)'}</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           ${d.gallery.map((g, i) => `
             <div class="aspect-[4/3] rounded-xl overflow-hidden img-shell">
               <img src="${localSrc(g)}" data-fallback="${localSrc(d.fb)}" alt="${esc(d.name)} ${i + 1}" loading="lazy"
