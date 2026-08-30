@@ -36,12 +36,6 @@
     "desc": "Dari Jawa hingga Sumatera dan Bali — temukan destinasi Nimo Land Group di kota favoritmu.",
     "lihatSemua": "Lihat Semua Destinasi"
   },
-  "wahana": {
-    "eyebrow": "Wahana & Aktivitas",
-    "judul": "Satu Bukit, Segudang Cerita",
-    "desc": "Pilih kategori untuk menyaring daftar wahana. Semua tersedia di area Nimo Highland.",
-    "kosong": "Belum ada wahana pada kategori ini."
-  },
   "fasilitas": {
     "eyebrow": "Fasilitas",
     "judul": "Area Atas & Area Bawah Bukit",
@@ -126,13 +120,6 @@
     "alam": "Alam & Pegunungan",
     "air": "Wisata Air",
     "keluarga": "Keluarga & Edukasi"
-  },
-  "kategori": {
-    "semua": "Semua",
-    "utama": "Atraksi Utama",
-    "ekstrem": "Wahana Ekstrem",
-    "foto": "Spot Foto",
-    "kuliner": "Kuliner"
   },
   "roomType": {
     "semua": "Semua"

@@ -11,7 +11,7 @@
    07. ESS        — employee portal against /api/ess/*
    ===================================================================== */
 import {
-  DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES, CATEGORIES, WAHANA,
+  DESTINATIONS, DEST_FILTERS, HOTELS, ROOM_TYPES,
   MOMENTS, GALLERY,
   allRooms, parseISODate, addDays, toISODate, rupiah, localSrc,
 } from '../lib/data.js';
@@ -343,54 +343,6 @@ const MomentSlider = {
     };
     dots.forEach(d => d.addEventListener('click', () => go(Number(d.dataset.mdot))));
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => go(index + 1), 5000);
-  },
-};
-
-/* ------------------------------------------------------------------
-   06a. WAHANA
------------------------------------------------------------------- */
-const WahanaFilter = {
-  init() {
-    const tabsWrap = document.getElementById('filterTabs');
-    const grid = document.getElementById('wahanaGrid');
-    const countEl = document.getElementById('filterCount');
-    const emptyEl = document.getElementById('wahanaEmpty');
-
-    grid.innerHTML = WAHANA.map(w => `
-      <article class="wahana-card group card card-hover overflow-hidden" data-cat="${w.cat}">
-        <div class="aspect-[4/3] img-shell overflow-hidden">
-          <img src="${localSrc(w.img)}" data-fallback="${localSrc(w.fb)}" alt="${esc(w.name)}" loading="lazy"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-        </div>
-        <div class="p-4">
-          <p class="font-heading font-semibold text-ink text-sm">${esc(w.name)}</p>
-          <p class="text-xs text-muted mt-1">${esc(w.note)}</p>
-        </div>
-      </article>`).join('');
-    ImageFallback.bindAll(grid);
-
-    tabsWrap.innerHTML = CATEGORIES.map(c => `
-      <button type="button" data-cat="${c.id}" aria-pressed="false" class="pill inline-flex items-center gap-2">
-        ${icon(c.icon, 'w-4 h-4')}${esc(c.label)}
-      </button>`).join('');
-
-    const tabs = [...tabsWrap.querySelectorAll('[data-cat]')];
-    const cards = [...grid.querySelectorAll('.wahana-card')];
-
-    const apply = cat => {
-      tabs.forEach(t => t.setAttribute('aria-pressed', String(t.dataset.cat === cat)));
-      let visible = 0;
-      cards.forEach(c => {
-        const match = cat === 'semua' || c.dataset.cat === cat;
-        c.classList.toggle('hidden', !match);
-        if (match) visible++;
-      });
-      countEl.textContent = State.locale === 'en' ? `Showing ${visible} of ${cards.length} attractions` : `Menampilkan ${visible} dari ${cards.length} wahana`;
-      emptyEl.classList.toggle('hidden', visible > 0);
-    };
-
-    tabs.forEach(t => t.addEventListener('click', () => apply(t.dataset.cat)));
-    apply('semua');
   },
 };
 
@@ -995,7 +947,6 @@ function boot() {
   Auth.init();
   Navbar.init();
   MomentSlider.init();
-  WahanaFilter.init();
   Destinations.init();
   Hotels.init();
   Gallery.init();

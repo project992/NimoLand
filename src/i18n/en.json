@@ -36,12 +36,6 @@
     "desc": "From Java to Sumatra and Bali — find Nimo Land Group destinations in your favorite city.",
     "lihatSemua": "View All Destinations"
   },
-  "wahana": {
-    "eyebrow": "Attractions & Activities",
-    "judul": "One Hill, Endless Stories",
-    "desc": "Choose a category to filter the attractions list. All available in the Nimo Highland area.",
-    "kosong": "No attractions in this category yet."
-  },
   "fasilitas": {
     "eyebrow": "Facilities",
     "judul": "Upper Hill & Lower Hill Areas",
@@ -126,13 +120,6 @@
     "alam": "Nature & Mountains",
     "air": "Water Tourism",
     "keluarga": "Family & Education"
-  },
-  "kategori": {
-    "semua": "All",
-    "utama": "Main Attractions",
-    "ekstrem": "Extreme Rides",
-    "foto": "Photo Spots",
-    "kuliner": "Dining"
   },
   "roomType": {
     "semua": "All"

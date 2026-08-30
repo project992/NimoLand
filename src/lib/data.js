@@ -305,35 +305,6 @@ export function allRooms() {
   );
 }
 
-/* ---- Attractions ---- */
-export const CATEGORIES = [
-  { id:'semua',   label:'Semua',           icon:'sparkles' },
-  { id:'utama',   label:'Atraksi Utama',   icon:'mountain' },
-  { id:'ekstrem', label:'Wahana Ekstrem',  icon:'waves-horizontal' },
-  { id:'foto',    label:'Spot Foto',       icon:'camera' },
-  { id:'kuliner', label:'Kuliner',         icon:'utensils' },
-];
-
-export const WAHANA = [
-  { name:'Sunrise Point',       cat:'utama',   note:'Dawn awakening',        img:NH(1), fb:NH(1) },
-  { name:'Sky Bridge',          cat:'utama',   note:'Ikon berbentuk U',      img:NH(2), fb:NH(2) },
-  { name:'Glass Sky Bridge',    cat:'ekstrem', note:'Lantai kaca',           img:NH(3), fb:NH(3) },
-  { name:'Nimo Eye',            cat:'utama',   note:'Bianglala MURI',        img:NE(1), fb:NE(1) },
-  { name:'ATV',                 cat:'ekstrem', note:'Off-road',              img:NH(4), fb:NH(4) },
-  { name:'Paintball',           cat:'ekstrem', note:'Permainan tim',         img:NH(5), fb:NH(5) },
-  { name:'Jimny Adventure',     cat:'ekstrem', note:'Jelajah bukit',         img:NH(6), fb:NH(6) },
-  { name:'Flying Fox',          cat:'ekstrem', note:'Adrenalin',             img:NH(7), fb:NH(7) },
-  { name:'Rafting',             cat:'ekstrem', note:'Arung jeram',           img:NH(8), fb:NH(8) },
-  { name:'Photo Ethnic Studio', cat:'foto',    note:'Busana etnik',          img:NH(9), fb:NH(9) },
-  { name:'Etnic Gallery',       cat:'foto',    note:'Galeri budaya',         img:NH(10), fb:NH(10) },
-  { name:'Bean Bag & Net Area', cat:'foto',    note:'Santai di tepi bukit',  img:NH(11), fb:NH(11) },
-  { name:'Virtual Reality',     cat:'utama',   note:'Fun games',             img:NE(2), fb:NE(2) },
-  { name:'Nimo Zoo',            cat:'utama',   note:'Edukasi satwa',         img:ZOO(1), fb:ZOO(1) },
-  { name:'Restaurant',          cat:'kuliner', note:'Area atas bukit',       img:NE(3), fb:NE(3) },
-  { name:'Food Court',          cat:'kuliner', note:'Area bawah bukit',      img:NE(4), fb:NE(4) },
-  { name:'F&B Stand',           cat:'kuliner', note:'Kopi & camilan',        img:NE(5), fb:NE(5) },
-];
-
 export const HERO_SLIDES = [
   { img:'/beranda-highlight.jpg', fb:'/beranda-highlight.jpg', alt:'' },
 ];
