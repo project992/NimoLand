@@ -3,11 +3,14 @@ import MapPin from '@lucide/astro/icons/map-pin';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import NimoImage from './NimoImage.astro';
 import { SITE } from '../lib/site.js';
+import { FOOTAGE } from '../lib/data.js';
 import { BEST_PHOTOS } from '../lib/best-photos.js';
 
 const { d } = Astro.props;
 const brandSlug = (d.img || '').split('/')[2];
 const bestPhotos = brandSlug ? BEST_PHOTOS[brandSlug] : undefined;
+const video = FOOTAGE[d.id]?.aerial;
+const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
 
 /* Server-rendered detail view for /destinasi/[slug]. The `.view` + data-view
    contract lets the client Router keep navigating the whole app from here. */
@@ -46,6 +49,20 @@ const flagship = d.id === 'nimo-highland';
             ))}
           </div>
         </div>
+
+        {video && (
+          <div>
+            <h2 class="font-heading font-semibold text-ink text-xl mb-4">Video</h2>
+            <div class="rounded-2xl overflow-hidden img-shell aspect-video bg-bark">
+              {isVideo ? (
+                <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
+                       controls preload="metadata" aria-label={`Video ${d.name}`}></video>
+              ) : (
+                <img src={video} alt={`Video ${d.name}`} class="w-full h-full object-cover" loading="lazy" />
+              )}
+            </div>
+          </div>
+        )}
 
         <div>
           <h2 class="font-heading font-semibold text-ink text-xl mb-4">{bestPhotos ? '6 Foto Terbaik' : 'Galeri'}</h2>

@@ -20,7 +20,6 @@ export const BEST_PHOTOS = {
   "malang-skyland": [
     "/brand/malang-skyland/malang-skyland-01.jpg",
     "/brand/malang-skyland/malang-skyland-02.jpg",
-    "/brand/malang-skyland/malang-skyland-03.jpg",
     "/brand/malang-skyland/malang-skyland-unnamed-1.gif",
     "/brand/malang-skyland/malang-skyland-05.jpg",
     "/brand/malang-skyland/malang-skyland-08.jpg"
@@ -28,10 +27,10 @@ export const BEST_PHOTOS = {
   "nimo-eye": [
     "/brand/nimo-eye/nimo-eye-01.jpg",
     "/brand/nimo-eye/nimo-eye-02.jpg",
-    "/brand/nimo-eye/nimo-eye-02.png",
     "/brand/nimo-eye/nimo-eye-03.jpg",
     "/brand/nimo-eye/nimo-eye-04.jpg",
-    "/brand/nimo-eye/nimo-eye-04.png"
+    "/brand/nimo-eye/nimo-eye-05.jpg",
+    "/brand/nimo-eye/nimo-eye-06.jpg"
   ],
   "nimo-highland": [
     "/brand/nimo-highland/nh-01.jpg",

@@ -18,7 +18,7 @@ export const SITE = {
   // scripts/seed-live-assets.mjs into public/aimg/).
   ogImage: 'https://nimo-land.vercel.app/aimg/tAG8ngQWBpj62NH-sryt3zUUZ3FH7.jpg',
   social: {
-    instagram: 'https://www.instagram.com/ilhamsunaryanto_/',
+    instagram: 'https://www.instagram.com/nimohighland/',
     instagramEye: 'https://www.instagram.com/nimo_eye/',
     tiktok: 'https://www.tiktok.com/@nimohighland',
     youtube: 'https://www.youtube.com/@Nimo_Land_Group',

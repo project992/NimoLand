@@ -100,7 +100,7 @@ const otherLocale = LOCALES.find(l => l !== locale);
         </form>
 
         {/* ---- Account area: rendered server-side from the verified session ---- */}
-        {isCustomer ? (
+        {isCustomer && (
           <div class="has-dropdown relative hidden lg:block">
             <button type="button"
                     class="nav-account inline-flex items-center gap-2 border rounded-full pl-1.5 pr-3.5 py-1.5 transition-colors">
@@ -120,10 +120,6 @@ const otherLocale = LOCALES.find(l => l !== locale);
               </div>
             </div>
           </div>
-        ) : (
-          <a href="/login" class="nav-account hidden lg:inline-flex items-center gap-2 border rounded-full px-4 py-2.5 font-heading font-semibold text-sm transition-colors">
-            <LogIn class="w-4 h-4" /> {t('nav.masuk')}
-          </a>
         )}
 
         <button id="mobileMenuBtn" aria-label="Menu" aria-expanded="false"
@@ -175,12 +171,8 @@ const otherLocale = LOCALES.find(l => l !== locale);
         </button>
       </form>
 
-      {isCustomer ? (
-        <>
-          <button type="button" data-logout class="mt-2 btn-outline text-danger"><LogOut class="w-4 h-4" /> {t('nav.keluar')}</button>
-        </>
-      ) : (
-        <a href="/login" class="mt-3 btn-outline"><LogIn class="w-4 h-4" /> {t('nav.masukAtauDaftar')}</a>
+      {isCustomer && (
+        <button type="button" data-logout class="mt-2 btn-outline text-danger"><LogOut class="w-4 h-4" /> {t('nav.keluar')}</button>
       )}
 
     </nav>
