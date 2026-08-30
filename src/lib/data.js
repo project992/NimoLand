@@ -316,26 +316,43 @@ export const MOMENTS = [
 ];
 
 export const GALLERY = [
+  // Nimo Tea Resort
   { img:TR(1),  fb:TR(1) },
-  { img:TR(2),  fb:TR(2) },
+  { img:TR(4),  fb:TR(4) },
+  // Nimo Resort Ciater
   { img:RC(1),  fb:RC(1) },
-  { img:RC(2),  fb:RC(2) },
-  { img:RC(3),  fb:RC(3) },
-  { img:SV(1),  fb:SV(1) },
+  { img:RC(9),  fb:RC(9) },
+  // Savia Hotel Resort
   { img:SV(2),  fb:SV(2) },
-  { img:SV(3),  fb:SV(3) },
+  { img:SV(6),  fb:SV(6) },
+  // Glamping Nimoza
   { img:GL(1),  fb:GL(1) },
-  { img:GL(2),  fb:GL(2) },
-  { img:PR(1),  fb:PR(1) },
-  { img:PR(2),  fb:PR(2) },
+  { img:GL(3),  fb:GL(3) },
+  // Pinaru Park
+  { img:'/brand/pinaru-park/unnamed-1.jpg', fb:'/brand/pinaru-park/unnamed-1.jpg' },
+  { img:PR(5),  fb:PR(5) },
+  // Nimo Eye
   { img:NE(1),  fb:NE(1) },
-  { img:NE(2),  fb:NE(2) },
-  { img:NWF(1), fb:NWF(1) },
+  { img:NE(6),  fb:NE(6) },
+  // Nimo Water Forest
+  { img:'/brand/nimo-water-forest/nwf-hero.jpg', fb:'/brand/nimo-water-forest/nwf-hero.jpg' },
+  { img:NWF(4), fb:NWF(4) },
+  // Malang Skyland
   { img:MSK(1), fb:MSK(1) },
-  { img:ZOO(1), fb:ZOO(1) },
+  { img:MSK(5), fb:MSK(5) },
+  // Nimo Zoo
+  { img:ZOO(2), fb:ZOO(2) },
+  { img:ZOO(5), fb:ZOO(5) },
+  // Nimo Kaldera Toba
   { img:KLT(1), fb:KLT(1) },
+  { img:KLT(3), fb:KLT(3) },
+  // Aqua Game
   { img:AQ(1),  fb:AQ(1) },
-  { img:PUN(1), fb:PUN(1) },
+  { img:AQ(4),  fb:AQ(4) },
+  // Nimo Ecomarine
+  { img:ECO(2), fb:ECO(2) },
+  // Punceling Park
+  { img:PUN(2), fb:PUN(2) },
 ];
 
 export function parseISODate(value) {
