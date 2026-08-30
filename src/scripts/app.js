@@ -143,8 +143,12 @@ async function api(url, options = {}) {
 function coverMedia(d, className) {
   const src = State.videos[d.id];
   if (src) {
-    return `<video class="${className}" src="${esc(src)}" muted playsinline loop autoplay
-                   preload="metadata" aria-label="Video ${esc(d.name)}"></video>`;
+    if (/\.(mp4|mov|webm)(\?|$)/i.test(src)) {
+      return `<video class="${className}" src="${esc(src)}" muted playsinline loop autoplay
+                     preload="metadata" aria-label="Video ${esc(d.name)}"></video>`;
+    }
+    return `<img src="${esc(src)}" alt="${esc(d.name)}"
+                class="${className}" ${className.includes('w-full') ? 'loading="lazy"' : ''}>`;
   }
   return `<img src="${localSrc(d.img)}" data-fallback="${localSrc(d.fb)}" alt="${esc(d.name)}"
                class="${className}" ${className.includes('w-full') ? 'loading="lazy"' : ''}>`;

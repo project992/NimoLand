@@ -10,6 +10,7 @@ import { FOOTAGE } from '../lib/data.js';
 const { d } = Astro.props;
 const flagship = d.id === 'nimo-highland';
 const video = FOOTAGE[d.id]?.aerial;
+const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
 ---
 <div class="view active" data-view="item-detail">
   <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
@@ -67,10 +68,14 @@ const video = FOOTAGE[d.id]?.aerial;
         </div>
 {video && (
           <div>
-            <h2 class="font-heading font-semibold text-ink text-xl mb-4">Video / Suasana</h2>
+            <h2 class="font-heading font-semibold text-ink text-xl mb-4">Suasana</h2>
             <div class="rounded-2xl overflow-hidden img-shell aspect-video bg-bark">
-              <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
-                     controls preload="metadata" aria-label={`Video ${d.name}`}></video>
+              {isVideo ? (
+                <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
+                       controls preload="metadata" aria-label={`Video ${d.name}`}></video>
+              ) : (
+                <img src={video} alt={`Suasana ${d.name}`} class="w-full h-full object-cover" loading="lazy" />
+              )}
             </div>
           </div>
         )}
