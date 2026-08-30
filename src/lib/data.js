@@ -299,6 +299,7 @@ export const FOOTAGE = {
   'pinaru-park':         { aerial: '/brand/pinaru-park/unnamed-1.jpg' },
   'punceling-park':      { aerial: '/brand/punceling-park/4320b925-e19f-458d-9c87-cd9f0036b6c4.jpg' },
   'nimo-ecomarine':      { aerial: ECO(1) },
+  'nimo-kaldera-toba':   { aerial: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-05.jpg' },
 };
 
 /** Flat list of every room with its parent hotel folded in. */
