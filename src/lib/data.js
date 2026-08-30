@@ -13,7 +13,7 @@ export const IS_DEMO_MODE = true;
 /** Company details single source: the fill-in badges in the UI read from here
  *  instead of hard-coded strings, so going live is a one-line edit. */
 export const COMPANY = {
-  legalName: 'PT Nimo Enterprise',
+  legalName: 'PT Nimo Kreasindo Utama',
   email: 'official@nimoenterprise.com',
 };
 
