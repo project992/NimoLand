@@ -358,7 +358,7 @@ export const GALLERY = [
 export const GALLERY_FEATURED = [
   { img:'/brand/nimo-water-forest/nwf-hero.jpg', fb:'/brand/nimo-water-forest/nwf-hero.jpg' },
   { img:'/brand/pinaru-park/unnamed-1.jpg',      fb:'/brand/pinaru-park/unnamed-1.jpg' },
-  { img:MSK(1), fb:MSK(1) },
+  { img:MSK(7), fb:MSK(7) },
   { img:NE(6),  fb:NE(6) },
   { img:KLT(1), fb:KLT(1) },
   { img:RC(9),  fb:RC(9) },
