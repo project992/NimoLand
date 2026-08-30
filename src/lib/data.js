@@ -165,8 +165,8 @@ export const DESTINATIONS = [
 
   { id:'nimo-ecomarine', name:'Nimo Ecomarine', type:'air', area:'Bali',
     img:ECO(1), fb:ECO(1),
-    desc:'Petualangan air terbaru di Bali sebagai bagian dari keluarga besar Nimo Land Group.',
-    highlights:['Wahana air','Area pantai','Baru dibuka'], gallery:[ECO(1), ECO(2), ECO(3)] },
+    desc:'Petualangan air tak terlupakan di destinasi rekreasi terbaru kami di Bali. Sebagai bagian dari keluarga besar Nimo yang sukses dengan Nimo Highland dan Nimo Water Forest, kami hadirkan Nimo Ecomarine dengan wahana Wibit inflatable water park yang inovatif untuk segala usia, berlokasi strategis di tengah keindahan Nusa Penida dan Pantai Sanur.',
+    highlights:['Wibit inflatable','Wahana air inovatif','Nusa Penida & Sanur','Baru dibuka'], gallery:[ECO(1), ECO(2), ECO(3), ECO(4)] },
 ];
 
 /* ---- Accommodation ----
@@ -297,6 +297,7 @@ export const FOOTAGE = {
   'savia-hotel-resort':  { aerial: '/videos/savia-hotel-resort/aerial.mp4' },
   'pinaru-park':         { aerial: '/brand/pinaru-park/unnamed-1.jpg' },
   'punceling-park':      { aerial: '/brand/punceling-park/4320b925-e19f-458d-9c87-cd9f0036b6c4.jpg' },
+  'nimo-ecomarine':      { aerial: ECO(1) },
 };
 
 /** Flat list of every room with its parent hotel folded in. */
