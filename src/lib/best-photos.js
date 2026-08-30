@@ -44,10 +44,10 @@ export const BEST_PHOTOS = {
   "nimo-kaldera-toba": [
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg",
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-02.jpg",
-    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-02.png",
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-03.jpg",
     "/brand/nimo-kaldera-toba/nimo-kaldera-toba-04.jpg",
-    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-05.jpg"
+    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-05.jpg",
+    "/brand/nimo-kaldera-toba/nimo-kaldera-toba-06.jpg"
   ],
   "nimo-resort-ciater": [
     "/brand/nimo-resort-ciater/nimo-resort-ciater-01.png",
