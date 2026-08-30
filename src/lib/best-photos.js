@@ -13,7 +13,7 @@ export const BEST_PHOTOS = {
     "/brand/malang-skyland/malang-skyland-01.jpg",
     "/brand/malang-skyland/malang-skyland-02.jpg",
     "/brand/malang-skyland/malang-skyland-03.jpg",
-    "/brand/malang-skyland/malang-skyland-04.jpg",
+    "/brand/malang-skyland/malang-skyland-unnamed-1.gif",
     "/brand/malang-skyland/malang-skyland-05.jpg",
     "/brand/malang-skyland/malang-skyland-08.jpg"
   ],
