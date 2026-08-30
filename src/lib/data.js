@@ -143,7 +143,7 @@ export const DESTINATIONS = [
     img:'/brand/malang-skyland/msk-hero.gif', fb:'/brand/malang-skyland/msk-hero.gif',
     desc:'Destinasi wisata modern di Kabupaten Malang yang menawarkan pengalaman di ketinggian dengan pemandangan alam serta gemerlap lampu Kota Malang dan Kota Batu. Terkenal dengan jembatan kaca (Glass Sky Bridge), wahana seperti ATV, dan kafe berkonsep futuristik — cocok untuk keluarga dan pasangan.',
     highlights:['Glass Sky Bridge','ATV','Kidszone','SkyZone','Cafe futuristik'],
-    gallery:[MSK(1), MSK(2), MSK(3), MSK(4), MSK(5), MSK(8)] },
+    gallery:[MSK(1), MSK(2), MSK(3), '/brand/malang-skyland/malang-skyland-IMG_6941.jpg', MSK(5), MSK(8)] },
 
   { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
     img:'/brand/pinaru-park/unnamed-1.jpg', fb:'/brand/pinaru-park/unnamed-1.jpg',
