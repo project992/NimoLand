@@ -317,18 +317,21 @@ const Navbar = {
 const MomentSlider = {
   init() {
     const wrap = document.getElementById('momentSlider');
+    if (!wrap) return;
     let index = 0;
 
-    wrap.innerHTML = MOMENTS.map((m, i) => `
-      <div class="moment-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}">
-        <img class="w-full h-full object-cover" alt=""
-             src="${localSrc(m.img)}" data-fallback="${localSrc(m.fb)}" loading="lazy">
-      </div>`).join('')
-      + `<div class="absolute bottom-5 right-5 z-20 flex gap-2">${
-        MOMENTS.map((_, i) =>
-          `<button type="button" aria-label="Foto ${i + 1}" data-mdot="${i}"
-                   class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/40'} transition-all"></button>`,
-        ).join('')}</div>`;
+    if (!wrap.querySelector('.moment-slide')) {
+      wrap.innerHTML = MOMENTS.map((m, i) => `
+        <div class="moment-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}">
+          <img class="w-full h-full object-cover" alt=""
+               src="${localSrc(m.img)}" data-fallback="${localSrc(m.fb)}" loading="lazy">
+        </div>`).join('')
+        + `<div class="absolute bottom-5 right-5 z-20 flex gap-2">${
+          MOMENTS.map((_, i) =>
+            `<button type="button" aria-label="Foto ${i + 1}" data-mdot="${i}"
+                     class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/40'} transition-all"></button>`,
+          ).join('')}</div>`;
+    }
 
     ImageFallback.bindAll(wrap);
     const slides = [...wrap.querySelectorAll('.moment-slide')];
