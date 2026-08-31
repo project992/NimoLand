@@ -110,7 +110,6 @@ const SLUG_MAP = {
   '/kontak': '/contact',
   '/tentang-kami': '/about-us',
   '/kebijakan-privasi': '/privacy',
-  '/pembatalan-refund': '/cancellation-refund',
   '/login': '/login',
   '/register': '/register',
   '/ess': '/ess',

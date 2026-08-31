@@ -3,6 +3,8 @@ import ExternalLink from '@lucide/astro/icons/external-link';
 import Play from '@lucide/astro/icons/play';
 import Trophy from '@lucide/astro/icons/trophy';
 import Newspaper from '@lucide/astro/icons/newspaper';
+import ChevronLeft from '@lucide/astro/icons/chevron-left';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
 import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS } from '../lib/data.js';
 
 const locale = Astro.locals.locale ?? 'id';
@@ -93,53 +95,101 @@ const locale = Astro.locals.locale ?? 'id';
       </div>
     </div>
 
-    <!-- NATIONAL NEWS ARTICLES GRID (5-10 ARTICLES) -->
-    <div class="mb-16">
-      <div class="flex items-center justify-between mb-8 reveal">
+    <!-- NATIONAL NEWS ARTICLES: 1 ITEM AT A TIME WITH NEXT CONTROLS -->
+    <div class="mb-16" id="newsShowcase">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 reveal">
         <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2.5">
           <Newspaper class="w-5 h-5 text-primary" />
           {locale === 'en' ? 'Latest National News & Media Articles' : 'Pemberitaan Media Nasional Terkini'}
         </h3>
+
+        <div class="flex items-center gap-2 text-xs text-muted font-heading">
+          <span class="font-semibold text-primary" id="newsCurrentIndex">1</span>
+          <span>/</span>
+          <span id="newsTotalCount">{NEWS_ARTICLES.length}</span>
+          <span>{locale === 'en' ? 'Articles' : 'Berita'}</span>
+        </div>
       </div>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {NEWS_ARTICLES.map(art => (
-          <a href={art.url} target="_blank" rel="noopener noreferrer"
-             class="card card-hover overflow-hidden flex flex-col justify-between group bg-surface border border-line-soft rounded-2xl reveal transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-accent/40 block">
-            <div>
-              <div class="relative aspect-[16/10] overflow-hidden img-shell">
-                <img src={art.img} data-fallback={art.fb} alt={art.title} loading="lazy"
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <span class="absolute top-3 left-3 bg-primary/90 backdrop-blur-xs text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
-                  {art.category}
-                </span>
-                <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-text-dark text-[11px] font-heading font-bold px-2.5 py-0.5 rounded shadow-sm">
-                  {art.source}
-                </span>
-              </div>
-              <div class="p-5 sm:p-6">
-                <div class="flex items-center gap-2 text-xs text-muted mb-2.5">
-                  <span>{art.date}</span>
-                  <span>·</span>
-                  <span>{art.readTime}</span>
+      <!-- Single Featured Active Card -->
+      <div class="relative bg-surface border border-line-soft rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm reveal">
+        <div id="newsSlidesWrapper" class="relative min-h-[300px]">
+          {NEWS_ARTICLES.map((art, idx) => (
+            <div class={`news-slide transition-all duration-300 ${idx === 0 ? 'block opacity-100' : 'hidden opacity-0'}`} data-news-idx={idx}>
+              <div class="grid lg:grid-cols-12 gap-8 items-center">
+                <!-- Image Side -->
+                <div class="lg:col-span-5 relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] rounded-2xl overflow-hidden img-shell">
+                  <img src={art.img} data-fallback={art.fb} alt={art.title} loading={idx === 0 ? 'eager' : 'lazy'}
+                       class="w-full h-full object-cover" />
+                  <span class="absolute top-3 left-3 bg-primary/90 backdrop-blur-xs text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                    {art.category}
+                  </span>
+                  <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-text-dark text-[11px] font-heading font-bold px-2.5 py-0.5 rounded shadow-sm">
+                    {art.source}
+                  </span>
                 </div>
-                <h4 class="font-heading font-bold text-text-dark text-base sm:text-lg leading-snug group-hover:text-primary transition-colors">
-                  {art.title}
-                </h4>
-                <p class="text-muted text-xs sm:text-sm leading-relaxed mt-3 line-clamp-3">
-                  {art.lead}
-                </p>
+
+                <!-- Content Side -->
+                <div class="lg:col-span-7 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-2 text-xs text-muted mb-3">
+                      <span class="font-semibold text-primary">{art.source}</span>
+                      <span>·</span>
+                      <span>{art.date}</span>
+                      <span>·</span>
+                      <span>{art.readTime}</span>
+                    </div>
+
+                    <h4 class="font-heading font-bold text-text-dark text-xl sm:text-2xl lg:text-3xl leading-snug hover:text-primary transition-colors mb-4">
+                      <a href={art.url} target="_blank" rel="noopener noreferrer">
+                        {art.title}
+                      </a>
+                    </h4>
+
+                    <p class="text-muted text-sm sm:text-base leading-relaxed mb-6">
+                      {art.lead}
+                    </p>
+                  </div>
+
+                  <div class="pt-4 border-t border-line-soft flex flex-wrap items-center justify-between gap-4">
+                    <a href={art.url} target="_blank" rel="noopener noreferrer"
+                       class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2 rounded-full">
+                      <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
+                      <ExternalLink class="w-4 h-4" />
+                    </a>
+                    <span class="text-xs text-muted">
+                      {locale === 'en' ? 'Official Media Coverage' : 'Liputan Resmi Media Nasional'}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
+          ))}
+        </div>
 
-            <div class="p-5 sm:p-6 pt-0 mt-auto">
-              <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-heading font-semibold text-primary border-b-2 border-accent pb-0.5 group-hover:text-primary-hover transition-colors">
-                <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
-                <ExternalLink class="w-3.5 h-3.5" />
-              </span>
-            </div>
-          </a>
-        ))}
+        <!-- Controls Below the News Card -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-line-soft">
+          <!-- Dots Indicator -->
+          <div class="flex items-center gap-1.5" id="newsDotsContainer">
+            {NEWS_ARTICLES.map((_, idx) => (
+              <button type="button" aria-label={`Berita ${idx + 1}`} data-news-dot={idx}
+                      class={`h-2.5 rounded-full transition-all ${idx === 0 ? 'bg-primary w-7' : 'bg-line hover:bg-muted w-2.5'}`}></button>
+            ))}
+          </div>
+
+          <!-- Prev & Next Buttons -->
+          <div class="flex items-center gap-3">
+            <button type="button" id="newsPrevBtn" aria-label={locale === 'en' ? 'Previous article' : 'Berita sebelumnya'}
+                    class="w-10 h-10 rounded-full border border-line-soft flex items-center justify-center text-text-dark hover:bg-primary hover:text-white hover:border-primary transition-colors">
+              <ChevronLeft class="w-5 h-5" />
+            </button>
+            <button type="button" id="newsNextBtn"
+                    class="btn-primary px-5 py-2.5 text-sm font-heading font-semibold rounded-full inline-flex items-center gap-2 shadow-sm hover:scale-105 transition-all">
+              <span>{locale === 'en' ? 'Next Article' : 'Berita Selanjutnya'}</span>
+              <ChevronRight class="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -198,3 +248,77 @@ const locale = Astro.locals.locale ?? 'id';
 
   </div>
 </section>
+
+<script>
+  function initNewsSlider() {
+    const container = document.getElementById('newsShowcase');
+    if (!container) return;
+
+    const slides = container.querySelectorAll<HTMLElement>('.news-slide');
+    const dots = container.querySelectorAll<HTMLElement>('[data-news-dot]');
+    const prevBtn = document.getElementById('newsPrevBtn');
+    const nextBtn = document.getElementById('newsNextBtn');
+    const currentIndexEl = document.getElementById('newsCurrentIndex');
+    
+    if (!slides.length) return;
+
+    let currentIndex = 0;
+    const total = slides.length;
+
+    function showSlide(idx: number) {
+      if (idx < 0) idx = total - 1;
+      if (idx >= total) idx = 0;
+      currentIndex = idx;
+
+      slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+          slide.classList.remove('hidden', 'opacity-0');
+          slide.classList.add('block', 'opacity-100');
+        } else {
+          slide.classList.add('hidden', 'opacity-0');
+          slide.classList.remove('block', 'opacity-100');
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        if (i === currentIndex) {
+          dot.className = 'h-2.5 rounded-full transition-all bg-primary w-7';
+        } else {
+          dot.className = 'h-2.5 rounded-full transition-all bg-line hover:bg-muted w-2.5';
+        }
+      });
+
+      if (currentIndexEl) {
+        currentIndexEl.textContent = String(currentIndex + 1);
+      }
+    }
+
+    if (prevBtn) {
+      prevBtn.onclick = (e) => {
+        e.preventDefault();
+        showSlide(currentIndex - 1);
+      };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = (e) => {
+        e.preventDefault();
+        showSlide(currentIndex + 1);
+      };
+    }
+
+    dots.forEach((dot) => {
+      dot.onclick = (e) => {
+        e.preventDefault();
+        const idx = parseInt(dot.getAttribute('data-news-dot') || '0', 10);
+        showSlide(idx);
+      };
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNewsSlider);
+  } else {
+    initNewsSlider();
+  }
+  document.addEventListener('astro:page-load', initNewsSlider);
+</script>

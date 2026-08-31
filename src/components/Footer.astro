@@ -26,6 +26,7 @@ const t = key => Astro.locals.t(key);
           <li><a href="/destinasi" data-route="destinations" class="hover:text-accent transition-colors">{t('nav.destinations')}</a></li>
           <li><a href="/penginapan" data-route="hotels" class="hover:text-accent transition-colors">{t('nav.hotels')} &amp; Resorts</a></li>
           <li><a href="/galeri" data-route="galeri" class="hover:text-accent transition-colors">{t('nav.galeri')}</a></li>
+          <li><a href="/#berita" data-route="beranda" class="hover:text-accent transition-colors">{t('nav.berita')}</a></li>
         </ul>
       </div>
       <div>
@@ -39,7 +40,6 @@ const t = key => Astro.locals.t(key);
         <ul class="space-y-3 text-sm text-white/70">
           <li><a href="/tentang-kami" class="hover:text-accent transition-colors">{t('footer.tentangKami')}</a></li>
           <li><a href="/kebijakan-privasi" class="hover:text-accent transition-colors">{t('footer.kebijakanPrivasi')}</a></li>
-          <li><a href="/pembatalan-refund" class="hover:text-accent transition-colors">{t('footer.pembatalanRefund')}</a></li>
         </ul>
       </div>
     </div>

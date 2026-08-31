@@ -14,7 +14,6 @@ const STATIC = [
   { path: '/kontak', change: 'monthly', pri: '0.6' },
   { path: '/tentang-kami', change: 'monthly', pri: '0.5' },
   { path: '/kebijakan-privasi', change: 'monthly', pri: '0.3' },
-  { path: '/pembatalan-refund', change: 'monthly', pri: '0.3' },
 ];
 
 export const prerender = false;

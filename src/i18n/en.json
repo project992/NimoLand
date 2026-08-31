@@ -4,6 +4,7 @@
     "destinations": "Destinations",
     "hotels": "Hotels",
     "galeri": "Gallery",
+    "berita": "News & Media",
     "kontak": "Contact",
     "katalogDestinasi": "Destination Catalog",
     "lihatSemuaDestinasi": "View all destinations",
@@ -121,7 +122,6 @@
     "legal": "Legal",
     "tentangKami": "About Us",
     "kebijakanPrivasi": "Privacy Policy",
-    "pembatalanRefund": "Cancellation & Refund",
     "namaBadanHukum": "Legal Entity Name",
     "alamatKantor": "Office Address",
     "emailResmi": "Official Email"
