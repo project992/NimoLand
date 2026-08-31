@@ -154,31 +154,41 @@ const locale = Astro.locals.locale ?? 'id';
       <div class="grid md:grid-cols-2 gap-6">
         {MEDIA_VIDEOS.map(vid => (
           <a href={vid.url} target="_blank" rel="noopener noreferrer"
-             class="group relative rounded-2xl overflow-hidden bg-bark text-white aspect-[16/9] shadow-lg reveal flex items-end border border-white/10 hover:border-white/20 transition-all">
-            <img class="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:opacity-75 transition-opacity group-hover:scale-105 duration-700"
+             class="group relative rounded-2xl overflow-hidden bg-bark text-white min-h-[300px] sm:min-h-[340px] shadow-xl reveal flex flex-col justify-end border border-white/10 hover:border-white/25 transition-all">
+            <img class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-65 transition-opacity group-hover:scale-105 duration-700"
                  src={vid.thumbnail} alt={vid.title} loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-bark via-bark/40 to-black/25"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-bark via-bark/60 to-black/30"></div>
 
             <!-- YouTube Red Play Button Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-                <Play class="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" />
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+                <Play class="w-7 h-7 sm:w-8 sm:h-8 fill-white translate-x-0.5" />
               </div>
             </div>
 
             <!-- Video Info Bottom Overlay -->
-            <div class="relative z-10 p-5 sm:p-6 w-full">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="inline-block px-2.5 py-0.5 rounded bg-white/20 backdrop-blur-md text-[11px] font-semibold">
+            <div class="relative z-10 p-6 sm:p-7 w-full bg-gradient-to-t from-bark via-bark/90 to-transparent">
+              <div class="flex flex-wrap items-center gap-2 mb-2.5">
+                <span class="inline-block px-2.5 py-0.5 rounded bg-red-600/90 text-[11px] font-bold text-white shadow">
+                  YouTube
+                </span>
+                <span class="inline-block px-2.5 py-0.5 rounded bg-white/15 backdrop-blur-md text-[11px] font-semibold text-white/90">
                   {vid.badge}
                 </span>
                 <span class="text-xs text-white/70">
-                  {vid.channel} · {vid.views}
+                  {vid.channel}
                 </span>
               </div>
-              <h4 class="font-heading font-bold text-white text-base sm:text-lg leading-snug group-hover:text-amber-300 transition-colors line-clamp-2">
+              <h4 class="font-heading font-bold text-white text-lg sm:text-xl leading-snug group-hover:text-amber-300 transition-colors mb-2">
                 {vid.title}
               </h4>
+              <p class="text-white/75 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-4">
+                {vid.desc}
+              </p>
+              <div class="inline-flex items-center gap-2 text-xs font-semibold text-amber-300 group-hover:text-amber-200">
+                <span>Tonton Video di YouTube</span>
+                <ExternalLink class="w-3.5 h-3.5" />
+              </div>
             </div>
           </a>
         ))}
