@@ -331,6 +331,7 @@ export const MOMENTS = [
 
 export const GALLERY = [
   // Nimo Tea Resort
+  { img:TR(2),  fb:TR(2) },
   { img:TR(4),  fb:TR(4) },
   // Nimo Resort Ciater
   { img:RC(1),  fb:RC(1) },
