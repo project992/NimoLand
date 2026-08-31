@@ -322,8 +322,8 @@ export const HERO_SLIDES = [
 ];
 
 export const MOMENTS = [
-  { img:'/moments/moment-01.jpg', fb:'/moments/moment-01.jpg' },
-  { img:'/moments/moment-02.jpg', fb:'/moments/moment-02.jpg' },
+  { img:'/moments/tentang-nimo-glamping-v1.jpg', fb:'/moments/tentang-nimo-glamping-v1.jpg' },
+  { img:'/moments/tentang-nimo-resort-v1.jpg', fb:'/moments/tentang-nimo-resort-v1.jpg' },
 ];
 
 export const GALLERY = [
