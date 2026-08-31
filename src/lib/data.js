@@ -385,18 +385,20 @@ export const GALLERY_FEATURED = [
 export const NEWS_SPOTLIGHT = {
   badge: 'Pemenang CNN Indonesia Awards 2024',
   award: 'Extraordinary Service Innovation Initiative',
-  title: 'Nimo Highland Raih Extraordinary Service Innovation Initiative di CNN Indonesia Awards 2024',
+  title: 'Nimo Highland Dianugerahi Extraordinary Service Innovation Initiative',
   source: 'CNN Indonesia',
   sourceColor: '#CC0000',
+  author: 'Dias Saraswati',
   date: '17 September 2024',
+  time: '20:18 WIB',
   readTime: '3 mnt baca',
   location: 'Grand Ballroom The Trans Luxury Hotel, Bandung',
-  lead: 'Penghargaan bergengsi diserahkan langsung oleh Direktur Utama Detik Network, Abdul Aziz, kepada CEO Nimo Land Group, Ilham Sunaryanto, dalam ajang puncak CNN Indonesia Awards Jawa Barat 2024 bertema "Jawa Barat Menyala untuk Indonesia Maju".',
-  desc: 'Apresiasi tingkat nasional ini dianugerahkan kepada Nimo Highland atas kepeloporan inovasi pelayanan pariwisata terintegrasi, pemanfaatan panorama alam 360 derajat di ketinggian 1.600 mdpl secara berkelanjutan, serta komitmen memberdayakan ekonomi masyarakat dan UMKM lokal.',
+  lead: 'Penghargaan bergengsi diserahkan langsung oleh Abdul Aziz selaku Direktur Utama Detik Network kepada CEO Nimo Land Group, Ilham Sunaryanto, pada ajang CNN Indonesia Awards Jawa Barat 2024 bertema "Jawa Barat Menyala untuk Indonesia Maju".',
+  desc: 'Apresiasi tingkat nasional ini dianugerahkan atas daya tarik panorama alam 360 derajat, keindahan kebun teh Pangalengan, jembatan ikonik huruf U berstandar internasional, dan kepeloporan inovasi pelayanan pariwisata terintegrasi berkelanjutan.',
   quote: '"Penghargaan ini menjadi motivasi besar bagi Nimo Land Group untuk terus menghadirkan destinasi kelas dunia yang mengedepankan inovasi layanan dan keberlanjutan lingkungan di seluruh Indonesia." — Ilham Sunaryanto, CEO Nimo Land Group',
-  url: 'https://www.cnnindonesia.com/nasional/20240917203000-20-1145450/nimo-highland-raih-penghargaan-di-cnn-indonesia-awards',
-  img: '/brand/nimo-highland/nh-02.jpg',
-  fb: '/brand/nimo-highland/nh-02.jpg',
+  url: 'https://www.cnnindonesia.com/gaya-hidup/20240917131307-275-1145148/nimo-highland-dianugerahi-extraordinary-service-innovation-initiative',
+  img: '/brand/cnn-awards-2024.png',
+  fb: '/brand/cnn-awards-2024.png',
 };
 
 export const NEWS_ARTICLES = [
