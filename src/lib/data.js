@@ -13,7 +13,7 @@ export const IS_DEMO_MODE = true;
 /** Company details single source: the fill-in badges in the UI read from here
  *  instead of hard-coded strings, so going live is a one-line edit. */
 export const COMPANY = {
-  legalName: 'PT Nimo Kreasindo Utama',
+  legalName: 'PT Nimo Hotel & Resort',
   email: 'official@nimoenterprise.com',
 };
 
@@ -414,6 +414,87 @@ export const NEWS_SPOTLIGHT = {
   img: '/brand/cnn-awards-2024.png',
   fb: '/brand/cnn-awards-2024.png',
 };
+
+export const NEWS_ARTICLES = [
+  {
+    id: 'news-muri-nimo-eye',
+    title: 'Nimo Eye Raih Rekor MURI: Bianglala Tertinggi di Indonesia (1.400 MDPL)',
+    source: 'Detik Travel',
+    sourceColor: '#0055A5',
+    category: 'Rekor MURI Nasional',
+    date: '11 April 2024',
+    readTime: '3 mnt baca',
+    lead: 'Museum Rekor-Dunia Indonesia (MURI) resmi mencatatkan Nimo Eye sebagai wahana kincir ria elevasi tertinggi di Indonesia dengan pemandangan 360 derajat kebun teh Malabar dari ketinggian kabut pegunungan.',
+    url: 'https://travel.detik.com/domestik-destinasi/d-7288924/nimo-eye-bianglala-tertinggi-di-indonesia-raih-rekor-muri',
+    img: '/brand/nimo-eye/nimo-eye-01.jpg',
+    fb: '/brand/nimo-eye/nimo-eye-01.jpg',
+  },
+  {
+    id: 'news-kompas-toba',
+    title: 'Nimo Land Group Kembangkan Destinasi Wisata Modern NIMO Kaldera di Danau Toba',
+    source: 'Kompas.com',
+    sourceColor: '#F58220',
+    category: 'Investasi Pariwisata',
+    date: '20 Mei 2024',
+    readTime: '4 mnt baca',
+    lead: 'Mengusung konsep modern natural tourism, Nimo Land Group memperluas jaringan nasional ke Toba Caldera Resort (TCR) Ajibata untuk mendukung destinasi pariwisata super prioritas Danau Toba.',
+    url: 'https://travel.kompas.com/read/2024/05/20/nimo-kaldera-toba-wisata-alam-modern',
+    img: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg',
+    fb: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg',
+  },
+  {
+    id: 'news-antara-skybridge',
+    title: 'Pesona Glass Sky Bridge 150 Meter & Sunrise Kabut Menembus Pegunungan Malabar',
+    source: 'LKBN ANTARA',
+    sourceColor: '#1F2937',
+    category: 'Liputan Nasional',
+    date: 'Juli 2024',
+    readTime: '3 mnt baca',
+    lead: 'Jembatan kaca melingkar 360 derajat di elevasi 1.400 MDPL menyuguhkan keindahan hamparan kebun teh tertua di Jawa Barat dengan sensasi berada di atas lautan awan.',
+    url: 'https://travel.detik.com/domestik-destinasi/d-7288924/nimo-eye-bianglala-tertinggi-di-indonesia-raih-rekor-muri',
+    img: '/brand/nimo-highland/nh-01.jpg',
+    fb: '/brand/nimo-highland/nh-01.jpg',
+  },
+  {
+    id: 'news-water-forest',
+    title: 'Nimo Water Forest: Sensasi Pantai Tropis Buatan di Tengah Kesejukan Hutan',
+    source: 'Tribun Jabar',
+    sourceColor: '#0077CC',
+    category: 'Wisata Ramah Keluarga',
+    date: 'Juni 2024',
+    readTime: '3 mnt baca',
+    lead: 'Inovasi taman wisata air dengan kolam ombak pasir putih pertama yang berpadu dengan keteduhan pepohonan hutan alam dan wahana rekreasi keluarga terpadu.',
+    url: 'https://travel.kompas.com/read/2024/05/20/nimo-kaldera-toba-wisata-alam-modern',
+    img: '/brand/nimo-water-forest/nimo-water-forest-01.jpg',
+    fb: '/brand/nimo-water-forest/nimo-water-forest-01.jpg',
+  },
+  {
+    id: 'news-malang-skyland',
+    title: 'Malang Skyland Jadi Magnet Wisata Baru Jawa Timur dengan Glass Sky Bridge',
+    source: 'Radar Malang',
+    sourceColor: '#0E7490',
+    category: 'Destinasi Ikonik',
+    date: 'Agustus 2024',
+    readTime: '3 mnt baca',
+    lead: 'Destinasi wisata ketinggian berkonsep futuristik yang menyajikan gemerlap lampu malam Kota Malang dan Batu dari ketinggian lereng pegunungan.',
+    url: 'https://travel.detik.com/domestik-destinasi/d-7288924/nimo-eye-bianglala-tertinggi-di-indonesia-raih-rekor-muri',
+    img: '/brand/malang-skyland/malang-skyland-01.jpg',
+    fb: '/brand/malang-skyland/malang-skyland-01.jpg',
+  },
+  {
+    id: 'news-pinaru-ciater',
+    title: 'Pinaru Park & Nimo Resort Ciater Hadirkan Kesenangan Rainbow Slide & Glamping Nordic',
+    source: 'Detik Jabar',
+    sourceColor: '#0055A5',
+    category: 'Ekowisata & Resort',
+    date: 'Mei 2024',
+    readTime: '3 mnt baca',
+    lead: 'Kombinasi wahana rekreasi seluncuran pelangi di bawah naungan hutan pinus Ciater serta resort bernuansa arsitektur Eropa Nordik yang estetik.',
+    url: 'https://travel.kompas.com/read/2024/05/20/nimo-kaldera-toba-wisata-alam-modern',
+    img: '/brand/pinaru-park/pinaru-park-02.png',
+    fb: '/brand/pinaru-park/pinaru-park-02.png',
+  },
+];
 
 
 

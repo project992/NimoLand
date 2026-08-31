@@ -362,10 +362,17 @@ const Destinations = {
 
   init() {
     const filtersWrap = document.getElementById('destFilters');
+    if (!filtersWrap) return;
+
+    const filterLabels = {
+      en: { semua: 'All', alam: 'Nature & Mountains', air: 'Water Attractions', keluarga: 'Family & Education' },
+      id: { semua: 'Semua', alam: 'Alam & Pegunungan', air: 'Wisata Air', keluarga: 'Keluarga & Edukasi' }
+    };
+    const labels = filterLabels[State.locale] || filterLabels.id;
 
     filtersWrap.innerHTML = DEST_FILTERS.map(f => `
       <button type="button" data-dfilter="${f.id}" aria-pressed="false" class="pill inline-flex items-center gap-2">
-        ${icon(f.icon, 'w-4 h-4')}${esc(f.label)}
+        ${icon(f.icon, 'w-4 h-4')}${esc(labels[f.id] || f.label)}
       </button>`).join('');
 
     this.renderGrid();
@@ -509,8 +516,12 @@ const Hotels = {
 
   init() {
     const tabsWrap = document.getElementById('hotelTabs');
-    tabsWrap.innerHTML = ROOM_TYPES.map(t =>
-      `<button type="button" data-rtype="${esc(t)}" aria-pressed="false" class="pill">${esc(t)}</button>`).join('');
+    if (!tabsWrap) return;
+
+    tabsWrap.innerHTML = ROOM_TYPES.map(t => {
+      const label = t === 'Semua' && State.locale === 'en' ? 'All' : t;
+      return `<button type="button" data-rtype="${esc(t)}" aria-pressed="false" class="pill">${esc(label)}</button>`;
+    }).join('');
 
     this.renderRooms();
     tabsWrap.querySelectorAll('[data-rtype]').forEach(t =>

@@ -185,7 +185,7 @@ const otherLocale = LOCALES.find(l => l !== locale);
     if (!form) return;
     e.preventDefault();
     const locale = form.querySelector('input[name="locale"]')?.value;
-    const next = form.querySelector('input[name="next"]')?.value || '/';
+    const next = window.location.pathname + window.location.search;
     try {
       await fetch('/api/locale', {
         method: 'POST',
@@ -196,7 +196,7 @@ const otherLocale = LOCALES.find(l => l !== locale);
     } catch {
       /* fall through to full reload regardless */
     }
-    window.location.href = next;
+    window.location.href = next || '/';
   });
 </script>
 

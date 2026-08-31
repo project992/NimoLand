@@ -24,7 +24,7 @@ export const SITE = {
     youtube: 'https://www.youtube.com/@Nimo_Land_Group',
   },
   addressBandung: {
-    street: 'Komplek Ruko Buahbatu Square Blk. A No.09',
+    street: 'Buahbatu Square Blk. A No.09',
     locality: 'Bojongsoang',
     region: 'Kabupaten Bandung',
     postalCode: '40267',

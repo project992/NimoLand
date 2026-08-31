@@ -2,7 +2,8 @@
 import ExternalLink from '@lucide/astro/icons/external-link';
 import Play from '@lucide/astro/icons/play';
 import Trophy from '@lucide/astro/icons/trophy';
-import { NEWS_SPOTLIGHT, MEDIA_VIDEOS } from '../lib/data.js';
+import Newspaper from '@lucide/astro/icons/newspaper';
+import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS } from '../lib/data.js';
 
 const locale = Astro.locals.locale ?? 'id';
 ---
@@ -13,7 +14,7 @@ const locale = Astro.locals.locale ?? 'id';
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
       <div>
         <p class="eyebrow text-primary mb-4">
-          <span class="w-6 h-px bg-primary"></span> {locale === 'en' ? 'National News & Media' : 'Berita & Liputan Media Nasional'}
+          <span class="w-6 h-px bg-primary"></span> {locale === 'en' ? 'National News & Media Coverage' : 'Berita & Liputan Media Nasional'}
         </p>
         <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-xl">
           {locale === 'en' ? 'Nimo Land Group in National Spotlight' : 'Nimo Land Group dalam Sorotan Nasional'}
@@ -21,13 +22,13 @@ const locale = Astro.locals.locale ?? 'id';
       </div>
       <p class="text-muted text-sm sm:text-base max-w-md">
         {locale === 'en'
-          ? 'Prestigious national awards and official documentary videos from Nimo Land Group.'
-          : 'Penghargaan bergengsi tingkat nasional dan dokumentasi video resmi ekosistem pariwisata Nimo Land Group.'}
+          ? 'Prestigious national awards, nationwide media coverage, and official documentary videos from Nimo Land Group.'
+          : 'Penghargaan bergengsi tingkat nasional, liputan media terkemuka, dan dokumentasi video resmi ekosistem pariwisata Nimo Land Group.'}
       </p>
     </div>
 
     <!-- SPOTLIGHT: CNN INDONESIA AWARDS 2024 -->
-    <div class="mb-16 reveal">
+    <div class="mb-14 reveal">
       <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1B4332] via-[#16382A] to-[#0F261C] text-white shadow-2xl border border-white/10">
         <div class="grid lg:grid-cols-12 items-stretch">
           
@@ -89,6 +90,56 @@ const locale = Astro.locals.locale ?? 'id';
           </div>
 
         </div>
+      </div>
+    </div>
+
+    <!-- NATIONAL NEWS ARTICLES GRID (5-10 ARTICLES) -->
+    <div class="mb-16">
+      <div class="flex items-center justify-between mb-8 reveal">
+        <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2.5">
+          <Newspaper class="w-5 h-5 text-primary" />
+          {locale === 'en' ? 'Latest National News & Media Articles' : 'Pemberitaan Media Nasional Terkini'}
+        </h3>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {NEWS_ARTICLES.map(art => (
+          <article class="card card-hover overflow-hidden flex flex-col justify-between group bg-surface border border-line-soft rounded-2xl reveal">
+            <div>
+              <div class="relative aspect-[16/10] overflow-hidden img-shell">
+                <img src={art.img} alt={art.title} loading="lazy"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <span class="absolute top-3 left-3 bg-primary/90 backdrop-blur-xs text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                  {art.category}
+                </span>
+                <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-text-dark text-[11px] font-heading font-bold px-2.5 py-0.5 rounded shadow-sm">
+                  {art.source}
+                </span>
+              </div>
+              <div class="p-5 sm:p-6">
+                <div class="flex items-center gap-2 text-xs text-muted mb-2.5">
+                  <span>{art.date}</span>
+                  <span>·</span>
+                  <span>{art.readTime}</span>
+                </div>
+                <h4 class="font-heading font-bold text-text-dark text-base sm:text-lg leading-snug group-hover:text-primary transition-colors">
+                  {art.title}
+                </h4>
+                <p class="text-muted text-xs sm:text-sm leading-relaxed mt-3 line-clamp-3">
+                  {art.lead}
+                </p>
+              </div>
+            </div>
+
+            <div class="p-5 sm:p-6 pt-0 mt-auto">
+              <a href={art.url} target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-heading font-semibold text-primary border-b-2 border-accent pb-0.5 hover:text-primary-hover transition-colors">
+                <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
+                <ExternalLink class="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
 
