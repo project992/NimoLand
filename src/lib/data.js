@@ -322,8 +322,8 @@ export const HERO_SLIDES = [
 ];
 
 export const MOMENTS = [
-  { img:RC(1),  fb:RC(1) },
-  { img:PR(1),  fb:PR(1) },
+  { img:TR(2),  fb:TR(2) },
+  { img:NH(2),  fb:NH(2) },
 ];
 
 export const GALLERY = [
