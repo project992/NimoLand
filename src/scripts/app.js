@@ -396,20 +396,20 @@ const Destinations = {
                data-type="${d.type}" data-name="${esc(d.name.toLowerCase())}" data-area="${esc(d.area.toLowerCase())}">
         <div class="relative aspect-[16/10] img-shell overflow-hidden">
           ${coverMedia(d, 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-500')}
-          ${d.tag ? `<span class="absolute top-3 left-3 bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">${esc(d.tag)}</span>` : ''}
-          <span class="absolute bottom-3 right-3 bg-bark/75 backdrop-blur-xs text-white text-[11px] font-heading font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+          ${d.tag ? `<span class="absolute top-3 left-3 bg-accent text-text-dark text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">${esc(d.tag)}</span>` : ''}
+          <span class="absolute bottom-3 right-3 bg-primary/80 backdrop-blur-xs text-white text-[11px] font-heading font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
             ${icon('camera', 'w-3 h-3')} 6 Footage
           </span>
         </div>
         <div class="p-5 flex flex-col flex-1">
-          <p class="font-heading font-bold text-ink text-lg">${esc(d.name)}</p>
+          <p class="font-heading font-bold text-text-dark text-lg">${esc(d.name)}</p>
           <p class="text-xs text-muted mt-1 flex items-center gap-1.5">
-            ${icon('map-pin', 'w-3.5 h-3.5 shrink-0')}${esc(d.area)}
+            ${icon('map-pin', 'w-3.5 h-3.5 shrink-0 text-accent')}${esc(d.area)}
           </p>
           <p class="text-sm text-muted leading-relaxed mt-3 flex-1">${esc(d.desc.slice(0, 110))}…</p>
           <div class="flex items-center justify-between mt-5 pt-4 border-t border-line-soft">
             <button type="button" data-dest-detail="${d.id}"
-                    class="inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-sage-deep border-b-2 border-sage pb-0.5 transition-colors">
+                    class="inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-primary border-b-2 border-accent pb-0.5 hover:text-primary-hover transition-colors">
               ${State.locale === 'en' ? 'View 6 footages' : 'Lihat 6 footage'} ${icon('arrow-right', 'w-3.5 h-3.5')}
             </button>
           </div>
@@ -451,17 +451,17 @@ const Destinations = {
     body.innerHTML = `
       <div class="relative aspect-[16/9] img-shell">
         ${coverMedia(d, 'w-full h-full object-cover')}
-        <div class="absolute inset-0 bg-bark/45"></div>
+        <div class="absolute inset-0 bg-primary/50"></div>
         <button type="button" data-close-dest aria-label="${State.locale === 'en' ? 'Close' : 'Tutup'}"
-                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-bark/50 hover:bg-bark/70 flex items-center justify-center text-white">
+                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-primary/60 hover:bg-primary/80 flex items-center justify-center text-white">
           ${icon('x', 'w-5 h-5')}
         </button>
         <div class="absolute bottom-5 left-6 right-6">
           <div class="flex items-center gap-3 flex-wrap">
             <h3 class="font-heading font-bold text-white text-2xl">${esc(d.name)}</h3>
           </div>
-          <p class="text-white/75 text-xs mt-1 flex items-center gap-1.5">
-            ${icon('map-pin', 'w-3.5 h-3.5')}${esc(d.area)}
+          <p class="text-white/80 text-xs mt-1 flex items-center gap-1.5">
+            ${icon('map-pin', 'w-3.5 h-3.5 text-accent')}${esc(d.area)}
           </p>
         </div>
       </div>
@@ -530,10 +530,10 @@ const Hotels = {
         <div class="p-5 flex flex-col flex-1">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <p class="font-heading font-bold text-ink text-base">${esc(r.name)}</p>
+              <p class="font-heading font-bold text-text-dark text-base">${esc(r.name)}</p>
               <p class="text-xs text-muted mt-0.5">${esc(r.hotelName)} · ${esc(r.area)}</p>
             </div>
-            <span class="shrink-0 text-[11px] font-heading font-semibold uppercase tracking-wider bg-sage-tint text-sage-deep px-2.5 py-1 rounded-full">${esc(r.type)}</span>
+            <span class="shrink-0 text-[11px] font-heading font-semibold uppercase tracking-wider bg-primary/10 text-primary px-2.5 py-1 rounded-full">${esc(r.type)}</span>
           </div>
 
           <p class="text-sm text-muted leading-relaxed mt-3">${esc(r.desc)}</p>
@@ -549,13 +549,13 @@ const Hotels = {
           <div class="mt-auto pt-5 flex items-end justify-between gap-3">
             <div>
               ${r.rate
-                ? `<p class="font-heading font-bold text-ink text-lg">${rupiah(r.rate)}</p>
+                ? `<p class="font-heading font-bold text-text-dark text-lg">${rupiah(r.rate)}</p>
                    <p class="text-xs text-muted">${State.locale === 'en' ? 'per room / night' : 'per kamar / malam'}</p>`
-                : `<p class="font-heading font-bold text-ink text-base">${State.locale === 'en' ? 'Contact reservations' : 'Hubungi reservasi'}</p>
+                : `<p class="font-heading font-bold text-text-dark text-base">${State.locale === 'en' ? 'Contact reservations' : 'Hubungi reservasi'}</p>
                    <p class="text-xs text-muted">${State.locale === 'en' ? 'rate not yet published' : 'tarif belum dipublikasikan'}</p>`}
             </div>
             <a href="https://wa.me/628216402221" target="_blank" rel="noopener"
-              class="inline-flex items-center gap-2 bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Contact WhatsApp' : 'Hubungi WhatsApp'}</a>
+              class="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-text-dark font-heading font-bold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm">${State.locale === 'en' ? 'Contact WhatsApp' : 'Hubungi WhatsApp'}</a>
           </div>
         </div>
       </article>`).join('');
@@ -568,7 +568,7 @@ const Hotels = {
                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
         </div>
         <div class="p-5 flex flex-col flex-1">
-          <p class="font-heading font-bold text-ink text-base">${esc(h.name)}</p>
+          <p class="font-heading font-bold text-text-dark text-base">${esc(h.name)}</p>
           <p class="text-xs text-muted mt-0.5">${esc(h.area)}</p>
           <p class="text-sm text-muted leading-relaxed mt-3">${esc(h.desc)}</p>
           <div class="flex flex-wrap gap-1.5 mt-4">
@@ -577,7 +577,7 @@ const Hotels = {
           </div>
           <div class="mt-auto pt-5">
             <a href="https://wa.me/628216402221" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 bg-clay hover:bg-clay-deep text-white font-heading font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">${State.locale === 'en' ? 'Contact Reservation Team' : 'Hubungi Tim Reservasi'}</a>
+               class="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-text-dark font-heading font-bold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm">${State.locale === 'en' ? 'Contact Reservation Team' : 'Hubungi Tim Reservasi'}</a>
           </div>
         </div>
       </article>`).join('');

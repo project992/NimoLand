@@ -18,31 +18,31 @@ const video = FOOTAGE[h.id]?.aerial;
 const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
 ---
 <div class="view active" data-view="item-detail">
-  <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
+  <section class="bg-primary pt-32 pb-16 lg:pt-40 lg:pb-20">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
       <a href="/penginapan" data-route="hotels"
-         class="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-heading mb-8 transition-colors">
+         class="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-heading mb-8 transition-colors bg-primary/50 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 w-fit">
         <ArrowLeft class="w-4 h-4" /> Semua penginapan
       </a>
       <div class="flex flex-wrap items-center gap-4">
-        <p class="eyebrow text-white/70 mb-0">
-          <span class="w-6 h-px bg-white/40"></span> {h.area}
+        <p class="eyebrow text-accent mb-0">
+          <span class="w-6 h-px bg-accent/60"></span> {h.area}
         </p>
       </div>
       <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4">
         {h.name}
       </h1>
-      <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+      <p class="text-white/80 text-sm sm:text-base mt-5 max-w-xl">
         {h.desc}
       </p>
     </div>
   </section>
 
-  <section class="bg-canvas py-14 lg:py-20">
+  <section class="bg-background py-14 lg:py-20">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
       <div class="grid lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-          <h2 class="font-heading font-semibold text-ink text-xl mb-4">Tipe Kamar</h2>
+          <h2 class="font-heading font-semibold text-text-dark text-xl mb-4">Tipe Kamar</h2>
           {h.rooms.length === 0 ? (
             <div class="card p-7 text-center">
               <p class="font-heading font-semibold text-ink text-lg">Reservasi via Tim Kami</p>

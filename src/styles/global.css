@@ -18,71 +18,73 @@ body { overflow-x: clip; }
    - Dark sections use `bark`, never black.
    ===================================================================== */
 @theme {
-  /* Surfaces */
-  --color-canvas:     #FBFAF7;  /* page background, warm off-white */
-  --color-surface:    #FFFFFF;  /* cards */
-  --color-paper:      #F3F1EB;  /* recessed panels, table headers */
+  /* Core Custom Colors */
+  --color-primary:      #1B4332;  /* navbar, dark sections, flagship dark elements */
+  --color-primary-hover:#143527;
+  --color-primary-soft: #265C45;
+  --color-primary-tint: #E8EFEA;
 
-  /* Dark sections (replaces the old near-black #1B3B2B) */
-  --color-bark:       #333D37;
-  --color-bark-soft:  #46524A;
+  --color-background:   #F7F4EC;  /* light section backgrounds replacing bg-gray, page canvas */
+  --color-surface:      #FFFFFF;  /* cards, elevated containers */
+  --color-paper:        #EFECE2;  /* recessed panels, table headers, pill background */
 
-  /* Primary interactive — soft sage */
-  --color-sage:       #7E9B85;
-  --color-sage-deep:  #5E7A66;
-  --color-sage-tint:  #EBF1EC;
+  --color-accent:       #C9A96A;  /* CTA buttons, active underlines, hover highlights */
+  --color-accent-hover: #B59353;
+  --color-accent-tint:  #FAF5EB;
 
-  /* Accent — muted earth / clay. Replaces the saturated gold #D9A441. */
-  --color-clay:       #B08D65;
-  --color-clay-deep:  #94734E;
-  --color-clay-tint:  #F5EEE5;
+  --color-text-dark:    #1F2A24;  /* main dark text (AA-accessible, contrast > 12:1) */
+  --color-muted:        #506056;  /* secondary text (AA-accessible, contrast > 5.5:1) */
 
-  /* Text */
-  --color-ink:        #2B322D;
-  --color-muted:      #6E7B72;
+  /* Semantic aliases for consistent component support */
+  --color-canvas:       var(--color-background);
+  --color-bark:         var(--color-primary);
+  --color-bark-soft:    var(--color-primary-soft);
+  --color-sage:         var(--color-primary);
+  --color-sage-deep:    var(--color-primary-hover);
+  --color-sage-tint:    var(--color-primary-tint);
+  --color-clay:         var(--color-accent);
+  --color-clay-deep:    var(--color-accent-hover);
+  --color-clay-tint:    var(--color-accent-tint);
+  --color-ink:          var(--color-text-dark);
+  --color-line:         #E2DDD0;
+  --color-line-soft:    #ECE7DA;
 
-  /* Lines */
-  --color-line:       #E4E1D9;
-  --color-line-soft:  #EFEDE7;
-
-  /* Status — desaturated to sit beside the soft palette */
-  --color-ok:         #4F7A5C;
-  --color-ok-tint:    #EDF3EE;
-  --color-info:       #5A7183;
-  --color-info-tint:  #EDF1F4;
-  --color-warn:       #A0743C;
-  --color-warn-tint:  #F7EFE3;
-  --color-danger:     #A35A52;
-  --color-danger-tint:#F7EDEC;
+  /* Status */
+  --color-ok:           #2D6A4F;
+  --color-ok-tint:      #E8F3ED;
+  --color-info:         #3D5A80;
+  --color-info-tint:    #E9EFF5;
+  --color-warn:         #B07D2B;
+  --color-warn-tint:    #FAF3E6;
+  --color-danger:       #B23B3B;
+  --color-danger-tint:  #FAECEC;
 
   --font-heading: 'Spectral', Georgia, 'Times New Roman', serif;
   --font-body:    'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* One soft shadow scale — no heavy drop shadows */
-  --shadow-soft:  0 1px 2px rgba(43, 50, 45, .04), 0 4px 12px rgba(43, 50, 45, .05);
-  --shadow-lift:  0 2px 4px rgba(43, 50, 45, .05), 0 12px 28px rgba(43, 50, 45, .08);
+  /* Soft shadow scale matching the warm organic theme */
+  --shadow-soft:  0 1px 3px rgba(31, 42, 36, .04), 0 4px 14px rgba(31, 42, 36, .05);
+  --shadow-lift:  0 2px 6px rgba(31, 42, 36, .06), 0 14px 30px rgba(31, 42, 36, .09);
 }
 
 @layer base {
   html { scroll-behavior: smooth; }
   body {
     font-family: var(--font-body);
-    background: var(--color-canvas);
-    color: var(--color-ink);
+    background: var(--color-background);
+    color: var(--color-text-dark);
   }
   .font-heading { font-family: var(--font-heading); }
 
   /* Consistent focus ring, palette-matched */
   :focus-visible {
-    outline: 2px solid var(--color-sage-deep);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 }
 
 @layer components {
-  /* ---- Buttons: solid fills only, no gradients ----
-     Tailwind v4 cannot `@apply` a custom class, so the shared base is a
-     selector list rather than `.btn-primary { @apply btn }`. */
+  /* ---- Buttons ---- */
   .btn, .btn-primary, .btn-accent, .btn-dark, .btn-outline, .btn-ghost-light {
     @apply inline-flex items-center justify-center gap-2 font-heading font-semibold
            text-sm rounded-full px-6 py-3 transition-colors;
@@ -93,16 +95,16 @@ body { overflow-x: clip; }
     @apply opacity-40 cursor-not-allowed;
   }
 
-  .btn-primary { @apply bg-sage text-white; }
-  .btn-primary:not(:disabled):hover { @apply bg-sage-deep; }
+  .btn-primary { @apply bg-primary text-white; }
+  .btn-primary:not(:disabled):hover { @apply bg-primary-hover; }
 
-  .btn-accent { @apply bg-clay text-white; }
-  .btn-accent:not(:disabled):hover { @apply bg-clay-deep; }
+  .btn-accent { @apply bg-accent text-text-dark font-bold; }
+  .btn-accent:not(:disabled):hover { @apply bg-accent-hover text-text-dark; }
 
-  .btn-dark { @apply bg-bark text-white; }
-  .btn-dark:not(:disabled):hover { @apply bg-bark-soft; }
+  .btn-dark { @apply bg-primary text-white; }
+  .btn-dark:not(:disabled):hover { @apply bg-primary-soft; }
 
-  .btn-outline { @apply border border-line text-ink bg-surface; }
+  .btn-outline { @apply border border-line text-text-dark bg-surface; }
   .btn-outline:not(:disabled):hover { @apply bg-paper; }
 
   .btn-ghost-light { @apply border border-white/25 text-white; }
@@ -119,12 +121,12 @@ body { overflow-x: clip; }
   /* ---- Form fields ---- */
   .field {
     @apply w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm
-           text-ink placeholder:text-muted/70 transition-colors;
+           text-text-dark placeholder:text-muted/70 transition-colors;
   }
-  .field:focus { @apply outline-none border-sage ring-2 ring-sage/25; }
+  .field:focus { @apply outline-none border-primary ring-2 ring-primary/20; }
   .field-error { @apply border-danger; }
 
-  .label { @apply block font-heading text-sm font-semibold text-ink mb-1.5; font-family: var(--font-body); }
+  .label { @apply block font-heading text-sm font-semibold text-text-dark mb-1.5; font-family: var(--font-body); }
 
   /* ---- Inline messages ---- */
   .note, .note-error, .note-warn, .note-info {
@@ -132,19 +134,19 @@ body { overflow-x: clip; }
   }
   .note-error { @apply bg-danger-tint border-danger/25 text-danger; }
   .note-warn  { @apply bg-warn-tint   border-warn/25   text-warn; }
-  .note-info  { @apply bg-sage-tint   border-sage/25   text-sage-deep; }
+  .note-info  { @apply bg-primary-tint border-primary/25 text-primary; }
 
   /* ---- Filter pills ---- */
   .pill {
     @apply font-heading text-sm font-medium px-5 py-2.5 rounded-full border
-           border-line bg-surface text-ink transition-colors;
+           border-line bg-surface text-text-dark transition-colors;
     font-family: var(--font-body);
   }
   .pill:hover { @apply bg-paper; }
-  .pill[aria-pressed="true"] { @apply bg-sage border-sage text-white; }
-  .pill[aria-pressed="true"]:hover { @apply bg-sage-deep border-sage-deep; }
+  .pill[aria-pressed="true"] { @apply bg-primary border-primary text-white; }
+  .pill[aria-pressed="true"]:hover { @apply bg-primary-hover border-primary-hover; }
 
-  /* ---- Image placeholder: flat tint, not a gradient ---- */
+  /* ---- Image placeholder ---- */
   .img-shell { @apply bg-paper; }
 
   /* ---- Section eyebrow ---- */
@@ -158,11 +160,11 @@ body { overflow-x: clip; }
    Component behaviour
    ===================================================================== */
 
-/* ---- Navbar: flat translucent, no gradient ---- */
+/* ---- Navbar: Primary Forest Green dark base & frosted glass ---- */
 #navbar {
-  background: rgba(51, 61, 55, .32);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(27, 67, 50, 0.40);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: transform .32s ease, background .3s ease, box-shadow .3s ease;
 }
 #navbar.hidden-nav {
@@ -170,29 +172,30 @@ body { overflow-x: clip; }
 }
 #navbar.scrolled,
 #navbar.solid {
-  background: rgba(251, 250, 247, .94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 1px 0 var(--color-line);
+  background: rgba(27, 67, 50, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(201, 169, 106, 0.20), 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 .nav-link { color: rgba(255, 255, 255, .88); }
 #navbar.scrolled .nav-link,
-#navbar.solid .nav-link { color: var(--color-muted); }
+#navbar.solid .nav-link { color: rgba(255, 255, 255, .88); }
 #navbar.scrolled .nav-link:hover,
 #navbar.solid .nav-link:hover,
 #navbar.scrolled .nav-link.active,
-#navbar.solid .nav-link.active { color: var(--color-sage-deep); }
-.nav-link.active { color: #fff; }
+#navbar.solid .nav-link.active,
+.nav-link:hover,
+.nav-link.active { color: var(--color-accent); }
 
 .brand-main { color: #fff; }
 #navbar.scrolled .brand-main,
-#navbar.solid .brand-main { color: var(--color-ink); }
+#navbar.solid .brand-main { color: #fff; }
 .brand-sub { color: rgba(255, 255, 255, .72); border-color: rgba(255, 255, 255, .3); }
 #navbar.scrolled .brand-sub,
-#navbar.solid .brand-sub { color: var(--color-sage-deep); border-color: var(--color-line); }
+#navbar.solid .brand-sub { color: var(--color-accent); border-color: rgba(201, 169, 106, 0.3); }
 .burger { color: #fff; }
 #navbar.scrolled .burger,
-#navbar.solid .burger { color: var(--color-ink); }
+#navbar.solid .burger { color: #fff; }
 
 /* ---- Dropdown ---- */
 .has-dropdown:hover .dropdown-panel,

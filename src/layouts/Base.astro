@@ -85,7 +85,7 @@ const ogUrl = canonical ?? u(Astro.url.pathname);
   <script type="application/json" id="session-data" set:html={jsonForScript(user)} is:inline />
   <script type="application/json" id="locale-data" set:html={jsonForScript({ locale, messages: locale === 'en' ? enMessages : idMessages })} is:inline />
 </head>
-<body class:list={['bg-canvas text-ink', bodyClass]}>
+<body class:list={['bg-background text-text-dark', bodyClass]}>
   <slot />
 
   <div
@@ -93,7 +93,7 @@ const ogUrl = canonical ?? u(Astro.url.pathname);
     role="status"
     aria-live="polite"
     class="fixed left-1/2 -translate-x-1/2 bottom-8 z-[99] opacity-0 translate-y-4 pointer-events-none
-           bg-bark text-white text-sm font-heading px-5 py-3 rounded-full shadow-lg"
+           bg-primary text-white text-sm font-heading px-5 py-3 rounded-full shadow-lg border border-accent/20"
   >
   </div>
 </body>

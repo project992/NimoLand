@@ -7,13 +7,13 @@ import ChevronRight from '@lucide/astro/icons/chevron-right';
    destination detail (body injected by the SPA) and the gallery lightbox. */
 ---
 <!-- MODAL: DETAIL DESTINASI -->
-<div id="destModal" class="hidden fixed inset-0 z-92 bg-bark/50 p-0 sm:p-4 overflow-y-auto"
+<div id="destModal" class="hidden fixed inset-0 z-92 bg-primary/60 backdrop-blur-sm p-0 sm:p-4 overflow-y-auto"
      role="dialog" aria-modal="true" aria-label="Detail destinasi">
   <div id="destModalBody" class="bg-surface sm:rounded-2xl w-full sm:max-w-2xl mx-auto min-h-full sm:min-h-0 sm:my-6 shadow-lg overflow-hidden"></div>
 </div>
 
 <!-- MODAL: LIGHTBOX -->
-<div id="lightbox" class="hidden fixed inset-0 z-95 flex items-center justify-center p-4 bg-bark/95"
+<div id="lightbox" class="hidden fixed inset-0 z-95 flex items-center justify-center p-4 bg-primary/95 backdrop-blur-md"
      role="dialog" aria-modal="true" aria-label="Galeri foto">
   <button id="lightboxClose" type="button" aria-label="Tutup"
           class="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white z-10">

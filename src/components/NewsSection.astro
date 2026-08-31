@@ -6,16 +6,16 @@ import { NEWS_SPOTLIGHT, MEDIA_VIDEOS } from '../lib/data.js';
 
 const locale = Astro.locals.locale ?? 'id';
 ---
-<section id="berita" class="bg-surface py-20 lg:py-28 border-t border-bark/5">
+<section id="berita" class="bg-background py-20 lg:py-28 border-t border-line-soft">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
     
     <!-- Section Header -->
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
       <div>
-        <p class="eyebrow text-sage-deep mb-4">
-          <span class="w-6 h-px bg-sage"></span> {locale === 'en' ? 'National News & Media' : 'Berita & Liputan Media Nasional'}
+        <p class="eyebrow text-primary mb-4">
+          <span class="w-6 h-px bg-primary"></span> {locale === 'en' ? 'National News & Media' : 'Berita & Liputan Media Nasional'}
         </p>
-        <h2 class="font-heading font-bold text-ink text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-xl">
+        <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-xl">
           {locale === 'en' ? 'Nimo Land Group in National Spotlight' : 'Nimo Land Group dalam Sorotan Nasional'}
         </h2>
       </div>
@@ -28,27 +28,27 @@ const locale = Astro.locals.locale ?? 'id';
 
     <!-- SPOTLIGHT: CNN INDONESIA AWARDS 2024 -->
     <div class="mb-16 reveal">
-      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1b1e1b] via-bark to-[#151815] text-white shadow-2xl border border-white/10">
+      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1B4332] via-[#16382A] to-[#0F261C] text-white shadow-2xl border border-white/10">
         <div class="grid lg:grid-cols-12 items-stretch">
           
           <!-- Left Content -->
           <div class="lg:col-span-7 p-8 sm:p-10 lg:p-12 flex flex-col justify-between z-10">
             <div>
               <div class="flex flex-wrap items-center gap-3 mb-5">
-                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/35 shadow-sm">
-                  <Trophy class="w-4 h-4 text-amber-400" />
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-accent/20 text-accent border border-accent/40 shadow-sm">
+                  <Trophy class="w-4 h-4 text-accent" />
                   {NEWS_SPOTLIGHT.badge}
                 </span>
                 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#CC0000] text-white">
                   {NEWS_SPOTLIGHT.source}
                 </span>
-                <span class="text-xs text-white/60">
+                <span class="text-xs text-white/70">
                   {NEWS_SPOTLIGHT.author} · {NEWS_SPOTLIGHT.date} ({NEWS_SPOTLIGHT.time}) · {NEWS_SPOTLIGHT.readTime}
                 </span>
               </div>
 
               <div class="inline-block px-3 py-1 rounded bg-white/10 text-xs font-medium text-white/90 mb-4 border border-white/10">
-                Kategori Resmi: <strong class="text-amber-300">{NEWS_SPOTLIGHT.award}</strong>
+                Kategori Resmi: <strong class="text-accent">{NEWS_SPOTLIGHT.award}</strong>
               </div>
 
               <h3 class="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-white leading-snug mb-4">
@@ -81,9 +81,9 @@ const locale = Astro.locals.locale ?? 'id';
             <img class="w-full h-full object-cover"
                  src={NEWS_SPOTLIGHT.img} data-fallback={NEWS_SPOTLIGHT.fb}
                  alt={NEWS_SPOTLIGHT.title} loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#1b1e1b] via-bark/30 to-transparent"></div>
-            <div class="absolute bottom-4 right-4 bg-bark/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/15 text-[11px] text-white/95 shadow-lg">
-              <p class="font-semibold text-amber-300">CNN Indonesia Awards 2024</p>
+            <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-primary via-primary/30 to-transparent"></div>
+            <div class="absolute bottom-4 right-4 bg-primary/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/15 text-[11px] text-white/95 shadow-lg">
+              <p class="font-semibold text-accent">CNN Indonesia Awards 2024</p>
               <p class="text-[10px] text-white/70">Jawa Barat Menyala untuk Indonesia Maju</p>
             </div>
           </div>
@@ -95,8 +95,8 @@ const locale = Astro.locals.locale ?? 'id';
     <!-- DOKUMENTASI & VIDEO RESMI YOUTUBE -->
     <div>
       <div class="flex items-center justify-between mb-6 reveal">
-        <h3 class="font-heading font-bold text-ink text-xl sm:text-2xl flex items-center gap-2">
-          <Play class="w-5 h-5 text-sage-deep fill-sage-deep/20" />
+        <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2">
+          <Play class="w-5 h-5 text-primary fill-primary/20" />
           {locale === 'en' ? 'Official Video & Documentation' : 'Dokumentasi & Video Resmi Nimo Land Group'}
         </h3>
       </div>
@@ -104,10 +104,10 @@ const locale = Astro.locals.locale ?? 'id';
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
         {MEDIA_VIDEOS.map(vid => (
           <a href={vid.url} target="_blank" rel="noopener noreferrer"
-             class="group relative rounded-2xl overflow-hidden bg-bark text-white min-h-[320px] sm:min-h-[360px] shadow-xl reveal flex flex-col justify-end border border-white/10 hover:border-white/25 transition-all">
+             class="group relative rounded-2xl overflow-hidden bg-primary text-white min-h-[320px] sm:min-h-[360px] shadow-xl reveal flex flex-col justify-end border border-white/10 hover:border-accent/40 transition-all">
             <img class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-65 transition-opacity group-hover:scale-105 duration-700"
                  src={vid.thumbnail} alt={vid.title} loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-bark via-bark/60 to-black/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-black/30"></div>
 
             <!-- YouTube Red Play Button Overlay -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -117,7 +117,7 @@ const locale = Astro.locals.locale ?? 'id';
             </div>
 
             <!-- Video Info Bottom Overlay -->
-            <div class="relative z-10 p-6 sm:p-7 w-full bg-gradient-to-t from-bark via-bark/90 to-transparent">
+            <div class="relative z-10 p-6 sm:p-7 w-full bg-gradient-to-t from-primary via-primary/90 to-transparent">
               <div class="flex flex-wrap items-center gap-2 mb-2.5">
                 <span class="inline-block px-2.5 py-0.5 rounded bg-red-600 text-[11px] font-bold text-white shadow">
                   YouTube
@@ -129,13 +129,13 @@ const locale = Astro.locals.locale ?? 'id';
                   {vid.channel}
                 </span>
               </div>
-              <h4 class="font-heading font-bold text-white text-lg sm:text-xl leading-snug group-hover:text-amber-300 transition-colors mb-2">
+              <h4 class="font-heading font-bold text-white text-lg sm:text-xl leading-snug group-hover:text-accent transition-colors mb-2">
                 {vid.title}
               </h4>
               <p class="text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-3">
                 {vid.desc}
               </p>
-              <div class="inline-flex items-center gap-2 text-xs font-semibold text-amber-300 group-hover:text-amber-200">
+              <div class="inline-flex items-center gap-2 text-xs font-semibold text-accent group-hover:text-accent-hover">
                 <span>Tonton Video di YouTube</span>
                 <ExternalLink class="w-3.5 h-3.5" />
               </div>
