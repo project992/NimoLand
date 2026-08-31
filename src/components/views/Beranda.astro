@@ -2,7 +2,6 @@
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import MapPin from '@lucide/astro/icons/map-pin';
 import Sunrise from '@lucide/astro/icons/sunrise';
-import NewsSection from '../NewsSection.astro';
 import { DESTINATIONS, HERO_SLIDES, MOMENTS, localSrc } from '../../lib/data.js';
 
 const { class: cls = 'view' } = Astro.props;
@@ -166,8 +165,5 @@ const t = key => Astro.locals.t(key);
       </div>
     </div>
   </section>
-
-  <!-- ============ BERITA & LIPUTAN MEDIA ============ -->
-  <NewsSection />
 
 </div>
