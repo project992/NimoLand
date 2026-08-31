@@ -326,7 +326,7 @@ export const MOMENTS = [
   { img:'/moments/tentang-02-cottage.jpg',    fb:'/moments/tentang-02-cottage.jpg' },
   { img:'/moments/tentang-03-skybridge.jpg',  fb:'/moments/tentang-03-skybridge.jpg' },
   { img:'/moments/tentang-04-malang.jpg',     fb:'/moments/tentang-04-malang.jpg' },
-  { img:'/moments/tentang-05-pinaru.jpg',     fb:'/moments/tentang-05-pinaru.jpg' },
+  { img:'/moments/tentang-05-nimoeye.jpg',    fb:'/moments/tentang-05-nimoeye.jpg' },
 ];
 
 export const GALLERY = [
