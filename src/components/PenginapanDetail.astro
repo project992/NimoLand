@@ -18,21 +18,37 @@ const video = FOOTAGE[h.id]?.aerial;
 const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
 ---
 <div class="view active" data-view="item-detail">
-  <section class="bg-primary pt-32 pb-16 lg:pt-40 lg:pb-20">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+  <!-- Hero Section with Background Video / Media Behind Text -->
+  <section class="relative bg-black pt-32 pb-20 lg:pt-44 lg:pb-28 overflow-hidden min-h-[440px] flex items-center">
+    
+    <!-- Background Video / Media Overlay -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <img src={h.img} alt="" class="absolute inset-0 w-full h-full object-cover opacity-90 scale-100" />
+
+      {isVideo && (
+        <video class="absolute inset-0 w-full h-full object-cover opacity-90 scale-100"
+               src={video} playsinline muted loop autoplay
+               preload="metadata" aria-label={`Video Background ${h.name}`}></video>
+      )}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent"></div>
+    </div>
+
+    <!-- Foreground Text Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 w-full">
       <a href="/penginapan" data-route="hotels"
-         class="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-heading mb-8 transition-colors bg-primary/50 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 w-fit">
+         class="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-heading mb-8 transition-colors bg-black/40 hover:bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 w-fit shadow-md">
         <ArrowLeft class="w-4 h-4" /> Semua penginapan
       </a>
       <div class="flex flex-wrap items-center gap-4">
-        <p class="eyebrow text-accent mb-0">
-          <span class="w-6 h-px bg-accent/60"></span> {h.area}
+        <p class="eyebrow text-accent mb-0 font-medium drop-shadow">
+          <span class="w-6 h-px bg-accent"></span> {h.area}
         </p>
       </div>
-      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4">
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4 drop-shadow-lg">
         {h.name}
       </h1>
-      <p class="text-white/80 text-sm sm:text-base mt-5 max-w-xl">
+      <p class="text-white text-sm sm:text-base mt-5 max-w-xl leading-relaxed drop-shadow-md bg-black/30 backdrop-blur-[2px] p-4 rounded-xl border border-white/10">
         {h.desc}
       </p>
     </div>
