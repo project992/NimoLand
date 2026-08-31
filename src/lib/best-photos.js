@@ -82,12 +82,12 @@ export const BEST_PHOTOS = {
     "/brand/nimo-zoo/nimo-zoo-06.jpg"
   ],
   "pinaru-park": [
-    "/brand/pinaru-park/pinaru-park-01.png",
-    "/brand/pinaru-park/pinaru-park-02.png",
-    "/brand/pinaru-park/pinaru-park-03.png",
-    "/brand/pinaru-park/pinaru-park-05.jpg",
-    "/brand/pinaru-park/pinaru-park-06.jpg",
-    "/brand/pinaru-park/pinaru-park-07.jpg"
+    "/brand/pinaru-park/pinaru-01-pine-forest.jpg",
+    "/brand/pinaru-park/pinaru-02-rainbow-slide.jpg",
+    "/brand/pinaru-park/pinaru-03-water-attraction.jpg",
+    "/brand/pinaru-park/pinaru-04-nature-zone.jpg",
+    "/brand/pinaru-park/pinaru-05-pool-recreation.jpg",
+    "/brand/pinaru-park/pinaru-06-lush-pines.jpg"
   ],
   "punceling-park": [
     "/brand/punceling-park/punceling-park-01.jpg",

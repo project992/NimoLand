@@ -146,10 +146,17 @@ export const DESTINATIONS = [
     gallery:[MSK(1), MSK(2), MSK(3), '/brand/malang-skyland/malang-skyland-IMG_6941.jpg', MSK(5), MSK(8)] },
 
   { id:'pinaru-park', name:'Pinaru Park', type:'keluarga', area:'Ciater, Subang',
-    img:'/brand/pinaru-park/pinaru-hero-ultra-hd.jpg', fb:'/brand/pinaru-park/pinaru-hero-ultra-hd.jpg',
+    img:'/brand/pinaru-park/pinaru-01-pine-forest.jpg', fb:'/brand/pinaru-park/pinaru-01-pine-forest.jpg',
     desc:'Destinasi ramah keluarga yang memadukan keseruan wahana modern dengan kesegaran alam pegunungan. Berada di bawah rindangnya pohon pinus, kami menghadirkan area bermain yang aman dan menyenangkan untuk segala usia — dari wahana yang memacu adrenalin di seluncuran pelangi ikonik hingga bersantai di udara segar.',
     highlights:['Rainbow Slide','Water Slide','ATV','Luge Car','Jacuzzi','Aviary & Mini Zoo'],
-    gallery:['/brand/pinaru-park/pinaru-hero-ultra-hd.jpg', '/brand/pinaru-park/pinaru-slide-ultra-hd.jpg', '/brand/pinaru-park/pinaru-attraction-ultra-hd.jpg', PR(2), PR(5), PR(7)] },
+    gallery:[
+      '/brand/pinaru-park/pinaru-01-pine-forest.jpg',
+      '/brand/pinaru-park/pinaru-02-rainbow-slide.jpg',
+      '/brand/pinaru-park/pinaru-03-water-attraction.jpg',
+      '/brand/pinaru-park/pinaru-04-nature-zone.jpg',
+      '/brand/pinaru-park/pinaru-05-pool-recreation.jpg',
+      '/brand/pinaru-park/pinaru-06-lush-pines.jpg'
+    ] },
 
   { id:'nimo-kaldera-toba', name:'Nimo Kaldera Toba', type:'alam', area:'Danau Toba, Sumut',
     img:KLT(1), fb:KLT(1),
