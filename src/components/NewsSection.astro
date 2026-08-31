@@ -104,10 +104,11 @@ const locale = Astro.locals.locale ?? 'id';
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {NEWS_ARTICLES.map(art => (
-          <article class="card card-hover overflow-hidden flex flex-col justify-between group bg-surface border border-line-soft rounded-2xl reveal">
+          <a href={art.url} target="_blank" rel="noopener noreferrer"
+             class="card card-hover overflow-hidden flex flex-col justify-between group bg-surface border border-line-soft rounded-2xl reveal transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-accent/40 block">
             <div>
               <div class="relative aspect-[16/10] overflow-hidden img-shell">
-                <img src={art.img} alt={art.title} loading="lazy"
+                <img src={art.img} data-fallback={art.fb} alt={art.title} loading="lazy"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <span class="absolute top-3 left-3 bg-primary/90 backdrop-blur-xs text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
                   {art.category}
@@ -132,13 +133,12 @@ const locale = Astro.locals.locale ?? 'id';
             </div>
 
             <div class="p-5 sm:p-6 pt-0 mt-auto">
-              <a href={art.url} target="_blank" rel="noopener noreferrer"
-                 class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-heading font-semibold text-primary border-b-2 border-accent pb-0.5 hover:text-primary-hover transition-colors">
+              <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-heading font-semibold text-primary border-b-2 border-accent pb-0.5 group-hover:text-primary-hover transition-colors">
                 <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
                 <ExternalLink class="w-3.5 h-3.5" />
-              </a>
+              </span>
             </div>
-          </article>
+          </a>
         ))}
       </div>
     </div>
