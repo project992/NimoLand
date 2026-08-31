@@ -27,8 +27,9 @@ const otherLocale = LOCALES.find(l => l !== locale);
         <img src="/logo.png" alt="Nimo Land Group" class="h-9 w-auto transition-all" />
       </a>
 
-      <nav class="hidden lg:flex items-center gap-7 font-heading text-sm font-medium">
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-7 font-heading text-sm font-medium">
         <a href="/" data-route="beranda" class={"nav-link transition-colors" + navActive('beranda')}>{t('nav.beranda')}</a>
+        <a href="/tentang-kami" class={"nav-link transition-colors" + navActive('tentang-kami')}>{t('nav.about')}</a>
 
         <div class="has-dropdown relative">
           <a href="/destinasi" data-route="destinations" class={"nav-link flex items-center gap-1 transition-colors" + navActive('destinations')}>
@@ -84,7 +85,8 @@ const otherLocale = LOCALES.find(l => l !== locale);
           </div>
         </div>
 
-        <a href="/galeri" data-route="galeri" class={"nav-link transition-colors" + navActive('galeri')}>{t('nav.galeri')}</a>
+        <a href="/#partnership" class="nav-link transition-colors">{t('nav.partnership')}</a>
+        <a href="/#berita" class="nav-link transition-colors">{t('nav.berita')}</a>
         <a href="/kontak" data-route="kontak" class={"nav-link transition-colors" + navActive('kontak')}>{t('nav.kontak')}</a>
       </nav>
 
@@ -136,6 +138,7 @@ const otherLocale = LOCALES.find(l => l !== locale);
   <div id="mobileMenu" class="lg:hidden hidden bg-surface border-t border-line-soft shadow-lg max-h-[80vh] overflow-y-auto">
     <nav class="px-5 py-4 flex flex-col gap-1 font-heading text-sm text-ink">
       <a href="/" data-route="beranda" class="py-3 border-b border-line-soft">{t('nav.beranda')}</a>
+      <a href="/tentang-kami" class="py-3 border-b border-line-soft">{t('nav.about')}</a>
 
       <details class="border-b border-line-soft">
         <summary class="py-3 cursor-pointer list-none flex items-center justify-between">
@@ -159,7 +162,8 @@ const otherLocale = LOCALES.find(l => l !== locale);
         </ul>
       </details>
 
-      <a href="/galeri" data-route="galeri" class="py-3 border-b border-line-soft">{t('nav.galeri')}</a>
+      <a href="/#partnership" class="py-3 border-b border-line-soft">{t('nav.partnership')}</a>
+      <a href="/#berita" class="py-3 border-b border-line-soft">{t('nav.berita')}</a>
       <a href="/kontak" data-route="kontak" class="py-3 border-b border-line-soft">{t('nav.kontak')}</a>
 
       {/* Mobile language switcher */}

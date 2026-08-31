@@ -1,0 +1,100 @@
+﻿---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import MapPin from '@lucide/astro/icons/map-pin';
+import { FLAGSHIP_DESTINATIONS } from '../../lib/data.js';
+
+const locale = Astro.locals.locale ?? 'id';
+---
+<section id="flagships" class="bg-background py-20 lg:py-28 border-t border-line-soft">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 lg:mb-16 reveal">
+      <div>
+        <p class="eyebrow text-primary mb-3">
+          <span class="w-6 h-px bg-primary"></span>
+          {locale === 'en' ? 'Flagship Portfolio' : 'Portofolio Destinasi Utama'}
+        </p>
+        <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-xl">
+          {locale === 'en' ? 'Iconic Destinations & Theme Parks' : 'Destinasi Ikonik & Theme Park Unggulan'}
+        </h2>
+      </div>
+      <p class="text-muted text-sm sm:text-base max-w-md">
+        {locale === 'en'
+          ? 'Curated landmark developments delivering world-class visitor experiences and sustainable regional tourism growth.'
+          : 'Kawasan wisata mahakarya pilihan dengan daya tarik unik, arsitektur ikonik, dan standar keselamatan internasional.'}
+      </p>
+    </div>
+
+    <!-- Flagship Grid (2 cols large cards) -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {FLAGSHIP_DESTINATIONS.map((dest) => (
+        <article class="card card-hover overflow-hidden flex flex-col justify-between group bg-surface border border-line-soft rounded-3xl reveal transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-accent/40">
+          <div>
+            <!-- Cinematic Media Container -->
+            <div class="relative aspect-[16/11] overflow-hidden img-shell">
+              <img src={dest.img} data-fallback={dest.fb} alt={dest.name} loading="lazy"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              
+              <!-- Badge Tags -->
+              <div class="absolute top-4 left-4 flex flex-wrap gap-2">
+                <span class="bg-primary/95 backdrop-blur-md text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                  {dest.tag}
+                </span>
+              </div>
+              <span class="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md text-text-dark text-[11px] font-heading font-bold px-2.5 py-1 rounded-lg shadow-sm">
+                {dest.category}
+              </span>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-6 sm:p-7">
+              <div class="flex items-center gap-1.5 text-xs text-muted mb-2.5">
+                <MapPin class="w-3.5 h-3.5 text-primary shrink-0" />
+                <span class="line-clamp-1">{dest.area}</span>
+              </div>
+
+              <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl group-hover:text-primary transition-colors mb-3">
+                <a href={`/destinasi/${dest.id}`} data-route="destinations">
+                  {dest.name}
+                </a>
+              </h3>
+
+              <p class="text-muted text-xs sm:text-sm leading-relaxed line-clamp-3 mb-5">
+                {dest.desc}
+              </p>
+
+              <!-- Highlight Badges -->
+              <div class="flex flex-wrap gap-1.5 mb-2">
+                {dest.highlights.slice(0, 3).map((h) => (
+                  <span class="text-[11px] font-medium bg-background border border-line-soft text-muted px-2.5 py-1 rounded-full">
+                    {h}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Link -->
+          <div class="p-6 sm:p-7 pt-0 mt-auto border-t border-line-soft/40 flex items-center justify-between">
+            <a href={`/destinasi/${dest.id}`} data-route="destinations"
+               class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-heading font-bold text-primary hover:text-primary-hover group/link">
+              <span>{locale === 'en' ? 'Explore Destination' : 'Jelajahi Destinasi'}</span>
+              <ArrowRight class="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Bottom CTA: Explore All Destinations -->
+    <div class="mt-12 lg:mt-16 text-center reveal">
+      <a href="/destinasi" data-route="destinations"
+         class="btn-accent px-8 py-4 text-sm sm:text-base font-heading font-bold rounded-full shadow-lg hover:scale-105 transition-all inline-flex items-center gap-2">
+        <span>{locale === 'en' ? 'Explore All Destinations' : 'Jelajahi Seluruh Destinasi Nimo'}</span>
+        <ArrowRight class="w-4 h-4" />
+      </a>
+    </div>
+
+  </div>
+</section>

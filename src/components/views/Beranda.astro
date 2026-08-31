@@ -1,7 +1,8 @@
 ---
 import ArrowRight from '@lucide/astro/icons/arrow-right';
-import NewsSection from '../NewsSection.astro';
-import { DESTINATIONS, HERO_SLIDES, MOMENTS, localSrc } from '../../lib/data.js';
+import MessageSquare from '@lucide/astro/icons/message-square';
+import PresenceMap from '../home/PresenceMap.astro';
+import { HERO_SLIDES } from '../../lib/data.js';
 
 const { class: cls = 'view' } = Astro.props;
 const locale = Astro.locals.locale ?? 'id';
@@ -9,12 +10,12 @@ const t = key => Astro.locals.t(key);
 ---
 <div class={cls} data-view="beranda">
 
-  <!-- ============ HERO WITH CINEMATIC MONTAGE VIDEO ============ -->
+  <!-- ============ 1. CINEMATIC HERO HOMEPAGE ============ -->
   <section class="relative min-h-[100svh] flex items-end overflow-hidden bg-black">
     <!-- Cinematic Video Background & Fallback Poster -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
       <!-- High-res static fallback image -->
-      <img class="w-full h-full object-cover opacity-90 scale-100" alt=""
+      <img class="w-full h-full object-cover opacity-90 scale-100" alt="Nimo Land Group Background"
            src="/aimg/tAG8ngQWBpj62NH-sryt3zUUZ3FH.jpg" fetchpriority="high" loading="eager" />
 
       <!-- Montage Drone Video (Nimo Highland, Tea Resort, Ciater, Pinaru, Savia, Bali) -->
@@ -32,63 +33,66 @@ const t = key => Astro.locals.t(key);
     <!-- Hero Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pb-16 lg:pb-24 w-full">
       <h1 class="font-heading font-bold text-white text-4xl sm:text-6xl lg:text-7xl leading-[1.08] max-w-4xl drop-shadow-lg">
-        {t('hero.headline')}
+        {locale === 'en' ? "Building Indonesia’s Next Iconic Destinations" : "Building Indonesia's Next Iconic Destinations"}
       </h1>
 
       <div class="mt-4 max-w-2xl">
-        <p class="font-heading text-accent text-lg sm:text-2xl font-bold tracking-wide drop-shadow-md">
-          {t('hero.tagline')}
-        </p>
-        <p class="text-white/90 text-sm sm:text-base leading-relaxed mt-3 drop-shadow-sm max-w-xl">
-          {t('hero.deskripsi')}
+        <p class="text-white/90 text-sm sm:text-base lg:text-lg leading-relaxed mt-3 drop-shadow-md max-w-xl font-medium">
+          {locale === 'en'
+            ? 'Developing world-class destinations and resorts across Indonesia while creating sustainable economic impact for local communities.'
+            : 'Mengembangkan destinasi dan resort berkelas dunia di seluruh Indonesia sekaligus menciptakan dampak ekonomi berkelanjutan bagi masyarakat lokal.'}
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-4 mt-8">
         <a href="/destinasi" data-route="destinations"
-           class="btn-accent px-8 py-4 sm:text-base font-heading font-bold rounded-full shadow-lg hover:scale-105 transition-transform">
-          {t('hero.jelajahiDestinasi')}
+           class="btn-accent px-8 py-4 sm:text-base font-heading font-bold rounded-full shadow-lg hover:scale-105 transition-transform inline-flex items-center gap-2">
+          <span>{locale === 'en' ? 'Explore Nimo' : 'Explore Nimo'}</span>
+          <ArrowRight class="w-4 h-4" />
         </a>
-        <a href="/penginapan" data-route="hotels"
+        <a href="#partnership"
            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-heading font-semibold px-7 py-4 rounded-full backdrop-blur-md border border-white/20 transition-all text-sm sm:text-base">
-          {t('hero.lihatPenginapan')}
+          <MessageSquare class="w-4 h-4 text-accent" />
+          <span>{locale === 'en' ? 'Partner With Us' : 'Partner With Us'}</span>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ============ SECTION: NIMO IN NUMBERS ============ -->
+  <!-- ============ 2. NIMO IN NUMBERS (CLEAN CORPORATE ACHIEVEMENTS) ============ -->
   <section id="nimo-in-numbers" class="bg-primary text-white py-16 lg:py-24 relative overflow-hidden border-y border-white/10">
     <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C9A96A_1px,transparent_1px)] [background-size:24px_24px]"></div>
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 relative z-10">
       
       <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
         <p class="eyebrow text-accent justify-center mb-3">
-          <span class="w-6 h-px bg-accent"></span> {t('numbers.eyebrow')} <span class="w-6 h-px bg-accent"></span>
+          <span class="w-6 h-px bg-accent"></span> Nimo in Numbers <span class="w-6 h-px bg-accent"></span>
         </p>
         <h2 class="font-heading font-bold text-white text-3xl sm:text-4xl lg:text-5xl leading-tight">
-          {t('numbers.judul')}
+          {locale === 'en' ? 'National Scale & Proven Track Record' : 'Skala Nasional & Rekam Jejak Terbukti'}
         </h2>
         <p class="text-white/80 text-sm sm:text-base leading-relaxed mt-4">
-          {t('numbers.desc')}
+          {locale === 'en'
+            ? 'Transforming Indonesian natural landscapes into iconic world-class destinations with quantifiable social impact.'
+            : 'Pencapaian nyata Nimo Land Group dalam membangun jaringan pariwisata terpadu yang berdaya saing global.'}
         </p>
       </div>
 
-      <!-- Stats Grid / Cards with Bold Figures & Count-Up Animation -->
+      <!-- Stats Grid / 5 Clean Corporate Achievement Cards -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6" id="numbersGrid">
         
-        <!-- Card 1: 16 Theme Park & Resort -->
+        <!-- Card 1: 16 Destinations & Resorts -->
         <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
           <div>
             <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
               <span class="count-up" data-target="16">16</span>
             </div>
             <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat1')}
+              {locale === 'en' ? 'Destinations & Resorts' : 'Destinations & Resorts'}
             </p>
           </div>
           <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat1Sub')}
+            {locale === 'en' ? 'Nationwide Network' : 'Jaringan Nasional'}
           </p>
         </div>
 
@@ -99,31 +103,15 @@ const t = key => Astro.locals.t(key);
               <span class="count-up" data-target="222">222</span>
             </div>
             <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat2')}
+              {locale === 'en' ? 'Rooms' : 'Rooms'}
             </p>
           </div>
           <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat2Sub')}
+            {locale === 'en' ? 'Resort & Glamping Units' : 'Vila, Glamping & Kamar'}
           </p>
         </div>
 
-        <!-- Card 3: 100.000+ Visitors/bulan -->
-        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
-          <div>
-            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
-              <span class="count-up" data-target="100000" data-format="locale">100.000</span>
-              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
-            </div>
-            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat3')}
-            </p>
-          </div>
-          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat3Sub')}
-          </p>
-        </div>
-
-        <!-- Card 4: 600+ Employees -->
+        <!-- Card 3: 600+ Employees -->
         <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
           <div>
             <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
@@ -131,15 +119,31 @@ const t = key => Astro.locals.t(key);
               <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
             </div>
             <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat4')}
+              {locale === 'en' ? 'Employees' : 'Employees'}
             </p>
           </div>
           <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat4Sub')}
+            {locale === 'en' ? 'Trained Local Talents' : 'Tenaga Kerja Profesional'}
           </p>
         </div>
 
-        <!-- Card 5: 5.000+ UMKM Diberdayakan -->
+        <!-- Card 4: 100K+ Visitors / Month -->
+        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
+          <div>
+            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
+              <span class="count-up" data-target="100000" data-format="locale">100K</span>
+              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
+            </div>
+            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
+              {locale === 'en' ? 'Visitors / Month' : 'Visitors / Month'}
+            </p>
+          </div>
+          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
+            {locale === 'en' ? 'Monthly Footfall' : 'Kunjungan Wisatawan'}
+          </p>
+        </div>
+
+        <!-- Card 5: 5,000+ MSMEs Empowered -->
         <div class="stat-card col-span-2 md:col-span-1 bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
           <div>
             <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
@@ -147,11 +151,11 @@ const t = key => Astro.locals.t(key);
               <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
             </div>
             <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat5')}
+              {locale === 'en' ? 'MSMEs Empowered' : 'MSMEs Empowered'}
             </p>
           </div>
           <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat5Sub')}
+            {locale === 'en' ? 'Ecosystem Partners' : 'Pemberdayaan UMKM'}
           </p>
         </div>
 
@@ -159,53 +163,9 @@ const t = key => Astro.locals.t(key);
     </div>
   </section>
 
-  <!-- ============ TENTANG ============ -->
-  <section id="tentang" class="bg-background py-20 lg:py-28">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div>
-          <p class="eyebrow text-primary mb-4">
-            <span class="w-6 h-px bg-primary"></span> {t('tentang.eyebrow')}
-          </p>
-          <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
-            {t('tentang.judul')}
-          </h2>
+  <!-- ============ 3. OUR PRESENCE (MAP INDONESIA INTERAKTIF) ============ -->
+  <PresenceMap />
 
-          <p class="text-muted text-sm sm:text-base leading-relaxed mt-6 max-w-lg">
-            {t('tentang.paragraf1')}
-          </p>
-          <p class="text-muted text-sm sm:text-base leading-relaxed mt-4 max-w-lg">
-            {t('tentang.paragraf2')}
-          </p>
 
-          <a href="/destinasi" data-route="destinations"
-             class="inline-flex items-center gap-2 font-heading font-semibold text-primary text-sm mt-8 border-b-2 border-accent pb-1 hover:gap-3 transition-all">
-            {t('tentang.selengkapnya')}
-            <ArrowRight class="w-4 h-4" />
-          </a>
-        </div>
-
-        <div class="relative reveal">
-          <div id="momentSlider" class="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-2xl overflow-hidden img-shell">
-            {MOMENTS.map((m, i) => (
-              <div class:list={['moment-slide absolute inset-0 transition-opacity duration-500', i === 0 ? 'opacity-100' : 'opacity-0']}>
-                <img class="w-full h-full object-cover" alt=""
-                     src={localSrc(m.img)} data-fallback={localSrc(m.fb)} loading={i === 0 ? 'eager' : 'lazy'} />
-              </div>
-            ))}
-            <div class="absolute bottom-5 right-5 z-20 flex gap-2">
-              {MOMENTS.map((_, i) => (
-                <button type="button" aria-label={`Foto ${i + 1}`} data-mdot={i}
-                        class:list={['w-2 h-2 rounded-full transition-all', i === 0 ? 'bg-white' : 'bg-white/40']}></button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ NEWS & NATIONAL MEDIA COVERAGE (HOMEPAGE) ============ -->
-  <NewsSection />
 
 </div>

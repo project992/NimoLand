@@ -1,11 +1,13 @@
 {
   "nav": {
     "beranda": "Beranda",
+    "about": "Tentang Kami",
     "destinations": "Destinasi",
-    "hotels": "Hotels",
-    "galeri": "Galeri",
+    "hotels": "Hotels & Resorts",
+    "partnership": "Kemitraan",
     "berita": "Berita & Media",
     "kontak": "Kontak",
+    "galeri": "Galeri",
     "katalogDestinasi": "Katalog Destinasi",
     "lihatSemuaDestinasi": "Lihat semua destinasi",
     "penginapan": "Penginapan",

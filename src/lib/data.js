@@ -572,3 +572,340 @@ export function toISODate(d) {
 }
 
 export const rupiah = n => 'Rp ' + Number(n).toLocaleString('id-ID');
+
+/* ------------------------------------------------------------------
+   10/10 CORPORATE HOLDING GROUP DATA
+------------------------------------------------------------------ */
+
+export const FLAGSHIP_DESTINATIONS = [
+  {
+    id: 'nimo-highland',
+    name: 'Nimo Highland',
+    category: 'Sky Bridge & Iconic Highland',
+    area: 'Pangalengan, Bandung · 1.400 MDPL',
+    tag: 'Flagship Destination',
+    img: '/brand/nimo-highland/nh-hero.jpg',
+    fb: '/brand/nimo-highland/nh-01.jpg',
+    video: '/videos/nimo-tea-resort/aerial.mp4',
+    desc: 'Destinasi ikonik berketinggian 1.400 MDPL dengan Glass Sky Bridge berbentuk U 150 meter pertama di Indonesia di atas hamparan kebun teh Malabar.',
+    highlights: ['Glass Sky Bridge 150M', 'Panorama 360° Kebun Teh', 'ATV & Paintball Adventure', 'Santorini Sky Walk'],
+  },
+  {
+    id: 'nimo-kaldera-toba',
+    name: 'NIMO Kaldera',
+    category: 'Integrated Nature Tourism',
+    area: 'Toba Caldera Resort (TCR), Sumatera Utara',
+    tag: 'Super Priority Expansion',
+    img: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg',
+    fb: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg',
+    video: '/videos/nimo-tea-resort/aerial.mp4',
+    desc: 'Kawasan wisata alam modern terpadu di Destinasi Pariwisata Super Prioritas (DPSP) Kaldera Danau Toba bekerja sama dengan BPODT.',
+    highlights: ['Danau Vulkanik Terbesar', 'Calandra Horse Riding', 'Iconic Viewpoint TCR', 'Modern Eco Tourism'],
+  },
+  {
+    id: 'nimo-water-forest',
+    name: 'Nimo Water Forest',
+    category: 'Tropical Water Park & Beach',
+    area: 'Bungursari, Purwakarta, Jawa Barat',
+    tag: 'Water Theme Park',
+    img: '/brand/nimo-water-forest/nwf-hero.jpg',
+    fb: '/brand/nimo-water-forest/nwf-hero.jpg',
+    video: '/videos/nimo-resort-ciater/ad.mp4',
+    desc: 'Konsep pantai pasir putih tropis buatan pertama di tengah rindangnya hutan alam Purwakarta dengan kolam ombak dan wahana petualangan keluarga.',
+    highlights: ['Pantai Pasir Putih Buatan', 'Kolam Ombak Alami', 'Waterfall Resto', 'ATV Forest Track'],
+  },
+  {
+    id: 'malang-skyland',
+    name: 'Malang Skyland',
+    category: 'Highland Nature & Citylight',
+    area: 'Karangploso, Kabupaten Malang, Jawa Timur',
+    tag: 'East Java Flagship',
+    img: '/brand/malang-skyland/malang-skyland-01.jpg',
+    fb: '/brand/malang-skyland/malang-skyland-01.jpg',
+    video: '/videos/savia-hotel-resort/aerial.mp4',
+    desc: 'Destinasi wisata ketinggian berkonsep modern di lereng Gunung Arjuno yang menyajikan pemandangan gemerlap citylight Malang Raya 360 derajat.',
+    highlights: ['Glass Sky Bridge', 'Sky Net & Sunset Deck', 'Citylight Malang Raya', 'Futuristic Cafe'],
+  },
+  {
+    id: 'nimo-eye',
+    name: 'Nimo Eye',
+    category: 'Highest Elevation Ferris Wheel',
+    area: 'Gunung Nini, Pangalengan · 1.400 MDPL',
+    tag: 'Rekor MURI Nasional',
+    img: '/brand/nimo-eye/nimo-eye-01.jpg',
+    fb: '/brand/nimo-eye/nimo-eye-01.jpg',
+    video: '/videos/nimo-tea-resort/ad.mp4',
+    desc: 'Bianglala dengan elevasi tertinggi di Indonesia yang tercatat resmi di Rekor MURI, melayang di atas kabut kebun teh Malabar dari ketinggian 1.400 MDPL.',
+    highlights: ['Elevasi Tertinggi 1.400 MDPL', 'VIP & Regular Cabins', 'Dine & Karaoke in Sky', '360° Mist Panorama'],
+  },
+  {
+    id: 'nimo-resort-ciater',
+    name: 'Nimo Resort & DGYP Ciater',
+    category: 'Nordic Resort & Eco Lodging',
+    area: 'Ciater, Subang, Jawa Barat',
+    tag: 'Hospitality Cluster',
+    img: '/brand/nimo-resort-ciater/nimo-resort-ciater-01.png',
+    fb: '/brand/pinaru-park/pinaru-park-02.png',
+    video: '/videos/pinaru-park/aerial.MOV',
+    desc: 'Kawasan resort terpadu berkonsep Nordic European dan vila kayu alami dengan kolam air panas, berdampingan dengan wahana Pinaru Park.',
+    highlights: ['Hot Spring Mineral Pool', 'Nordic European Cabins', 'Pinaru Park Rainbow Slide', 'Pine Forest Glamping'],
+  },
+];
+
+export const PRESENCE_REGIONS = [
+  {
+    id: 'sumut-toba',
+    name: 'Danau Toba, Sumatera Utara',
+    island: 'Sumatera',
+    coords: { x: '18%', y: '32%' },
+    destinations: ['NIMO Kaldera Toba'],
+    tag: 'DPSP Danau Toba (TCR)',
+    desc: 'Destinasi Pariwisata Super Prioritas Danau Toba bersama BPODT.',
+    img: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-01.jpg',
+  },
+  {
+    id: 'jabar-bandung',
+    name: 'Bandung Raya (Pangalengan & Ciwidey)',
+    island: 'Jawa Barat',
+    coords: { x: '35%', y: '68%' },
+    destinations: ['Nimo Highland', 'Nimo Eye', 'Nimo Tea Resort', 'Nimo Zoo', 'Punceling Park', 'Glamping Nimoza'],
+    tag: 'Flagship Highland Cluster',
+    desc: 'Klaster wisata ketinggian kebun teh, rekor MURI, dan resort alam.',
+    img: '/brand/nimo-highland/nh-hero.jpg',
+  },
+  {
+    id: 'jabar-subang',
+    name: 'Subang (Ciater)',
+    island: 'Jawa Barat',
+    coords: { x: '37%', y: '65%' },
+    destinations: ['Nimo Resort Ciater', 'Pinaru Park', 'New DGYP Resort', 'Savia Hotel & Resort'],
+    tag: 'Hospitality & Wellness',
+    desc: 'Klaster resort Nordic, private onsen air panas, dan taman rekreasi pinus.',
+    img: '/brand/pinaru-park/pinaru-park-02.png',
+  },
+  {
+    id: 'jabar-purwakarta',
+    name: 'Purwakarta',
+    island: 'Jawa Barat',
+    coords: { x: '34%', y: '64%' },
+    destinations: ['Nimo Water Forest'],
+    tag: 'Tropical Water Park',
+    desc: 'Pantai buatan pasir putih dan kolam ombak di hutan tropis.',
+    img: '/brand/nimo-water-forest/nwf-hero.jpg',
+  },
+  {
+    id: 'jabar-bogor',
+    name: 'Bogor',
+    island: 'Jawa Barat',
+    coords: { x: '33%', y: '66%' },
+    destinations: ['Bogor Aqua Game'],
+    tag: 'Watersport Adventure',
+    desc: 'Wahana inflatable terapung standar internasional Wibit Jerman.',
+    img: '/brand/aqua-game/aqua-game-01.jpg',
+  },
+  {
+    id: 'jatim-malang',
+    name: 'Malang & Batu, Jawa Timur',
+    island: 'Jawa Timur',
+    coords: { x: '52%', y: '75%' },
+    destinations: ['Malang Skyland'],
+    tag: 'Highland & Citylight',
+    desc: 'Wisata ketinggian modern dengan panorama Arjuno dan citylight.',
+    img: '/brand/malang-skyland/malang-skyland-01.jpg',
+  },
+  {
+    id: 'bali',
+    name: 'Bali (Sanur & Nusa Penida)',
+    island: 'Bali',
+    coords: { x: '60%', y: '78%' },
+    destinations: ['Nimo Ecomarine'],
+    tag: 'Marine Tourism',
+    desc: 'Petualangan wisata air ramah lingkungan dan marine park.',
+    img: '/brand/nimo-ecomarine/nimo-ecomarine-01.jpg',
+  },
+];
+
+export const HOSPITALITY_COLLECTION = [
+  {
+    id: 'nimo-resort-ciater',
+    name: 'Nimo Resort Ciater',
+    type: 'Nordic European Resort',
+    location: 'Ciater, Subang, Jawa Barat',
+    startingRate: 'Rp 650.000',
+    img: '/brand/nimo-resort-ciater/nimo-resort-ciater-01.png',
+    fb: '/brand/pinaru-park/pinaru-park-02.png',
+    features: ['Kolam Air Panas Alami', 'Nordic Wooden Architecture', 'Akses Eksklusif Ciater Park'],
+  },
+  {
+    id: 'new-dgyp-resort',
+    name: 'New DGYP Resort',
+    type: 'Rustic Villa & Family Glamping',
+    location: 'Ciater, Subang, Jawa Barat',
+    startingRate: 'Rp 550.000',
+    img: '/brand/dgyp/junior-private-pool-1.jpg',
+    fb: '/brand/dgyp/junior-suite-1.jpg',
+    features: ['Private Onsen Jacuzzi', 'Vila Bambu & Modern Woody', 'Satu Kawasan Pinaru Park'],
+  },
+  {
+    id: 'nimo-tea-resort',
+    name: 'Nimo Tea Resort',
+    type: 'Mountain View Tea Resort',
+    location: 'Pangalengan, Bandung',
+    startingRate: 'Rp 950.000',
+    img: '/brand/nimo-tea-resort/nimo-tea-resort-01.png',
+    fb: '/brand/nimo-highland/nh-01.jpg',
+    features: ['Balkon 360° Kebun Teh', 'Sunrise Point Gunung Nini', 'Akses Nimo Highland & Nimo Eye'],
+  },
+  {
+    id: 'savia-hotel-resort',
+    name: 'Savia Hotel & Resort',
+    type: 'Hillside Modern Cabins',
+    location: 'Ciater, Subang, Jawa Barat',
+    startingRate: 'Rp 600.000',
+    img: '/brand/savia-hotel-resort/savia-hotel-resort-01.png',
+    fb: '/brand/savia-hotel-resort/savia-hotel-resort-02.jpg',
+    features: ['Modern Cabin Glass Wall', 'Cottage Mezzanine Suite', 'Corporate Gathering Venue'],
+  },
+];
+
+export const ABOUT_PILLARS = [
+  {
+    id: 'who-we-are',
+    title: 'Who We Are',
+    subtitle: 'Leading Integrated Tourism & Hospitality Group',
+    content: 'Nimo Land Group (PT Nimo Hotel & Resort) adalah kelompok usaha pariwisata terintegrasi nasional yang berfokus pada pembangunan destinasi ikonik modern, perhotelan bernuansa alam, dan pemberdayaan ekonomi lokal berbasis keberlanjutan.',
+  },
+  {
+    id: 'what-we-build',
+    title: 'What We Build',
+    subtitle: 'Iconic Theme Parks, Sky Attractions & Eco Resorts',
+    content: 'Kami merancang dan mengoperasikan portofolio destinasi berstandar dunia — mulai dari jembatan kaca Sky Bridge 150M, bianglala elevasi tertinggi 1.400 MDPL (Rekor MURI), taman wisata air ramah keluarga, hingga resort berarsitektur khas Nordic dan rustic di seluruh Indonesia.',
+  },
+  {
+    id: 'where-were-going',
+    title: "Where We're Going",
+    subtitle: 'National Expansion Across Super Priority Destinations',
+    content: 'Menuju ekosistem pariwisata nasional terpadu, Nimo Land Group berekspansi ke Destinasi Pariwisata Super Prioritas (DPSP) Danau Toba, Bali, Jawa Timur, dan pulau-pulau utama Nusantara dengan komitmen ESG dan inovasi energi ramah lingkungan.',
+  },
+];
+
+export const CORPORATE_VISION = {
+  statement: 'To become one of Indonesia’s leading integrated tourism and hospitality groups.',
+  statementId: 'Menjadi salah satu grup pariwisata dan perhotelan terintegrasi terdepan di Indonesia yang berdaya saing global dan berdampak nyata bagi masyarakat.',
+};
+
+export const IMPACT_METRICS = {
+  headline: 'Tourism That Creates Impact',
+  subheadline: 'Pariwisata berkelanjutan yang memberdayakan ekonomi lokal, UMKM, dan ribuan tenaga kerja daerah di seluruh ekosistem destinasi kami.',
+  stats: [
+    { value: '5.000+', label: 'MSMEs Empowered', desc: 'Mitra UMKM lokal kuliner, kerajinan, dan jasa di sekitar destinasi.' },
+    { value: '600+', label: 'Local Workforce', desc: 'Tenaga kerja lokal yang terlatih dengan standar hospitality profesional.' },
+    { value: '100.000+', label: 'Monthly Visitors', desc: 'Pengunjung domestik & mancanegara yang menggerakkan perputaran ekonomi daerah.' },
+  ],
+  photos: [
+    { img: '/brand/nimo-highland/nh-02.jpg', caption: 'Pemberdayaan UMKM lokal perkebunan teh Pangalengan' },
+    { img: '/brand/pinaru-park/pinaru-park-02.png', caption: 'Kolaborasi ekonomi masyarakat hutan pinus Ciater' },
+    { img: '/brand/malang-skyland/malang-skyland-01.jpg', caption: 'Ekosistem kuliner & talenta lokal Jawa Timur' },
+  ],
+};
+
+export const PARTNERSHIP_AREAS = [
+  {
+    id: 'property-resort',
+    title: 'Property & Resort Partnership',
+    desc: 'Pengembangan dan pengelolaan bersama hotel, vila, dan glamping resort dengan standar manajemen hospitality terpadu.',
+    icon: 'building-2',
+  },
+  {
+    id: 'destination-dev',
+    title: 'Tourism Destination Development',
+    desc: 'Master planning, pembangunan wahana tematik, dan operasionalisasi kawasan wisata alam berkonsep modern.',
+    icon: 'mountain',
+  },
+  {
+    id: 'land-collaboration',
+    title: 'Land & Asset Collaboration',
+    desc: 'Optimalisasi lahan strategis BUMN, pemerintah daerah, maupun pemilik lahan swasta menjadi aset produktif bernilai tinggi.',
+    icon: 'map-pin',
+  },
+  {
+    id: 'strategic-investment',
+    title: 'Strategic Investment Partnership',
+    desc: 'Kemitraan investasi institusional berkelanjutan untuk ekspansi portofolio pariwisata skala nasional di Indonesia.',
+    icon: 'trending-up',
+  },
+];
+
+export const LEADERSHIP = {
+  title: 'Executive Leadership',
+  subtitle: 'Dipimpin oleh figur berpengalaman yang berdedikasi membangun destinasi kelas dunia berdaya saing global.',
+  founder: {
+    name: 'Ilham Sunaryanto',
+    role: 'Founder & Chief Executive Officer (CEO)',
+    award: 'Penerima CNN Indonesia Awards 2024 (Extraordinary Service Innovation Initiative)',
+    bio: 'Visioner di balik transformasi pariwisata alam modern terintegrasi di Indonesia, memimpin ekspansi Nimo Land Group dari Jawa Barat hingga skala nasional ke Danau Toba dan Bali.',
+    img: '/brand/cnn-awards-2024.png',
+  },
+  executives: [
+    {
+      name: 'Board of Directors',
+      role: 'Hospitality & Asset Development',
+      dept: 'PT Nimo Hotel & Resort',
+      desc: 'Mengawasi perancangan arsitektur, standar konstruksi berkelanjutan, dan manajemen portofolio resort terpadu.',
+    },
+    {
+      name: 'Operations Leadership',
+      role: 'Theme Park & Guest Experience',
+      dept: 'Nimo Land Group Operations',
+      desc: 'Memastikan standar keselamatan internasional wahana, keunggulan layanan, dan kepuasan ratusan ribu pengunjung.',
+    },
+    {
+      name: 'Strategic Partnership & ESG',
+      role: 'Institutional Relations & Community Impact',
+      dept: 'Corporate Affairs',
+      desc: 'Menjalin kolaborasi institusional dengan kementerian/otorita, BUMN, mitra investasi, dan 5.000+ UMKM lokal.',
+    },
+  ],
+};
+
+export const NIMO_JOURNEY = [
+  {
+    year: '2021',
+    title: 'Foundation & Strategic Vision',
+    desc: 'Pendirian holding group dengan misi mentransformasikan pariwisata alam Indonesia menjadi destinasi kelas dunia yang ramah lingkungan.',
+  },
+  {
+    year: '2022',
+    title: 'First Iconic Destination: Nimo Highland',
+    desc: 'Peluncuran Nimo Highland di Pangalengan Bandung dengan Glass Sky Bridge 150 meter yang langsung menjadi landmark pariwisata nasional.',
+  },
+  {
+    year: '2023',
+    title: 'Regional Theme Park Scale',
+    desc: 'Ekspansi ke Jawa Timur melalui Malang Skyland dan wahana petualangan air internasional Bogor Aqua Game.',
+  },
+  {
+    year: '2024',
+    title: 'MURI Record & Hospitality Cluster',
+    desc: 'Peresmian Nimo Eye (Rekor MURI Bianglala Tertinggi 1.400 MDPL), Nimo Water Forest Purwakarta, dan peluncuran klaster resort Ciater Subang.',
+  },
+  {
+    year: '2025',
+    title: 'Super Priority National Destinations',
+    desc: 'Pengembangan NIMO Kaldera di Toba Caldera Resort (TCR) Sumatera Utara bersama BPODT serta ekspansi Nimo Ecomarine Bali.',
+  },
+  {
+    year: '2026+',
+    title: 'Future of Integrated Tourism',
+    desc: 'Memperluas jaringan holding pariwisata berkelanjutan ke seluruh penjuru Nusantara dengan teknologi ramah lingkungan dan dampak sosial terukur.',
+  },
+];
+
+export const RECOGNITION_PARTNERS = [
+  { name: 'CNN Indonesia', logoText: 'CNN INDONESIA', note: 'Awards 2024 Winner' },
+  { name: 'MURI', logoText: 'REKOR MURI', note: 'Bianglala Tertinggi Indonesia' },
+  { name: 'BPODT', logoText: 'BPODT KEMENPAR', note: 'Toba Caldera Strategic Partner' },
+  { name: 'Kompas.com', logoText: 'KOMPAS.com', note: 'National Media Partner' },
+  { name: 'detikcom', logoText: 'detikTravel', note: 'National Press Coverage' },
+];
+

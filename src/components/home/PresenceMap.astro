@@ -1,0 +1,222 @@
+---
+import MapPin from '@lucide/astro/icons/map-pin';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import { PRESENCE_REGIONS } from '../../lib/data.js';
+
+const locale = Astro.locals.locale ?? 'id';
+---
+<section id="presence" class="bg-surface py-20 lg:py-28 border-t border-line-soft relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16 reveal">
+      <p class="eyebrow text-primary justify-center mb-3">
+        <span class="w-6 h-px bg-primary"></span>
+        {locale === 'en' ? 'Our Presence' : 'Jaringan Destinasi Nasional'}
+        <span class="w-6 h-px bg-primary"></span>
+      </p>
+      <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight">
+        {locale === 'en' ? 'Growing Across Indonesia' : 'Tumbuh & Berkembang di Seluruh Indonesia'}
+      </h2>
+      <p class="text-muted text-sm sm:text-base leading-relaxed mt-4">
+        {locale === 'en'
+          ? 'From West Java to North Sumatra, Nimo is building a growing network of iconic tourism destinations and hospitality experiences.'
+          : 'Dari Jawa Barat hingga Sumatera Utara dan Bali, Nimo Land Group membangun ekosistem destinasi pariwisata dan perhotelan kelas dunia yang terus berkembang.'}
+      </p>
+    </div>
+
+    <!-- Interactive Presence Showcase -->
+    <div class="grid lg:grid-cols-12 gap-8 items-center">
+      
+      <!-- Interactive Region List / Selector (Left 5 cols) -->
+      <div class="lg:col-span-5 space-y-3 reveal" id="presenceList">
+        {PRESENCE_REGIONS.map((reg, idx) => (
+          <button
+            type="button"
+            data-presence-btn={reg.id}
+            class={idx === 0 ? "w-full text-left p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start justify-between gap-4 group bg-primary text-white border-primary shadow-md cursor-pointer" : "w-full text-left p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start justify-between gap-4 group bg-background hover:bg-paper text-text-dark border-line-soft cursor-pointer"}
+          >
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class={idx === 0 ? 'text-[11px] font-heading font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-accent text-text-dark' : 'text-[11px] font-heading font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-primary/10 text-primary'}>
+                  {reg.island}
+                </span>
+                <span class={idx === 0 ? 'text-xs text-white/70' : 'text-xs text-muted'}>
+                  {reg.tag}
+                </span>
+              </div>
+              <h3 class={idx === 0 ? 'font-heading font-bold text-base sm:text-lg transition-colors text-white' : 'font-heading font-bold text-base sm:text-lg transition-colors text-text-dark group-hover:text-primary'}>
+                {reg.name}
+              </h3>
+              <p class={idx === 0 ? 'text-xs mt-1.5 line-clamp-1 text-white/80' : 'text-xs mt-1.5 line-clamp-1 text-muted'}>
+                {reg.destinations.join(' · ')}
+              </p>
+            </div>
+            <div class={idx === 0 ? 'w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 bg-white/20 text-white' : 'w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 bg-primary/5 text-primary'}>
+              <ArrowUpRight class="w-4 h-4" />
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <!-- Interactive Map & Visual Display (Right 7 cols) -->
+      <div class="lg:col-span-7 relative reveal">
+        
+        <!-- Main Map Container Card -->
+        <div class="relative bg-background border border-line-soft rounded-3xl p-6 sm:p-8 overflow-hidden shadow-sm">
+          
+          <!-- Map Header / Info Pill -->
+          <div class="flex items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-2 text-xs font-semibold text-primary">
+              <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+              <span>{locale === 'en' ? 'Active Destinations Map' : 'Peta Sebaran Destinasi Aktif'}</span>
+            </div>
+            <span class="text-xs text-muted font-heading font-medium">
+              7 {locale === 'en' ? 'Strategic Clusters' : 'Klaster Strategis'}
+            </span>
+          </div>
+
+          <!-- Stylized Archipelago SVG Map Representation -->
+          <div class="relative w-full aspect-[16/9] bg-surface rounded-2xl border border-line-soft/60 overflow-hidden flex items-center justify-center p-4">
+            
+            <!-- Archipelago Silhouette Background Pattern -->
+            <svg viewBox="0 0 1000 450" class="w-full h-full text-line-soft fill-current opacity-40 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Sumatra -->
+              <path d="M 80 120 Q 150 180, 230 260 L 260 290 Q 230 300, 210 280 L 140 200 Z" />
+              <!-- Java -->
+              <path d="M 280 320 Q 380 325, 480 340 L 580 350 Q 560 365, 420 355 L 290 335 Z" />
+              <!-- Bali & Nusa Tenggara -->
+              <path d="M 590 350 Q 640 355, 700 360 L 740 365 Q 680 375, 600 360 Z" />
+              <!-- Kalimantan -->
+              <path d="M 380 150 Q 460 120, 510 170 L 520 250 Q 440 270, 390 230 Z" />
+              <!-- Sulawesi -->
+              <path d="M 580 160 Q 640 140, 650 200 L 670 280 Q 620 260, 590 220 Z" />
+              <!-- Maluku & Papua -->
+              <path d="M 720 180 Q 770 160, 800 210 Z M 820 190 Q 940 180, 970 250 L 950 310 Q 860 300, 830 240 Z" />
+            </svg>
+
+            <!-- Dynamic Pin Nodes on Map -->
+            {PRESENCE_REGIONS.map((reg) => (
+              <button
+                type="button"
+                data-map-pin={reg.id}
+                style={`left: ${reg.coords.x}; top: ${reg.coords.y};`}
+                class="absolute -translate-x-1/2 -translate-y-1/2 group z-20 focus:outline-hidden cursor-pointer"
+                aria-label={`Lokasi ${reg.name}`}
+              >
+                <div class="relative flex items-center justify-center">
+                  <span class="w-8 h-8 rounded-full bg-primary/20 animate-ping absolute"></span>
+                  <div class="w-7 h-7 rounded-full bg-primary text-accent border-2 border-white shadow-lg flex items-center justify-center group-hover:scale-125 transition-transform">
+                    <MapPin class="w-4 h-4" />
+                  </div>
+                </div>
+                <span class="hidden sm:block absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-primary/95 text-white text-[10px] font-heading font-semibold px-2 py-0.5 rounded shadow-md pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                  {reg.name.split(',')[0]}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <!-- Dynamic Active Location Detail Preview Box -->
+          <div id="presencePreviewCard" class="mt-6 p-5 rounded-2xl bg-surface border border-line-soft transition-all duration-300">
+            <div class="grid sm:grid-cols-12 gap-4 items-center">
+              <div class="sm:col-span-4 relative aspect-[16/10] rounded-xl overflow-hidden img-shell">
+                <img id="presencePreviewImg" src={PRESENCE_REGIONS[0].img} alt={PRESENCE_REGIONS[0].name} class="w-full h-full object-cover" />
+              </div>
+              <div class="sm:col-span-8 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span id="presencePreviewIsland" class="text-[10px] font-heading font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">
+                      {PRESENCE_REGIONS[0].island}
+                    </span>
+                    <span id="presencePreviewTag" class="text-xs text-muted font-medium">
+                      {PRESENCE_REGIONS[0].tag}
+                    </span>
+                  </div>
+                  <h4 id="presencePreviewTitle" class="font-heading font-bold text-text-dark text-lg leading-snug">
+                    {PRESENCE_REGIONS[0].name}
+                  </h4>
+                  <p id="presencePreviewDesc" class="text-muted text-xs sm:text-sm mt-1.5 leading-relaxed">
+                    {PRESENCE_REGIONS[0].desc}
+                  </p>
+                </div>
+                <div class="mt-3 pt-3 border-t border-line-soft/60 flex items-center justify-between">
+                  <span id="presencePreviewDests" class="text-xs font-semibold text-primary">
+                    {PRESENCE_REGIONS[0].destinations.join(' · ')}
+                  </span>
+                  <a href="/destinasi" data-route="destinations" class="text-xs font-heading font-semibold text-accent hover:text-accent-hover inline-flex items-center gap-1">
+                    <span>{locale === 'en' ? 'View Portfolio' : 'Lihat Portofolio'}</span>
+                    <ArrowUpRight class="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { PRESENCE_REGIONS } from '../../lib/data.js';
+
+  function initPresenceMap() {
+    const buttons = document.querySelectorAll('[data-presence-btn]');
+    const pins = document.querySelectorAll('[data-map-pin]');
+    const previewImg = document.getElementById('presencePreviewImg') as HTMLImageElement;
+    const previewTitle = document.getElementById('presencePreviewTitle');
+    const previewIsland = document.getElementById('presencePreviewIsland');
+    const previewTag = document.getElementById('presencePreviewTag');
+    const previewDesc = document.getElementById('presencePreviewDesc');
+    const previewDests = document.getElementById('presencePreviewDests');
+
+    if (!buttons.length) return;
+
+    function selectRegion(id: string) {
+      const reg = PRESENCE_REGIONS.find(r => r.id === id);
+      if (!reg) return;
+
+      buttons.forEach(btn => {
+        const isTarget = btn.getAttribute('data-presence-btn') === id;
+        if (isTarget) {
+          btn.className = 'w-full text-left p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start justify-between gap-4 group bg-primary text-white border-primary shadow-md cursor-pointer';
+        } else {
+          btn.className = 'w-full text-left p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start justify-between gap-4 group bg-background hover:bg-paper text-text-dark border-line-soft cursor-pointer';
+        }
+      });
+
+      if (previewImg) previewImg.src = reg.img;
+      if (previewTitle) previewTitle.textContent = reg.name;
+      if (previewIsland) previewIsland.textContent = reg.island;
+      if (previewTag) previewTag.textContent = reg.tag;
+      if (previewDesc) previewDesc.textContent = reg.desc;
+      if (previewDests) previewDests.textContent = reg.destinations.join(' · ');
+    }
+
+    buttons.forEach(btn => {
+      btn.onclick = () => {
+        const id = btn.getAttribute('data-presence-btn');
+        if (id) selectRegion(id);
+      };
+    });
+
+    pins.forEach(pin => {
+      pin.onclick = () => {
+        const id = pin.getAttribute('data-map-pin');
+        if (id) selectRegion(id);
+      };
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPresenceMap);
+  } else {
+    initPresenceMap();
+  }
+  document.addEventListener('astro:page-load', initPresenceMap);
+</script>
