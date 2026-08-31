@@ -107,13 +107,13 @@ test('rateLimit: buckets are independent per key', () => {
 
 test('rateLimit: the window expires', () => {
   rateLimit._reset();
-  for (let i = 0; i < 5; i++) rateLimit.check('c', 5, 1);
-  assert.equal(rateLimit.check('c', 5, 1).ok, false);
-  // The bucket's window was 1 ms, so by now it has rolled over.
+  for (let i = 0; i < 5; i++) rateLimit.check('c', 5, 50);
+  assert.equal(rateLimit.check('c', 5, 50).ok, false);
+  // The bucket's window was 50 ms, wait for it to roll over.
   return new Promise(resolve => setTimeout(() => {
-    assert.equal(rateLimit.check('c', 5, 1).ok, true, 'a fresh window must allow attempts again');
+    assert.equal(rateLimit.check('c', 5, 50).ok, true, 'a fresh window must allow attempts again');
     resolve();
-  }, 20));
+  }, 70));
 });
 
 test('rateLimit: reset clears a bucket (successful login path)', () => {
