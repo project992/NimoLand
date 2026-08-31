@@ -1,7 +1,6 @@
 ---
 import MapPin from '@lucide/astro/icons/map-pin';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
-import Play from '@lucide/astro/icons/play';
 import NimoImage from './NimoImage.astro';
 import { SITE } from '../lib/site.js';
 import { FOOTAGE } from '../lib/data.js';
@@ -22,22 +21,42 @@ const embedUrl = isYouTube
 const flagship = d.id === 'nimo-highland';
 ---
 <div class="view active" data-view="item-detail">
-  <section class="bg-bark pt-32 pb-16 lg:pt-40 lg:pb-20">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+  <!-- Hero Section with Background Video / Media Behind Text -->
+  <section class="relative bg-bark pt-32 pb-20 lg:pt-44 lg:pb-28 overflow-hidden min-h-[440px] flex items-center">
+    
+    <!-- Background Video / Media Overlay -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      {isVideo ? (
+        <video class="w-full h-full object-cover opacity-60 scale-105" src={video} playsinline muted loop autoplay
+               preload="metadata" aria-label={`Video Background ${d.name}`}></video>
+      ) : isYouTube ? (
+        <iframe class="w-full h-full object-cover opacity-60 pointer-events-none scale-125"
+                src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/').pop()}`}
+                title={`Video Background ${d.name}`} frameborder="0" allow="autoplay; encrypted-media"></iframe>
+      ) : (
+        <img src={d.img} alt="" class="w-full h-full object-cover opacity-45 scale-105" />
+      )}
+      <!-- High contrast dark gradients ensuring text readability -->
+      <div class="absolute inset-0 bg-gradient-to-t from-bark via-bark/75 to-bark/60"></div>
+      <div class="absolute inset-0 bg-bark/30"></div>
+    </div>
+
+    <!-- Foreground Text Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 w-full">
       <a href="/destinasi" data-route="destinations"
-         class="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-heading mb-8 transition-colors">
+         class="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-heading mb-8 transition-colors bg-bark/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 w-fit">
         <ArrowLeft class="w-4 h-4" /> Semua destinasi
       </a>
       <div class="flex flex-wrap items-center gap-4">
-        <p class="eyebrow text-white/70 mb-0">
-          <span class="w-6 h-px bg-white/40"></span> {d.area}
+        <p class="eyebrow text-amber-300/90 mb-0">
+          <span class="w-6 h-px bg-amber-400/60"></span> {d.area}
         </p>
-        {d.tag && <span class="bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full">{d.tag}</span>}
+        {d.tag && <span class="bg-clay text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">{d.tag}</span>}
       </div>
-      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4">
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-3xl mt-4 drop-shadow-md">
         {d.name}
       </h1>
-      <p class="text-white/65 text-sm sm:text-base mt-5 max-w-xl">
+      <p class="text-white/90 text-sm sm:text-base mt-5 max-w-xl leading-relaxed drop-shadow-sm">
         {d.desc}
       </p>
     </div>
@@ -48,30 +67,11 @@ const flagship = d.id === 'nimo-highland';
       <div class="lg:col-span-2 space-y-9">
         <div>
           <h2 class="font-heading font-semibold text-ink text-xl mb-3">Sorotan</h2>
-          <div class="flex flex-wrap gap-2 mb-6">
+          <div class="flex flex-wrap gap-2">
             {d.highlights.map(h => (
               <span class="text-xs bg-paper border border-line-soft text-muted px-3 py-1.5 rounded-full">{h}</span>
             ))}
           </div>
-
-          {video && (
-            <div class="mt-6">
-              <h3 class="font-heading font-semibold text-ink text-lg mb-3 flex items-center gap-2">
-                <Play class="w-4 h-4 text-sage-deep fill-sage-deep/20" />
-                Video Highlight Destinasi
-              </h3>
-              <div class="rounded-2xl overflow-hidden img-shell aspect-video bg-bark shadow-lg border border-line-soft relative">
-                {isYouTube ? (
-                  <iframe class="w-full h-full" src={embedUrl} title={`Video Highlight ${d.name}`} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                ) : isVideo ? (
-                  <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
-                         controls preload="metadata" aria-label={`Video Highlight ${d.name}`}></video>
-                ) : (
-                  <img src={video} alt={`Video Highlight ${d.name}`} class="w-full h-full object-cover" loading="lazy" />
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         <div>

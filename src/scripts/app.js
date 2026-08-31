@@ -469,27 +469,10 @@ const Destinations = {
         <p class="text-sm text-muted leading-relaxed">${esc(d.desc)}</p>
 
         <p class="font-heading font-semibold text-ink text-sm mt-6 mb-3">${State.locale === 'en' ? 'Highlights' : 'Sorotan'}</p>
-        <div class="flex flex-wrap gap-2 mb-4">
+        <div class="flex flex-wrap gap-2 mb-6">
           ${d.highlights.map(h =>
             `<span class="text-xs bg-paper border border-line-soft text-muted px-3 py-1.5 rounded-full">${esc(h)}</span>`).join('')}
         </div>
-
-        ${FOOTAGE[d.id]?.aerial ? `
-          <div class="mt-4 mb-6">
-            <p class="font-heading font-semibold text-ink text-sm mb-2 flex items-center gap-1.5">
-              ${icon('play', 'w-4 h-4 text-sage-deep')} ${State.locale === 'en' ? 'Highlight Video' : 'Video Highlight Destinasi'}
-            </p>
-            <div class="rounded-xl overflow-hidden img-shell aspect-video bg-bark shadow-sm border border-line-soft relative">
-              ${/(youtube\.com|youtu\.be)/i.test(FOOTAGE[d.id].aerial) ? `
-                <iframe class="w-full h-full" src="${FOOTAGE[d.id].aerial.includes('/embed/') ? FOOTAGE[d.id].aerial : `https://www.youtube.com/embed/${FOOTAGE[d.id].aerial.split('v=')[1]?.split('&')[0] || FOOTAGE[d.id].aerial.split('/').pop()}`}" title="Video Highlight ${esc(d.name)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-              ` : /\.(mp4|mov|webm)/i.test(FOOTAGE[d.id].aerial) ? `
-                <video class="w-full h-full object-cover" src="${esc(FOOTAGE[d.id].aerial)}" playsinline muted loop autoplay controls preload="metadata"></video>
-              ` : `
-                <img src="${esc(FOOTAGE[d.id].aerial)}" class="w-full h-full object-cover" loading="lazy" alt="Video ${esc(d.name)}">
-              `}
-            </div>
-          </div>
-        ` : ''}
 
         <p class="font-heading font-semibold text-ink text-sm mt-6 mb-3">${State.locale === 'en' ? 'Gallery (6 Footage)' : 'Galeri (6 Footage)'}</p>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
