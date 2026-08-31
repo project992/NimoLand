@@ -318,7 +318,7 @@ export function allRooms() {
 }
 
 export const HERO_SLIDES = [
-  { img:'/beranda-highlight-skybridge.jpg', fb:'/beranda-highlight-skybridge.jpg', alt:'Nimo Sky Bridge & Tea Plantation' },
+  { img:'/beranda-hero-ultra-hd.jpg', fb:'/beranda-hero-ultra-hd.jpg', alt:'Nimo Sky Bridge & Tea Plantation' },
 ];
 
 export const MOMENTS = [
