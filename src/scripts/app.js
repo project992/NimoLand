@@ -322,7 +322,7 @@ const MomentSlider = {
 
     if (!wrap.querySelector('.moment-slide')) {
       wrap.innerHTML = MOMENTS.map((m, i) => `
-        <div class="moment-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}">
+        <div class="moment-slide absolute inset-0 transition-opacity duration-500 ${i === 0 ? 'opacity-100' : 'opacity-0'}">
           <img class="w-full h-full object-cover" alt=""
                src="${localSrc(m.img)}" data-fallback="${localSrc(m.fb)}" loading="lazy">
         </div>`).join('')
@@ -349,7 +349,7 @@ const MomentSlider = {
       });
     };
     dots.forEach(d => d.addEventListener('click', () => go(Number(d.dataset.mdot))));
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => go(index + 1), 5000);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => go(index + 1), 2500);
   },
 };
 

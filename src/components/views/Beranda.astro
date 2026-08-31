@@ -96,7 +96,7 @@ const t = key => Astro.locals.t(key);
         <div class="relative reveal">
           <div id="momentSlider" class="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-2xl overflow-hidden img-shell">
             {MOMENTS.map((m, i) => (
-              <div class:list={['moment-slide absolute inset-0 transition-opacity duration-700', i === 0 ? 'opacity-100' : 'opacity-0']}>
+              <div class:list={['moment-slide absolute inset-0 transition-opacity duration-500', i === 0 ? 'opacity-100' : 'opacity-0']}>
                 <img class="w-full h-full object-cover" alt=""
                      src={localSrc(m.img)} data-fallback={localSrc(m.fb)} loading={i === 0 ? 'eager' : 'lazy'} />
               </div>

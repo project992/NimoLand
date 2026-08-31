@@ -322,8 +322,11 @@ export const HERO_SLIDES = [
 ];
 
 export const MOMENTS = [
-  { img:'/moments/tentang-nimo-glamping-v1.jpg', fb:'/moments/tentang-nimo-glamping-v1.jpg' },
-  { img:'/moments/tentang-nimo-resort-v1.jpg', fb:'/moments/tentang-nimo-resort-v1.jpg' },
+  { img:'/moments/tentang-01-glamping.jpg',   fb:'/moments/tentang-01-glamping.jpg' },
+  { img:'/moments/tentang-02-cottage.jpg',    fb:'/moments/tentang-02-cottage.jpg' },
+  { img:'/moments/tentang-03-skybridge.jpg',  fb:'/moments/tentang-03-skybridge.jpg' },
+  { img:'/moments/tentang-04-malang.jpg',     fb:'/moments/tentang-04-malang.jpg' },
+  { img:'/moments/tentang-05-pinaru.jpg',     fb:'/moments/tentang-05-pinaru.jpg' },
 ];
 
 export const GALLERY = [
