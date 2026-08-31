@@ -1,17 +1,15 @@
 {
   "nav": {
     "beranda": "Home",
-    "about": "About",
     "destinations": "Destinations",
-    "hotels": "Hotels & Resorts",
-    "partnership": "Partnership",
-    "berita": "News",
-    "kontak": "Contact",
+    "hotels": "Hotels",
     "galeri": "Gallery",
+    "berita": "News & Media",
+    "kontak": "Contact",
     "katalogDestinasi": "Destination Catalog",
     "lihatSemuaDestinasi": "View all destinations",
-    "penginapan": "Hotels & Resorts",
-    "lihatSemuaPenginapan": "View all hotels & resorts",
+    "penginapan": "Accommodation",
+    "lihatSemuaPenginapan": "View all accommodation",
     "keluar": "Sign Out",
     "masuk": "Sign In",
     "masukAtauDaftar": "Sign In or Register"

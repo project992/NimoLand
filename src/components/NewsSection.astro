@@ -1,11 +1,11 @@
-﻿---
+---
 import ExternalLink from '@lucide/astro/icons/external-link';
 import Play from '@lucide/astro/icons/play';
 import Trophy from '@lucide/astro/icons/trophy';
 import Newspaper from '@lucide/astro/icons/newspaper';
 import ChevronLeft from '@lucide/astro/icons/chevron-left';
 import ChevronRight from '@lucide/astro/icons/chevron-right';
-import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS, RECOGNITION_PARTNERS } from '../lib/data.js';
+import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS } from '../lib/data.js';
 
 const locale = Astro.locals.locale ?? 'id';
 ---
@@ -15,42 +15,22 @@ const locale = Astro.locals.locale ?? 'id';
     <!-- Section Header -->
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
       <div>
-        <p class="eyebrow text-primary mb-3">
-          <span class="w-6 h-px bg-primary"></span>
-          {locale === 'en' ? 'Recognition & Media' : 'Rekognisi & Liputan Media'}
+        <p class="eyebrow text-primary mb-4">
+          <span class="w-6 h-px bg-primary"></span> {locale === 'en' ? 'Trusted & Media Coverage' : 'Liputan Media & Reputasi Terpercaya'}
         </p>
         <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-xl">
-          {locale === 'en' ? 'Trusted by National Institutions' : 'Dipercaya & Diliput Media Nasional'}
+          {locale === 'en' ? 'Nimo Land Group in National Spotlight' : 'Nimo Land Group dalam Sorotan Media Terpercaya'}
         </h2>
       </div>
       <p class="text-muted text-sm sm:text-base max-w-md">
         {locale === 'en'
-          ? 'Winner of CNN Indonesia Awards 2024, verified MURI national record, and nationwide press coverage.'
-          : 'Penghargaan resmi CNN Indonesia Awards 2024, Rekor MURI Nasional, dan liputan pers terpercaya dari berbagai media terkemuka.'}
+          ? 'Recognized by CNN Indonesia Awards 2024, MURI Records, and verified media coverage from Kompas.com, detikTravel, and national press.'
+          : 'Penghargaan resmi CNN Indonesia Awards 2024, Rekor MURI, dan liputan faktual terverifikasi dari Kompas.com, detikTravel, serta Detik Network.'}
       </p>
     </div>
 
-    <!-- Corporate Recognition & Partner Logos Bar -->
-    <div class="mb-14 p-6 sm:p-8 rounded-3xl bg-surface border border-line-soft reveal">
-      <p class="text-[11px] font-heading font-bold uppercase tracking-widest text-muted text-center mb-6">
-        {locale === 'en' ? 'Institutional Recognition & Media Coverage' : 'Rekognisi Institusional & Jaringan Media Terpercaya'}
-      </p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-center text-center">
-        {RECOGNITION_PARTNERS.map((partner) => (
-          <div class="p-4 rounded-2xl bg-background border border-line-soft/60 flex flex-col items-center justify-center hover:border-accent/40 transition-colors">
-            <span class="font-heading font-black text-sm sm:text-base text-text-dark tracking-wider">
-              {partner.logoText}
-            </span>
-            <span class="text-[10px] text-muted mt-1 font-medium">
-              {partner.note}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- SPOTLIGHT: CNN INDONESIA AWARDS 2024 (TRUST SIGNAL) -->
-    <div class="mb-16 reveal">
+    <!-- SPOTLIGHT: CNN INDONESIA AWARDS 2024 -->
+    <div class="mb-14 reveal">
       <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1B4332] via-[#16382A] to-[#0F261C] text-white shadow-2xl border border-white/10">
         <div class="grid lg:grid-cols-12 items-stretch">
           
@@ -66,7 +46,7 @@ const locale = Astro.locals.locale ?? 'id';
                   {NEWS_SPOTLIGHT.source}
                 </span>
                 <span class="text-xs text-white/70">
-                  {NEWS_SPOTLIGHT.date}
+                  {NEWS_SPOTLIGHT.author} · {NEWS_SPOTLIGHT.date} ({NEWS_SPOTLIGHT.time}) · {NEWS_SPOTLIGHT.readTime}
                 </span>
               </div>
 
@@ -89,7 +69,7 @@ const locale = Astro.locals.locale ?? 'id';
 
             <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10">
               <a href={NEWS_SPOTLIGHT.url} target="_blank" rel="noopener noreferrer"
-                 class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2 rounded-full shadow-md">
+                 class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2">
                 <span>{locale === 'en' ? 'Read Full Coverage on CNN Indonesia' : 'Baca Liputan di CNN Indonesia'}</span>
                 <ExternalLink class="w-4 h-4" />
               </a>
@@ -173,7 +153,7 @@ const locale = Astro.locals.locale ?? 'id';
 
                   <div class="pt-4 border-t border-line-soft flex flex-wrap items-center justify-between gap-4">
                     <a href={art.url} target="_blank" rel="noopener noreferrer"
-                       class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2 rounded-full shadow-sm">
+                       class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2 rounded-full">
                       <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
                       <ExternalLink class="w-4 h-4" />
                     </a>
@@ -193,18 +173,18 @@ const locale = Astro.locals.locale ?? 'id';
           <div class="flex items-center gap-1.5" id="newsDotsContainer">
             {NEWS_ARTICLES.map((_, idx) => (
               <button type="button" aria-label={`Berita ${idx + 1}`} data-news-dot={idx}
-                      class={`h-2.5 rounded-full transition-all ${idx === 0 ? 'bg-primary w-7 cursor-pointer' : 'bg-line hover:bg-muted w-2.5 cursor-pointer'}`}></button>
+                      class={`h-2.5 rounded-full transition-all ${idx === 0 ? 'bg-primary w-7' : 'bg-line hover:bg-muted w-2.5'}`}></button>
             ))}
           </div>
 
           <!-- Prev & Next Buttons -->
           <div class="flex items-center gap-3">
             <button type="button" id="newsPrevBtn" aria-label={locale === 'en' ? 'Previous article' : 'Berita sebelumnya'}
-                    class="w-10 h-10 rounded-full border border-line-soft flex items-center justify-center text-text-dark hover:bg-primary hover:text-white hover:border-primary transition-colors cursor-pointer">
+                    class="w-10 h-10 rounded-full border border-line-soft flex items-center justify-center text-text-dark hover:bg-primary hover:text-white hover:border-primary transition-colors">
               <ChevronLeft class="w-5 h-5" />
             </button>
             <button type="button" id="newsNextBtn"
-                    class="btn-primary px-5 py-2.5 text-sm font-heading font-semibold rounded-full inline-flex items-center gap-2 shadow-sm hover:scale-105 transition-all cursor-pointer">
+                    class="btn-primary px-5 py-2.5 text-sm font-heading font-semibold rounded-full inline-flex items-center gap-2 shadow-sm hover:scale-105 transition-all">
               <span>{locale === 'en' ? 'Next Article' : 'Berita Selanjutnya'}</span>
               <ChevronRight class="w-4 h-4" />
             </button>
@@ -274,8 +254,8 @@ const locale = Astro.locals.locale ?? 'id';
     const container = document.getElementById('newsShowcase');
     if (!container) return;
 
-    const slides = container.querySelectorAll('.news-slide');
-    const dots = container.querySelectorAll('[data-news-dot]');
+    const slides = container.querySelectorAll<HTMLElement>('.news-slide');
+    const dots = container.querySelectorAll<HTMLElement>('[data-news-dot]');
     const prevBtn = document.getElementById('newsPrevBtn');
     const nextBtn = document.getElementById('newsNextBtn');
     const currentIndexEl = document.getElementById('newsCurrentIndex');
@@ -302,9 +282,9 @@ const locale = Astro.locals.locale ?? 'id';
 
       dots.forEach((dot, i) => {
         if (i === currentIndex) {
-          dot.className = 'h-2.5 rounded-full transition-all bg-primary w-7 cursor-pointer';
+          dot.className = 'h-2.5 rounded-full transition-all bg-primary w-7';
         } else {
-          dot.className = 'h-2.5 rounded-full transition-all bg-line hover:bg-muted w-2.5 cursor-pointer';
+          dot.className = 'h-2.5 rounded-full transition-all bg-line hover:bg-muted w-2.5';
         }
       });
 
