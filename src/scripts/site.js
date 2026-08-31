@@ -11,13 +11,6 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  const ess = e.target.closest('[data-open-ess]');
-  if (ess) {
-    e.preventDefault();
-    location.href = '/';
-    return;
-  }
-
   const logout = e.target.closest('[data-logout]');
   if (logout) {
     e.preventDefault();

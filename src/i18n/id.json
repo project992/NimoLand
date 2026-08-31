@@ -14,11 +14,27 @@
     "masukAtauDaftar": "Masuk atau Daftar"
   },
   "hero": {
-    "lokasi": "Jaringan Destinasi Nasional",
-    "tagline": "A Tourism Company That Focuses On Social Impact, MSME & Renewable Energy",
-    "deskripsi": "Nimo Land Group mengelola jaringan destinasi wisata & resort di seluruh Indonesia — dari kebun teh Pangalengan hingga danau vulkanik Toba, bianglala tertinggi di Indonesia, hingga ecomarine di Bali. Satu platform, seluruh Indonesia.",
-    "beliTiketSekarang": "Beli Tiket Sekarang",
+    "lokasi": "Jaringan Destinasi Nasional · Bandung · Subang · Malang · Toba · Bali",
+    "headline": "Building Indonesia's Next Iconic Destinations.",
+    "tagline": "A Tourism Company That Focuses On Social Impact, MSME & Renewable Energy.",
+    "deskripsi": "Mengembangkan jaringan theme park alam modern, bianglala elevasi tertinggi, dan resort ikonik berstandar kelas dunia yang memberdayakan ribuan UMKM serta talenta lokal di seluruh penjuru Nusantara.",
+    "jelajahiDestinasi": "Jelajahi Destinasi",
     "lihatPenginapan": "Lihat Penginapan"
+  },
+  "numbers": {
+    "eyebrow": "Nimo in Numbers",
+    "judul": "Pertumbuhan Berkelanjutan di Seluruh Nusantara",
+    "desc": "Komitmen nyata Nimo Land Group dalam menghadirkan pariwisata berkelas dunia sekaligus menggerakkan roda ekonomi dan dampak sosial masyarakat lokal.",
+    "stat1": "Theme Park & Resort",
+    "stat1Sub": "Destinasi Ikonik Nasional",
+    "stat2": "Rooms",
+    "stat2Sub": "Vila, Glamping & Kamar Resort",
+    "stat3": "Visitors / Bulan",
+    "stat3Sub": "Wisatawan Terlayani",
+    "stat4": "Employees",
+    "stat4Sub": "Tenaga Kerja & Talenta Lokal",
+    "stat5": "UMKM Diberdayakan",
+    "stat5Sub": "Mitra Ekonomi Kreatif"
   },
   "tentang": {
     "eyebrow": "Tentang Nimo Land Group",

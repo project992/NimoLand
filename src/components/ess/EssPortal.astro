@@ -19,84 +19,81 @@ const isEssAdmin = employee?.kind === 'employee' && (employee?.name || '').trim(
 ---
 <!-- ============ LOGIN ESS ============ -->
 <div id="essLoginModal" class:list={[
-  'fixed inset-0 z-96 bg-bark/50 p-0 sm:p-4 overflow-y-auto',
-  !standalone && 'hidden',                    // standalone: tampil sebagai halaman
-  standalone && !employee && 'flex items-center justify-center',
+  'fixed inset-0 z-96 bg-primary/60 backdrop-blur-xs p-4 overflow-y-auto flex items-center justify-center',
+  employee && 'hidden',
 ]}
      role="dialog" aria-modal="true" aria-labelledby="essLoginTitle">
-  <div class="bg-surface sm:rounded-2xl w-full sm:max-w-md mx-auto min-h-full sm:min-h-0 sm:my-10 sm:shadow-lg overflow-hidden">
-    {/* Solid header — was a two-stop gradient. */}
-    <div class="bg-bark px-6 py-6">
+  <div class="bg-surface rounded-2xl w-full max-w-md mx-auto shadow-2xl border border-line-soft overflow-hidden">
+    <div class="bg-primary px-7 py-7 text-white">
       <div class="flex items-center gap-2">
         <span class="font-heading font-bold text-white text-lg tracking-wide">NIMO</span>
-        <span class="text-white/60 text-[10px] font-medium uppercase tracking-widest border-l border-white/25 pl-2.5">Land Group</span>
+        <span class="text-accent text-[10px] font-bold uppercase tracking-widest border-l border-white/25 pl-2.5">Land Group</span>
       </div>
       <h3 id="essLoginTitle" class="font-heading font-bold text-white text-xl mt-3 flex items-center gap-2">
-        <IdCard class="w-5 h-5" /> Portal ESS Karyawan
+        <IdCard class="w-5 h-5 text-accent" /> Portal ESS Internal
       </h3>
-      <p class="text-white/65 text-xs mt-1">Employee Self-Service · Masuk untuk mengelola data</p>
+      <p class="text-white/70 text-xs mt-1">Employee Self-Service · Masuk untuk mengelola data operasional</p>
     </div>
 
-    <form id="essLoginForm" class="px-6 py-6" novalidate>
-      <label for="essNik" class="label">NIK Karyawan</label>
+    <form id="essLoginForm" class="px-7 py-7" novalidate>
+      <label for="essNik" class="label text-text-dark">NIK Karyawan</label>
       <input type="text" id="essNik" name="nik" autocomplete="username" placeholder="Masukkan NIK" class="field mb-4" />
 
-      <label for="essPassword" class="label">Password</label>
+      <label for="essPassword" class="label text-text-dark">Password</label>
       <input type="password" id="essPassword" name="password" autocomplete="current-password"
              placeholder="Masukkan password" class="field mb-3" />
 
       <p id="essLoginError" class="hidden note-error mb-4" role="alert"></p>
 
-      <button type="submit" id="essLoginBtn" class="btn-primary w-full py-3.5">
-        <LogIn class="w-4 h-4" /> Masuk Portal
+      <button type="submit" id="essLoginBtn" class="btn-primary w-full py-3.5 mt-2">
+        <LogIn class="w-4 h-4" /> Masuk Portal Internal
       </button>
-      <button type="button" data-close-ess class="btn-outline w-full mt-3 py-3.5">Batal</button>
 
-      <p class="flex items-start gap-2 text-[11px] text-muted mt-4">
-        <ShieldCheck class="w-4 h-4 shrink-0 mt-px text-sage" />
-        Percobaan masuk dibatasi 5 kali per menit. Password diverifikasi di server.
+      <p class="flex items-start gap-2 text-[11px] text-muted mt-5">
+        <ShieldCheck class="w-4 h-4 shrink-0 mt-px text-primary" />
+        Akses khusus karyawan terdaftar Nimo Land Group. Percobaan masuk dibatasi dan dicatat pada audit log.
       </p>
     </form>
   </div>
 </div>
 
 <!-- ============ DASHBOARD ESS ============ -->
-<div id="essDashboard" class:list={['fixed inset-0 z-97 bg-canvas overflow-y-auto', !employee && 'hidden']}>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-    <div class="flex items-center justify-between gap-4 flex-wrap">
+<div id="essDashboard" class:list={['min-h-screen bg-background text-text-dark pb-16', !employee && 'hidden']}>
+  <header class="bg-primary text-white py-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 flex-wrap">
       <div class="flex items-center gap-2">
-        <span class="font-heading font-bold text-ink text-lg tracking-wide">NIMO</span>
-        <span class="text-sage-deep text-[10px] font-medium uppercase tracking-widest border-l border-line pl-2">ESS Dashboard</span>
+        <span class="font-heading font-bold text-white text-lg tracking-wide">NIMO</span>
+        <span class="text-accent text-[11px] font-bold uppercase tracking-widest border-l border-white/20 pl-2.5">ESS Portal Internal</span>
       </div>
       <div class="flex items-center gap-3">
-        <span class="hidden sm:inline text-xs text-muted">Sesi aktif sebagai</span>
-        <div class="flex items-center gap-2.5 card rounded-full pl-1.5 pr-4 py-1.5">
-          <div id="essAvatar" class="w-8 h-8 rounded-full bg-sage text-white flex items-center justify-center font-heading font-bold text-sm">
+        <div class="flex items-center gap-2.5 bg-white/10 backdrop-blur-xs rounded-full pl-2 pr-4 py-1.5 border border-white/15">
+          <div id="essAvatar" class="w-8 h-8 rounded-full bg-accent text-text-dark flex items-center justify-center font-heading font-bold text-sm">
             {employee ? employee.name.trim().charAt(0).toUpperCase() : '—'}
           </div>
           <div class="leading-tight">
-            <p id="essProfileName" class="font-heading font-semibold text-ink text-sm">{employee?.name ?? '—'}</p>
-            <p id="essProfileMeta" class="text-[11px] text-muted">
+            <p id="essProfileName" class="font-heading font-semibold text-white text-sm">{employee?.name ?? '—'}</p>
+            <p id="essProfileMeta" class="text-[11px] text-white/70">
               {employee ? `${employee.nik} · ${employee.role}` : '—'}
             </p>
           </div>
         </div>
         <button type="button" id="essLogoutBtn"
-                class="inline-flex items-center gap-2 border border-danger/30 text-danger font-heading font-semibold text-xs px-4 py-2.5 rounded-full hover:bg-danger-tint transition-colors">
-          <LogOut class="w-3.5 h-3.5" /> Logout
+                class="inline-flex items-center gap-2 border border-white/20 text-white font-heading font-semibold text-xs px-4 py-2.5 rounded-full hover:bg-white/10 transition-colors">
+          <LogOut class="w-3.5 h-3.5 text-accent" /> Logout
         </button>
       </div>
     </div>
+  </header>
 
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- ============ EDITOR VIDEO DESTINASI ============ -->
-    <div class="card p-6 mt-6">
+    <div class="card p-6">
       <div class="flex items-start gap-3">
-        <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
-          <Video class="w-5 h-5 text-sage-deep" />
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+          <Video class="w-5 h-5 text-primary" />
         </div>
         <div class="flex-1 min-w-0">
-          <h2 class="font-heading font-bold text-ink text-lg">Video Destinasi</h2>
+          <h2 class="font-heading font-bold text-text-dark text-lg">Kelola Video Destinasi</h2>
           <p class="text-xs text-muted mt-0.5">
             Ganti foto sampul sebuah destinasi menjadi video (mp4/webm) yang bisa dilihat semua pengunjung.
             Kosongkan URL lalu simpan untuk kembali ke foto.
@@ -120,15 +117,15 @@ const isEssAdmin = employee?.kind === 'employee' && (employee?.name || '').trim(
     </div>
 
     <!-- ============ KELOLA AKUN ESS (khusus Ami) ============ -->
-    <div id="essAccountsPanel" class:list=['card p-6 mt-5', !isEssAdmin && 'hidden']>
+    <div id="essAccountsPanel" class:list=['card p-6 mt-6', !isEssAdmin && 'hidden']>
       <div class="flex items-start gap-3">
-        <div class="w-10 h-10 rounded-xl bg-sage-tint flex items-center justify-center shrink-0">
-          <UserPlus class="w-5 h-5 text-sage-deep" />
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+          <UserPlus class="w-5 h-5 text-primary" />
         </div>
         <div class="flex-1 min-w-0">
-          <h2 class="font-heading font-bold text-ink text-lg">Kelola Akun ESS</h2>
+          <h2 class="font-heading font-bold text-text-dark text-lg">Kelola Akun ESS</h2>
           <p class="text-xs text-muted mt-0.5">
-            Buat atau hapus akun karyawan (NIK, password, role). Khusus akun Ami.
+            Buat atau kelola akun karyawan internal (NIK, password, role). Khusus hak akses administrator.
           </p>
         </div>
       </div>
@@ -154,7 +151,7 @@ const isEssAdmin = employee?.kind === 'employee' && (employee?.name || '').trim(
       <p id="essAccountError" class="hidden note-error mt-3 mb-0" role="alert"></p>
 
       <div class="mt-6">
-        <h3 class="font-heading font-semibold text-ink text-sm mb-3">Daftar Akun</h3>
+        <h3 class="font-heading font-semibold text-text-dark text-sm mb-3">Daftar Akun Karyawan</h3>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead>
@@ -172,7 +169,5 @@ const isEssAdmin = employee?.kind === 'employee' && (employee?.name || '').trim(
         <p id="essAccountEmpty" class="hidden text-center text-muted text-sm py-6">Belum ada akun.</p>
       </div>
     </div>
-
-    <p id="essSyncNote" class="text-center text-[11px] text-muted mt-5" aria-live="polite"></p>
-  </div>
+  </main>
 </div>

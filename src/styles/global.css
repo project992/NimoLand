@@ -229,9 +229,3 @@ body { overflow-x: clip; }
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
-
-/* Portal ESS (route /ess): sembunyikan chrome publik — halaman ini hanya
-   menampilkan overlay login/dashboard ESS. */
-body.ess-only header,
-body.ess-only footer,
-body.ess-only #appRoot { display: none; }

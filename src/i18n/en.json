@@ -14,11 +14,27 @@
     "masukAtauDaftar": "Sign In or Register"
   },
   "hero": {
-    "lokasi": "National Destination Network",
-    "tagline": "A Tourism Company That Focuses On Social Impact, MSME & Renewable Energy",
-    "deskripsi": "Nimo Land Group manages a nationwide network of tourist destinations & resorts — from tea plantations in Bandung to the world's largest volcanic lake, Indonesia's tallest ferris wheel, and ecomarine in Bali. One platform, across Indonesia.",
-    "beliTiketSekarang": "Buy Ticket Now",
+    "lokasi": "National Destination Network · Bandung · Subang · Malang · Toba · Bali",
+    "headline": "Building Indonesia's Next Iconic Destinations.",
+    "tagline": "A Tourism Company That Focuses On Social Impact, MSME & Renewable Energy.",
+    "deskripsi": "Developing a nationwide network of modern natural theme parks, high-elevation iconic attractions, and world-class resorts empowering thousands of local MSMEs and communities across Indonesia.",
+    "jelajahiDestinasi": "Explore Destinations",
     "lihatPenginapan": "View Accommodation"
+  },
+  "numbers": {
+    "eyebrow": "Nimo in Numbers",
+    "judul": "Sustainable Growth Across the Archipelago",
+    "desc": "Nimo Land Group's tangible commitment to delivering world-class tourism while driving local economic ecosystems and social impact.",
+    "stat1": "Theme Park & Resort",
+    "stat1Sub": "National Iconic Destinations",
+    "stat2": "Rooms",
+    "stat2Sub": "Villas, Glamping & Resort Rooms",
+    "stat3": "Visitors / Month",
+    "stat3Sub": "Guests Welcomed",
+    "stat4": "Employees",
+    "stat4Sub": "Local Talents & Workforce",
+    "stat5": "MSMEs Empowered",
+    "stat5Sub": "Creative Economy Partners"
   },
   "tentang": {
     "eyebrow": "About Nimo Land Group",

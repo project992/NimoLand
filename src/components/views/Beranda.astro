@@ -10,44 +10,156 @@ const t = key => Astro.locals.t(key);
 ---
 <div class={cls} data-view="beranda">
 
-  <!-- ============ HERO ============ -->
-  <section class="relative min-h-[100svh] flex items-end overflow-hidden bg-bark">
-    <div id="heroTrack" class="absolute inset-0">
-      {HERO_SLIDES.map((s, i) => (
-        <div class:list={['hero-slide absolute inset-0', i === 0 && 'active']}>
-          <div class="img-shell absolute inset-0">
-            <img class="w-full h-full object-cover" alt=""
-                 src={i === 0 ? localSrc(s.fb) : localSrc(s.img)} data-fallback={localSrc(s.fb)}
-                 fetchpriority={i === 0 ? 'high' : undefined} loading={i === 0 ? 'eager' : 'lazy'} />
-          </div>
-        </div>
-      ))}
+  <!-- ============ HERO WITH CINEMATIC MONTAGE VIDEO ============ -->
+  <section class="relative min-h-[100svh] flex items-end overflow-hidden bg-black">
+    <!-- Cinematic Video Background & Fallback Poster -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <!-- High-res static fallback image -->
+      <img class="w-full h-full object-cover opacity-90 scale-100" alt=""
+           src="/aimg/tAG8ngQWBpj62NH-sryt3zUUZ3FH.jpg" fetchpriority="high" loading="eager" />
+
+      <!-- Montage Drone Video (Nimo Highland, Tea Resort, Ciater, Pinaru, Savia, Bali) -->
+      <video id="heroBgVideo" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-opacity duration-700"
+             src="/videos/nimo-tea-resort/aerial.mp4"
+             data-playlist="/videos/nimo-tea-resort/aerial.mp4,/videos/nimo-resort-ciater/aerial.mp4,/videos/pinaru-park/aerial.MOV,/videos/savia-hotel-resort/aerial.mp4,/videos/new-dgyp-resort/aerial.mp4"
+             playsinline muted loop autoplay preload="metadata"
+             aria-label="Cinematic Drone Background Nimo Land Group"></video>
+
+      <!-- Thin subtle dark gradient vignette keeping video clear while text pops -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent"></div>
     </div>
 
-    {/* Flat scrim instead of the old three-stop gradient. */}
-    <div class="absolute inset-0 bg-bark/55 pointer-events-none"></div>
-
+    <!-- Hero Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pb-16 lg:pb-24 w-full">
-      <p class="eyebrow text-white/80 mb-4">
-        <MapPin class="w-4 h-4" /> {t('hero.lokasi')}
-      </p>
-      <h1 class="font-heading font-bold text-white text-4xl sm:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">
-        Nimo Land Group
-      </h1>
-
-      <div class="flex flex-wrap items-center gap-4 mt-3">
-        <p class="font-heading text-white/85 text-lg sm:text-2xl italic">{t('hero.tagline')}</p>
+      <div class="inline-flex items-center gap-2 text-accent bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/15 mb-5 text-xs sm:text-sm font-heading font-semibold shadow-md">
+        <MapPin class="w-3.5 h-3.5 text-accent" /> {t('hero.lokasi')}
       </div>
 
-      <p class="text-white/80 text-sm sm:text-base leading-relaxed max-w-xl mt-6">
-        {t('hero.deskripsi')}
-      </p>
+      <h1 class="font-heading font-bold text-white text-4xl sm:text-6xl lg:text-7xl leading-[1.08] max-w-4xl drop-shadow-lg">
+        {t('hero.headline')}
+      </h1>
+
+      <div class="mt-4 max-w-2xl">
+        <p class="font-heading text-accent text-lg sm:text-2xl font-bold tracking-wide drop-shadow-md">
+          {t('hero.tagline')}
+        </p>
+        <p class="text-white/90 text-sm sm:text-base leading-relaxed mt-3 drop-shadow-sm max-w-xl">
+          {t('hero.deskripsi')}
+        </p>
+      </div>
 
       <div class="flex flex-wrap items-center gap-4 mt-8">
+        <a href="/destinasi" data-route="destinations"
+           class="btn-accent px-8 py-4 sm:text-base font-heading font-bold rounded-full shadow-lg hover:scale-105 transition-transform">
+          {t('hero.jelajahiDestinasi')}
+        </a>
         <a href="/penginapan" data-route="hotels"
-           class="btn-accent px-7 py-3.5 sm:text-base">
+           class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-heading font-semibold px-7 py-4 rounded-full backdrop-blur-md border border-white/20 transition-all text-sm sm:text-base">
           {t('hero.lihatPenginapan')}
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: NIMO IN NUMBERS ============ -->
+  <section id="nimo-in-numbers" class="bg-primary text-white py-16 lg:py-24 relative overflow-hidden border-y border-white/10">
+    <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C9A96A_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
+        <p class="eyebrow text-accent justify-center mb-3">
+          <span class="w-6 h-px bg-accent"></span> {t('numbers.eyebrow')} <span class="w-6 h-px bg-accent"></span>
+        </p>
+        <h2 class="font-heading font-bold text-white text-3xl sm:text-4xl lg:text-5xl leading-tight">
+          {t('numbers.judul')}
+        </h2>
+        <p class="text-white/80 text-sm sm:text-base leading-relaxed mt-4">
+          {t('numbers.desc')}
+        </p>
+      </div>
+
+      <!-- Stats Grid / Cards with Bold Figures & Count-Up Animation -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6" id="numbersGrid">
+        
+        <!-- Card 1: 16 Theme Park & Resort -->
+        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
+          <div>
+            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
+              <span class="count-up" data-target="16">16</span>
+            </div>
+            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
+              {t('numbers.stat1')}
+            </p>
+          </div>
+          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
+            {t('numbers.stat1Sub')}
+          </p>
+        </div>
+
+        <!-- Card 2: 222 Rooms -->
+        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
+          <div>
+            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
+              <span class="count-up" data-target="222">222</span>
+            </div>
+            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
+              {t('numbers.stat2')}
+            </p>
+          </div>
+          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
+            {t('numbers.stat2Sub')}
+          </p>
+        </div>
+
+        <!-- Card 3: 100.000+ Visitors/bulan -->
+        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
+          <div>
+            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
+              <span class="count-up" data-target="100000" data-format="locale">100.000</span>
+              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
+            </div>
+            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
+              {t('numbers.stat3')}
+            </p>
+          </div>
+          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
+            {t('numbers.stat3Sub')}
+          </p>
+        </div>
+
+        <!-- Card 4: 600+ Employees -->
+        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
+          <div>
+            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
+              <span class="count-up" data-target="600">600</span>
+              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
+            </div>
+            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
+              {t('numbers.stat4')}
+            </p>
+          </div>
+          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
+            {t('numbers.stat4Sub')}
+          </p>
+        </div>
+
+        <!-- Card 5: 5.000+ UMKM Diberdayakan -->
+        <div class="stat-card col-span-2 md:col-span-1 bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
+          <div>
+            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
+              <span class="count-up" data-target="5000" data-format="locale">5.000</span>
+              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
+            </div>
+            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
+              {t('numbers.stat5')}
+            </p>
+          </div>
+          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
+            {t('numbers.stat5Sub')}
+          </p>
+        </div>
+
       </div>
     </div>
   </section>

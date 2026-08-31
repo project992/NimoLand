@@ -306,7 +306,7 @@ const Navbar = {
     });
 
     menu.addEventListener('click', e => {
-      if (e.target.closest('[data-route], [data-logout]')) close();
+      if (e.target.closest('[data-route], [data-open-ess], [data-logout]')) close();
     });
   },
 };
@@ -673,83 +673,285 @@ const Gallery = {
 };
 
 /* ------------------------------------------------------------------
-   08. HERO CINEMATIC VIDEO MONTAGE
+   08. ESS — Employee Self-Service
 ------------------------------------------------------------------ */
-const HeroVideo = {
+const ESS = {
+  user: null,
+
   init() {
-    const video = document.getElementById('heroBgVideo');
-    if (!video) return;
+    const standalone = !!document.getElementById('essStandalone');
 
-    const raw = video.dataset.playlist;
-    const playlist = raw ? raw.split(',').filter(Boolean) : [video.src];
-    if (playlist.length <= 1) return;
+    document.querySelectorAll('[data-open-ess]').forEach(b =>
+      b.addEventListener('click', () => this.openLogin()));
+    document.querySelectorAll('[data-close-ess]').forEach(b => {
+      if (standalone) b.classList.add('hidden');   // tidak ada tombol batal di halaman /ess
+      else b.addEventListener('click', () => this.closeLogin());
+    });
 
-    let index = 0;
-    let timer = null;
+    document.getElementById('essLoginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      this.doLogin();
+    });
+    document.getElementById('essLoginModal').addEventListener('click', e => {
+      if (e.target === e.currentTarget && !standalone) this.closeLogin();
+    });
+    document.getElementById('essLogoutBtn').addEventListener('click', () => this.logout());
 
-    const playNext = () => {
-      index = (index + 1) % playlist.length;
-      video.style.opacity = '0.3';
-      setTimeout(() => {
-        video.src = playlist[index];
-        video.play().catch(() => {});
-        video.style.opacity = '0.9';
-      }, 400);
-    };
+    document.getElementById('essVideoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      this.saveVideo();
+    });
+    document.getElementById('essVideoClear').addEventListener('click', () => this.clearVideo());
+    document.getElementById('essVideoDest').addEventListener('change', () => this.previewVideo());
 
-    video.addEventListener('ended', playNext);
-    timer = setInterval(playNext, 16000);
+    document.getElementById('essAccountForm').addEventListener('submit', e => {
+      e.preventDefault();
+      this.createAccount();
+    });
+    document.getElementById('essAccountBody').addEventListener('click', e => {
+      const btn = e.target.closest('[data-del-acc]');
+      if (btn) this.deleteAccount(btn.dataset.delAcc);
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { this.closeLogin(); }
+    });
+
+    // The server already rendered the dashboard visible for a signed-in
+    // employee. Di /ess, tampilkan login bila belum ada sesi karyawan.
+    if (State.user?.kind === 'employee') {
+      this.user = State.user;
+      this.showDashboard();
+    } else if (standalone) {
+      this.openLogin();
+    }
   },
-};
 
-/* ------------------------------------------------------------------
-   09. NIMO IN NUMBERS — ANIMATED COUNT-UP
------------------------------------------------------------------- */
-const NumbersCountUp = {
-  init() {
-    const section = document.getElementById('nimo-in-numbers');
-    if (!section) return;
+  openLogin() {
+    document.getElementById('essLoginError').classList.add('hidden');
+    document.getElementById('essLoginModal').classList.remove('hidden');
+    lockScroll(true);
+    document.getElementById('essNik').focus();
+  },
+  closeLogin() {
+    document.getElementById('essLoginModal').classList.add('hidden');
+    if (!this.user) lockScroll(false);
+  },
 
-    const formatNum = (n, isLocale) => {
-      if (!isLocale) return String(Math.round(n));
-      const loc = State.locale === 'en' ? 'en-US' : 'id-ID';
-      return Math.round(n).toLocaleString(loc);
+  async doLogin() {
+    const nik = document.getElementById('essNik').value.trim();
+    const password = document.getElementById('essPassword').value;
+    const btn = document.getElementById('essLoginBtn');
+    const err = document.getElementById('essLoginError');
+    const original = btn.innerHTML;
+
+    if (!nik || !password) {
+      err.textContent = t('error.nikPassword');
+      err.classList.remove('hidden');
+      return;
+    }
+
+    err.classList.add('hidden');
+    btn.disabled = true;
+    btn.textContent = t('ess.memeriksa');
+
+    const { ok, data } = await api('/api/ess/login', {
+      method: 'POST',
+      body: JSON.stringify({ nik, password }),
+    });
+
+    btn.disabled = false;
+    btn.innerHTML = original;
+
+    if (!ok) {
+      err.textContent = data?.error ?? t('ess.tidakBisaMasuk');
+      err.classList.remove('hidden');
+      return;
+    }
+
+    document.getElementById('essPassword').value = '';
+    this.user = data.user;
+    this.closeLogin();
+    this.showDashboard();
+  },
+
+  showDashboard() {
+    const u = this.user;
+    document.getElementById('essAvatar').textContent = u.name.trim().charAt(0).toUpperCase();
+    document.getElementById('essProfileName').textContent = u.name;
+    document.getElementById('essProfileMeta').textContent = `${u.nik} · ${u.role}`;
+    document.getElementById('essDashboard').classList.remove('hidden');
+    lockScroll(true);
+    this.syncAccountsPanel();
+  },
+
+  isAdmin() {
+    const u = this.user;
+    return !!(u && u.kind === 'employee' && (u.name || '').trim().toLowerCase() === 'ami');
+  },
+
+  /* Show the account management panel only for the designated admin (Ami). */
+  syncAccountsPanel() {
+    const panel = document.getElementById('essAccountsPanel');
+    if (panel) panel.classList.toggle('hidden', !this.isAdmin());
+    if (this.isAdmin()) this.loadAccounts();
+  },
+
+  async loadAccounts() {
+    const { ok, status, data } = await api('/api/ess/accounts');
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      document.getElementById('essAccountError').textContent = data?.error ?? 'Gagal memuat akun.';
+      document.getElementById('essAccountError').classList.remove('hidden');
+      return;
+    }
+    this.renderAccounts(data.accounts ?? []);
+  },
+
+  renderAccounts(accounts) {
+    const body = document.getElementById('essAccountBody');
+    const self = this;
+    body.innerHTML = accounts.map(a => `
+      <tr class="hover:bg-paper/70 transition-colors">
+        <td class="px-4 py-3 font-heading font-semibold text-ink text-xs whitespace-nowrap">${esc(a.nik)}</td>
+        <td class="px-4 py-3 font-medium text-ink text-sm">${esc(a.full_name)}</td>
+        <td class="px-4 py-3 text-muted text-xs">${esc(a.role)}</td>
+        <td class="px-4 py-3">${a.active
+          ? '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-ok/25 bg-ok-tint text-ok px-2.5 py-1 rounded-full">AKTIF</span>'
+          : '<span class="inline-flex items-center gap-1 text-[11px] font-heading font-semibold border border-line bg-paper text-muted px-2.5 py-1 rounded-full">NONAKTIF</span>'}</td>
+        <td class="px-4 py-3 text-right">
+          ${a.nik === (self.user && self.user.nik) ? '<span class="text-[11px] text-muted">Anda</span>'
+            : `<button type="button" data-del-acc="${esc(a.nik)}"
+                 class="inline-flex items-center gap-1.5 border border-danger/30 text-danger font-heading font-semibold text-xs px-3 py-2 rounded-full hover:bg-danger-tint transition-colors">
+                 ${icon('trash-2', 'w-3.5 h-3.5')} Hapus</button>`}
+        </td>
+      </tr>`).join('');
+    document.getElementById('essAccountEmpty').classList.toggle('hidden', accounts.length > 0);
+  },
+
+  async createAccount() {
+    const err = document.getElementById('essAccountError');
+    err.classList.add('hidden');
+    const nik = document.getElementById('essAccNik').value.trim();
+    const name = document.getElementById('essAccName').value.trim();
+    const role = document.getElementById('essAccRole').value;
+    const password = document.getElementById('essAccPassword').value;
+
+    if (!nik || !name || !role || !password) {
+      err.textContent = 'Lengkapi NIK, nama, role, dan password.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    const btn = document.getElementById('essAccountBtn');
+    btn.disabled = true;
+    const { ok, status, data } = await api('/api/ess/accounts', {
+      method: 'POST',
+      body: JSON.stringify({ nik, name, role, password }),
+    });
+    btn.disabled = false;
+
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      err.textContent = data?.error ?? 'Gagal membuat akun.';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    document.getElementById('essAccNik').value = '';
+    document.getElementById('essAccName').value = '';
+    document.getElementById('essAccRole').value = '';
+    document.getElementById('essAccPassword').value = '';
+    Toast.show(`Akun ${data.account.nik} berhasil dibuat`);
+    this.loadAccounts();
+  },
+
+  async deleteAccount(nik) {
+    if (!confirm(`Hapus akun ${nik}?`)) return;
+    const { ok, status, data } = await api('/api/ess/accounts', {
+      method: 'DELETE',
+      body: JSON.stringify({ nik }),
+    });
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      if (status === 403) { this.syncAccountsPanel(); }
+      Toast.show(data?.error ?? 'Gagal menghapus akun.');
+      return;
+    }
+    Toast.show(`Akun ${data.deleted} dihapus`);
+    this.loadAccounts();
+  },
+
+  /* Video editor: prefill, save, clear. */
+  videoEls() {
+    return {
+      dest: document.getElementById('essVideoDest'),
+      url: document.getElementById('essVideoUrl'),
+      note: document.getElementById('essVideoNote'),
+      err: document.getElementById('essVideoError'),
     };
+  },
+  previewVideo() {
+    const { dest, url, note, err } = this.videoEls();
+    err.classList.add('hidden');
+    const current = State.videos[dest.value];
+    url.value = current ?? '';
+    note.textContent = current
+      ? t('ess.videoSaatIni')
+      : t('ess.videoBelumAda');
+  },
+  async saveVideo() {
+    const { dest, url, note, err } = this.videoEls();
+    err.classList.add('hidden');
+    const destination_id = dest.value;
+    if (!destination_id) {
+      err.textContent = t('ess.pilihDestinasiDulu');
+      err.classList.remove('hidden');
+      return;
+    }
+    const video_url = url.value.trim();
+    if (video_url && !/^https?:\/\/.+/i.test(video_url)) {
+      err.textContent = t('ess.urlHarusHttp');
+      err.classList.remove('hidden');
+      return;
+    }
 
-    const runCountUp = el => {
-      const target = Number(el.dataset.target || 0);
-      const isLocale = el.dataset.format === 'locale';
-      const duration = 1800; // ms
-      const startTime = performance.now();
+    const { ok, status, data } = await api('/api/ess/videos', {
+      method: 'POST',
+      body: JSON.stringify({ destination_id, video_url }),
+    });
+    if (!ok) {
+      if (status === 401) { this.forceLogout(); return; }
+      err.textContent = data?.error ?? t('ess.gagalSimpan');
+      err.classList.remove('hidden');
+      return;
+    }
 
-      const update = now => {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        // easeOutCubic
-        const ease = 1 - Math.pow(1 - progress, 3);
-        const current = target * ease;
-        el.textContent = formatNum(current, isLocale);
+    if (video_url) State.videos[destination_id] = video_url;
+    else delete State.videos[destination_id];
+    note.textContent = video_url
+      ? t('ess.videoTersimpan')
+      : t('ess.videoDihapus');
+    Toast.show(video_url ? t('ess.videoDisimpan') : t('ess.videoDihapusLabel'));
+    Destinations.refresh();
+  },
 
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        } else {
-          el.textContent = formatNum(target, isLocale);
-        }
-      };
+  async clearVideo() {
+    const { dest, url, note, err } = this.videoEls();
+    if (!dest.value) return;
+    url.value = '';
+    this.saveVideo();
+  },
 
-      requestAnimationFrame(update);
-    };
+  async logout() {
+    await api('/api/auth/logout', { method: 'POST' });
+    location.href = '/';
+  },
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          section.querySelectorAll('.count-up').forEach(runCountUp);
-          obs.disconnect();
-        }
-      });
-    }, { threshold: 0.2 });
-
-    observer.observe(section);
+  forceLogout() {
+    Toast.show(t('ess.sesiBerakhir'));
+    setTimeout(() => { location.href = '/'; }, 1500);
   },
 };
 
@@ -761,14 +963,17 @@ function boot() {
   Reveal.init();
   Auth.init();
   Navbar.init();
-  HeroVideo.init();
-  NumbersCountUp.init();
   MomentSlider.init();
   Destinations.init();
   Hotels.init();
   Gallery.init();
+  ESS.init();
   Router.init(); // last: every view must exist before the first route renders
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
+
+
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => ESS.init()); else ESS.init();

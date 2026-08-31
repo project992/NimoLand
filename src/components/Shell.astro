@@ -8,7 +8,6 @@ import HotelsView from './views/HotelsView.astro';
 import GaleriView from './views/GaleriView.astro';
 import KontakView from './views/KontakView.astro';
 import MiscModals from './modals/MiscModals.astro';
-import EssPortal from './ess/EssPortal.astro';
 import { jsonForScript } from '../lib/serialize.js';
 
 /* App shell shared by every path-routed page. Server-renders the full SPA view
@@ -40,6 +39,5 @@ const viewClass = name => {
 <FloatingActions />
 
 <MiscModals />
-<EssPortal />
 
 <script src="../scripts/app.js"></script>

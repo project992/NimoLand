@@ -1,27 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
-import Shell from '../components/Shell.astro';
-import { getRatings } from '../lib/ratings.js';
+import EssPortal from '../components/ess/EssPortal.astro';
 import { getVideos } from '../lib/videos.js';
+import { jsonForScript } from '../lib/serialize.js';
 
 export const prerender = false;
 
-/* Portal ESS — route terpisah, TIDAK ditautkan dari footer publik.
-   Memakai Shell supaya app.js (yang berisi seluruh logika ESS) ikut dimuat;
-   chrome publik disembunyikan lewat class body "ess-only". Karyawan login di
-   sini; di /ess muncul form login (atau dashboard bila sesi karyawan aktif). */
-const [ratings, videos] = await Promise.all([
-  getRatings().catch(() => ({})),
-  getVideos().catch(() => ({})),
-]);
-const employee = Astro.locals.isEmployee;
+/* Portal ESS Internal — route terpisah & aman untuk operasional karyawan Nimo Land Group.
+   Terisolasi sepenuhnya dari halaman publik corporate (tidak memuat Shell publik / app.js publik). */
+const videos = await getVideos().catch(() => ({}));
 ---
 <Base
-  title="Portal ESS — Nimo Land Group"
-  description="Portal Karyawan Nimo Land Group."
+  title="Portal ESS Internal — Nimo Land Group"
+  description="Portal Karyawan Internal Nimo Land Group."
   noindex
-  bodyClass="ess-only"
+  bodyClass="bg-background"
 >
-  <div id="essStandalone" />
-  <Shell active="beranda" ratings={ratings} videos={videos} />
+  <script type="application/json" id="videos-data" set:html={jsonForScript(videos)} is:inline />
+  <EssPortal standalone={true} />
+  <script src="../scripts/ess.js"></script>
 </Base>
