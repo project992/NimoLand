@@ -1,6 +1,7 @@
 ---
 import MapPin from '@lucide/astro/icons/map-pin';
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
+import Play from '@lucide/astro/icons/play';
 import NimoImage from './NimoImage.astro';
 import { SITE } from '../lib/site.js';
 import { FOOTAGE } from '../lib/data.js';
@@ -11,6 +12,10 @@ const brandSlug = (d.img || '').split('/')[2];
 const bestPhotos = brandSlug ? BEST_PHOTOS[brandSlug] : undefined;
 const video = FOOTAGE[d.id]?.aerial;
 const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
+const isYouTube = video && /(youtube\.com|youtu\.be)/i.test(video);
+const embedUrl = isYouTube
+  ? (video.includes('/embed/') ? video : `https://www.youtube.com/embed/${video.split('v=')[1]?.split('&')[0] || video.split('/').pop()}`)
+  : video;
 
 /* Server-rendered detail view for /destinasi/[slug]. The `.view` + data-view
    contract lets the client Router keep navigating the whole app from here. */
@@ -43,26 +48,31 @@ const flagship = d.id === 'nimo-highland';
       <div class="lg:col-span-2 space-y-9">
         <div>
           <h2 class="font-heading font-semibold text-ink text-xl mb-3">Sorotan</h2>
-          <div class="flex flex-wrap gap-2">
+          <div class="flex flex-wrap gap-2 mb-6">
             {d.highlights.map(h => (
               <span class="text-xs bg-paper border border-line-soft text-muted px-3 py-1.5 rounded-full">{h}</span>
             ))}
           </div>
-        </div>
 
-        {video && (
-          <div>
-            <h2 class="font-heading font-semibold text-ink text-xl mb-4">Video</h2>
-            <div class="rounded-2xl overflow-hidden img-shell aspect-video bg-bark">
-              {isVideo ? (
-                <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
-                       controls preload="metadata" aria-label={`Video ${d.name}`}></video>
-              ) : (
-                <img src={video} alt={`Video ${d.name}`} class="w-full h-full object-cover" loading="lazy" />
-              )}
+          {video && (
+            <div class="mt-6">
+              <h3 class="font-heading font-semibold text-ink text-lg mb-3 flex items-center gap-2">
+                <Play class="w-4 h-4 text-sage-deep fill-sage-deep/20" />
+                Video Highlight Destinasi
+              </h3>
+              <div class="rounded-2xl overflow-hidden img-shell aspect-video bg-bark shadow-lg border border-line-soft relative">
+                {isYouTube ? (
+                  <iframe class="w-full h-full" src={embedUrl} title={`Video Highlight ${d.name}`} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                ) : isVideo ? (
+                  <video class="w-full h-full object-cover" src={video} playsinline muted loop autoplay
+                         controls preload="metadata" aria-label={`Video Highlight ${d.name}`}></video>
+                ) : (
+                  <img src={video} alt={`Video Highlight ${d.name}`} class="w-full h-full object-cover" loading="lazy" />
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div>
           <h2 class="font-heading font-semibold text-ink text-xl mb-4">Galeri (6 Footage)</h2>

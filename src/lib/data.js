@@ -306,14 +306,22 @@ export const ROOM_TYPES = ['Semua', 'Villa', 'Room', 'Cabin', 'Cottage', 'Suite'
    Dipakai sebagai cover autoplay di kartu destinasi (via coverMedia) dan di
    halaman detail; row DB destination_videos tetap menang bila karyawan set. */
 export const FOOTAGE = {
-  'nimo-water-forest':   { aerial: '/brand/nimo-water-forest/nwf-hero.jpg' },
+  'nimo-highland':       { aerial: '/videos/nimo-tea-resort/aerial.mp4' },
+  'nimo-eye':            { aerial: '/videos/nimo-tea-resort/ad.mp4' },
+  'nimo-water-forest':   { aerial: 'https://www.youtube.com/embed/4vwvbq6QWpA' },
+  'bogor-aqua-game':     { aerial: 'https://www.youtube.com/embed/SYMZjjT0k3E' },
+  'malang-skyland':      { aerial: 'https://www.youtube.com/embed/4vwvbq6QWpA' },
+  'pinaru-park':         { aerial: '/videos/pinaru-park/aerial.MOV' },
+  'nimo-kaldera-toba':   { aerial: 'https://www.youtube.com/embed/4vwvbq6QWpA' },
+  'nimo-zoo':            { aerial: 'https://www.youtube.com/embed/SYMZjjT0k3E' },
+  'punceling-park':      { aerial: '/videos/new-dgyp-resort/aerial.mp4' },
+  'nimo-ecomarine':      { aerial: 'https://www.youtube.com/embed/SYMZjjT0k3E' },
+  // Hotel / Resort video footage
   'nimo-tea-resort':     { aerial: '/videos/nimo-tea-resort/aerial.mp4',     ad: '/videos/nimo-tea-resort/ad.mp4' },
   'nimo-resort-ciater':  { aerial: '/videos/nimo-resort-ciater/aerial.mp4',  ad: '/videos/nimo-resort-ciater/ad.mp4' },
   'savia-hotel-resort':  { aerial: '/videos/savia-hotel-resort/aerial.mp4' },
-  'punceling-park':      { aerial: '/brand/punceling-park/4320b925-e19f-458d-9c87-cd9f0036b6c4.jpg' },
-  'nimo-ecomarine':      { aerial: ECO(1) },
-  'nimo-kaldera-toba':   { aerial: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-05.jpg' },
-  'nimo-eye':            { aerial: NE(1) },
+  'new-dgyp-resort':     { aerial: '/videos/new-dgyp-resort/aerial.mp4',     ad: '/videos/new-dgyp-resort/ad.mp4' },
+  'glamping-nimoza':     { aerial: '/videos/nimo-tea-resort/aerial.mp4' },
 };
 
 /** Flat list of every room with its parent hotel folded in. */
