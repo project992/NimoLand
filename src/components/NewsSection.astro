@@ -1,9 +1,8 @@
 ---
 import ExternalLink from '@lucide/astro/icons/external-link';
-import Newspaper from '@lucide/astro/icons/newspaper';
 import Play from '@lucide/astro/icons/play';
 import Trophy from '@lucide/astro/icons/trophy';
-import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS } from '../lib/data.js';
+import { NEWS_SPOTLIGHT, MEDIA_VIDEOS } from '../lib/data.js';
 
 const locale = Astro.locals.locale ?? 'id';
 ---
@@ -22,8 +21,8 @@ const locale = Astro.locals.locale ?? 'id';
       </div>
       <p class="text-muted text-sm sm:text-base max-w-md">
         {locale === 'en'
-          ? 'Prestigious awards, official news coverage across top national portals, and official documentary videos.'
-          : 'Penghargaan bergengsi skala nasional, liputan resmi portal berita terpercaya, dan dokumentasi video eksklusif jaringan Nimo Land.'}
+          ? 'Prestigious national awards and official documentary videos from Nimo Land Group.'
+          : 'Penghargaan bergengsi tingkat nasional dan dokumentasi video resmi ekosistem pariwisata Nimo Land Group.'}
       </p>
     </div>
 
@@ -90,55 +89,6 @@ const locale = Astro.locals.locale ?? 'id';
           </div>
 
         </div>
-      </div>
-    </div>
-
-    <!-- PORTAL BERITA NASIONAL (ONLINE NEWS GRID) -->
-    <div class="mb-16">
-      <div class="flex items-center justify-between mb-6 reveal">
-        <h3 class="font-heading font-bold text-ink text-xl sm:text-2xl flex items-center gap-2">
-          <Newspaper class="w-5 h-5 text-sage-deep" />
-          {locale === 'en' ? 'National News Portals' : 'Liputan Portal Berita Nasional'}
-        </h3>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {NEWS_ARTICLES.map(art => (
-          <a href={art.url} target="_blank" rel="noopener noreferrer"
-             class="group card overflow-hidden flex flex-col justify-between hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 reveal bg-white border border-bark/8">
-            <div>
-              <div class="relative aspect-[16/10] overflow-hidden img-shell">
-                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                     src={art.img} data-fallback={art.fb} alt={art.title} loading="lazy" />
-                <div class="absolute top-3 left-3 px-2.5 py-1 rounded text-[11px] font-bold text-white shadow"
-                     style={`background-color: ${art.sourceColor};`}>
-                  {art.source}
-                </div>
-                <div class="absolute bottom-3 right-3 bg-bark/85 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-medium text-white">
-                  {art.category}
-                </div>
-              </div>
-
-              <div class="p-5">
-                <div class="flex items-center justify-between text-xs text-muted mb-2.5">
-                  <span>{art.date}</span>
-                  <span class="text-[11px] text-sage-deep font-medium">{art.readTime}</span>
-                </div>
-                <h4 class="font-heading font-bold text-ink text-base group-hover:text-sage-deep transition-colors leading-snug line-clamp-2 mb-2.5">
-                  {art.title}
-                </h4>
-                <p class="text-muted text-xs leading-relaxed line-clamp-3">
-                  {art.desc}
-                </p>
-              </div>
-            </div>
-
-            <div class="px-5 pb-5 pt-2 flex items-center justify-between text-xs font-semibold text-sage-deep border-t border-bark/5 mt-2">
-              <span>{locale === 'en' ? 'Read Full Article' : 'Baca Selengkapnya'}</span>
-              <ExternalLink class="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </div>
-          </a>
-        ))}
       </div>
     </div>
 

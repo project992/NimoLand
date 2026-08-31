@@ -401,60 +401,7 @@ export const NEWS_SPOTLIGHT = {
   fb: '/brand/cnn-awards-2024.png',
 };
 
-export const NEWS_ARTICLES = [
-  {
-    id: 'nimo-eye-muri',
-    source: 'Detik Travel',
-    sourceColor: '#005596',
-    title: 'Nimo Eye Raih Rekor MURI: Bianglala Tertinggi di Indonesia (1.400 MDPL)',
-    date: '11 April 2024',
-    readTime: '3 mnt baca',
-    category: 'Rekor MURI Nasional',
-    desc: 'Museum Rekor-Dunia Indonesia (MURI) resmi mencatatkan Nimo Eye sebagai wahana kincir ria dengan elevasi tertinggi di Indonesia yang menyajikan pemandangan 360 derajat kebun teh Malabar dari ketinggian kabut pegunungan.',
-    url: 'https://travel.detik.com/domestik-destinasi/d-7288924/nimo-eye-bianglala-tertinggi-di-indonesia-raih-rekor-muri',
-    img: '/moments/tentang-05-nimoeye.jpg',
-    fb: '/moments/tentang-05-nimoeye.jpg',
-  },
-  {
-    id: 'nimo-kaldera-toba',
-    source: 'Kompas.com',
-    sourceColor: '#002D62',
-    title: 'Nimo Land Group Kembangkan Destinasi Wisata Modern NIMO Kaldera di Danau Toba',
-    date: '20 Mei 2024',
-    readTime: '4 mnt baca',
-    category: 'Investasi Pariwisata',
-    desc: 'Mengusung konsep modern natural tourism, Nimo Land Group memperluas jaringan nasional ke Toba Caldera Resort (TCR) Ajibata untuk mendukung destinasi pariwisata super prioritas Danau Toba.',
-    url: 'https://travel.kompas.com/read/2024/05/20/nimo-kaldera-toba-wisata-alam-modern',
-    img: '/brand/nimo-kaldera-toba/klt-hero.jpg',
-    fb: '/brand/nimo-kaldera-toba/klt-hero.jpg',
-  },
-  {
-    id: 'nimo-skybridge-antara',
-    source: 'LKBN ANTARA',
-    sourceColor: '#C8102E',
-    title: 'Pesona Sky Bridge 150 Meter & Sunrise Kabut Menembus Perkebunan Teh Pangalengan',
-    date: 'Juli 2024',
-    readTime: '3 mnt baca',
-    category: 'Liputan Nasional',
-    desc: 'Eksotisme jembatan kaca U-shape dan sensasi kabut pagi pegunungan Malabar menjadikan Nimo Highland salah satu magnet wisata unggulan favorit Jawa Barat yang ramai dikunjungi wisatawan nusantara.',
-    url: 'https://www.antaranews.com/berita/pariwisata/nimo-highland-skybridge-pangalengan',
-    img: '/brand/nimo-highland/nh-hero.jpg',
-    fb: '/brand/nimo-highland/nh-hero.jpg',
-  },
-  {
-    id: 'malang-skyland-tech',
-    source: 'Detik Jatim',
-    sourceColor: '#005596',
-    title: 'Malang Skyland: Destinasi Wisata Teknologi 3.0 & Glass Sky Bridge 360 Derajat',
-    date: 'Juni 2024',
-    readTime: '3 mnt baca',
-    category: 'Destinasi Favorit',
-    desc: 'Menghadirkan pemandangan panoramik Kota Malang dan Kota Batu yang dipadukan dengan wahana sky net, jembatan kaca terpanjang, dan inovasi visual interaktif modern.',
-    url: 'https://www.detik.com/jatim/wisata/d-6688192/malang-skyland-daya-tarik-dan-fasilitas',
-    img: '/moments/tentang-04-malang.jpg',
-    fb: '/moments/tentang-04-malang.jpg',
-  },
-];
+
 
 export const MEDIA_VIDEOS = [
   {
