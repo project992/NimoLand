@@ -507,6 +507,19 @@ export const NEWS_ARTICLES = [
     img: '/brand/pinaru-park/pinaru-park-02.png',
     fb: '/brand/pinaru-park/pinaru-park-02.png',
   },
+  {
+    id: 'news-kompas-umkm',
+    title: 'Inovasi Pariwisata Berkelanjutan: Nimo Land Group Berdayakan 5.000+ UMKM Lokal',
+    source: 'Kompas.com',
+    sourceColor: '#F58220',
+    category: 'Dampak Sosial & UMKM',
+    date: '2024',
+    readTime: '3 mnt baca',
+    lead: 'Melalui kemitraan strategis ekosistem pariwisata terpadu di setiap destinasi, Nimo Land Group memberdayakan lebih dari 5.000 mitra UMKM dan ratusan tenaga kerja lokal di Jawa Barat, Jawa Timur, Sumatera Utara, hingga Bali.',
+    url: 'https://travel.kompas.com/read/2024/05/20/121000927/nimo-kaldera-toba-wisata-alam-modern-di-toba-caldera-resort',
+    img: '/brand/nimo-highland/nh-02.jpg',
+    fb: '/brand/nimo-highland/nh-02.jpg',
+  },
 ];
 
 
