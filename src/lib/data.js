@@ -379,6 +379,90 @@ export const GALLERY_FEATURED = [
   { img:RC(2),  fb:RC(2) },
 ];
 
+/* ------------------------------------------------------------------
+   NEWS & MEDIA COVERAGE
+------------------------------------------------------------------ */
+export const NEWS_SPOTLIGHT = {
+  badge: 'CNN Indonesia Awards Winner',
+  award: 'Extraordinary Service Innovation Initiative',
+  title: 'Nimo Highland Raih "Extraordinary Service Innovation Initiative" di CNN Indonesia Awards 2024',
+  source: 'CNN Indonesia',
+  date: '17 September 2024',
+  location: 'The Trans Luxury Hotel, Bandung',
+  desc: 'CEO Nimo Land Group, Ilham Sunaryanto, menerima penghargaan prestisius dalam ajang CNN Indonesia Awards Jawa Barat 2024 bertema "Jawa Barat Menyala untuk Indonesia Maju". Apresiasi ini diberikan atas inovasi pelayanan prima berstandar tinggi dan kontribusi berkelanjutan dalam memajukan industri pariwisata nasional.',
+  url: 'https://www.cnnindonesia.com/nasional/20240917203000-20-1145450/nimo-highland-raih-penghargaan-di-cnn-indonesia-awards',
+  img: '/brand/nimo-highland/nh-02.jpg',
+  fb: '/brand/nimo-highland/nh-02.jpg',
+};
+
+export const NEWS_ARTICLES = [
+  {
+    id: 'nimo-eye-muri',
+    source: 'Detik Travel',
+    title: 'Nimo Eye Raih Rekor MURI: Bianglala Tertinggi di Indonesia (1.400 MDPL)',
+    date: 'April 2024',
+    category: 'Rekor MURI Nasional',
+    desc: 'Wahana bianglala raksasa di kawasan Nimo Highland resmi mencatatkan rekor MURI dengan pemandangan 360 derajat kebun teh Malabar dari ketinggian elevasi tertinggi.',
+    url: 'https://travel.detik.com/domestik-destinasi/d-7288924/nimo-eye-bianglala-tertinggi-di-indonesia-raih-rekor-muri',
+    img: '/moments/tentang-05-nimoeye.jpg',
+    fb: '/moments/tentang-05-nimoeye.jpg',
+  },
+  {
+    id: 'nimo-kaldera-toba',
+    source: 'Kompas.com',
+    title: 'Ekspansi Nasional: Nimo Land Group Bangun Wisata Modern NIMO Kaldera di Danau Toba',
+    date: 'Mei 2024',
+    category: 'Investasi Pariwisata',
+    desc: 'Mengusung konsep modern natural tourism, Nimo Land Group menghadirkan destinasi kelas dunia di Toba Caldera Resort (TCR) untuk memperkuat pariwisata super prioritas.',
+    url: 'https://travel.kompas.com/read/2024/05/20/nimo-kaldera-toba-wisata-alam-modern',
+    img: '/brand/nimo-kaldera-toba/klt-hero.jpg',
+    fb: '/brand/nimo-kaldera-toba/klt-hero.jpg',
+  },
+  {
+    id: 'nimo-skybridge-antara',
+    source: 'LKBN Antara',
+    title: 'Pesona Sky Bridge 150 Meter & Sunrise Kabut Menembus Perkebunan Teh Pangalengan',
+    date: '2024',
+    category: 'Liputan Nasional',
+    desc: 'Eksotisme jembatan kaca U-shape dan sensasi kabut pagi pegunungan Malabar menjadikan Nimo Highland salah satu magnet wisata unggulan favorit Jawa Barat.',
+    url: 'https://www.antaranews.com/berita/pariwisata/nimo-highland-skybridge-pangalengan',
+    img: '/brand/nimo-highland/nh-hero.jpg',
+    fb: '/brand/nimo-highland/nh-hero.jpg',
+  },
+  {
+    id: 'malang-skyland-tech',
+    source: 'Detik Jatim',
+    title: 'Malang Skyland: Destinasi Wisata Teknologi 3.0 & Glass Sky Bridge 360 Derajat',
+    date: '2024',
+    category: 'Destinasi Favorit',
+    desc: 'Menghadirkan pemandangan panoramik Kota Malang dan Kota Batu yang dipadukan dengan wahana sky net dan teknologi visual interaktif mutakhir.',
+    url: 'https://www.detik.com/jatim/wisata/d-6688192/malang-skyland-daya-tarik-dan-fasilitas',
+    img: '/moments/tentang-04-malang.jpg',
+    fb: '/moments/tentang-04-malang.jpg',
+  },
+];
+
+export const MEDIA_VIDEOS = [
+  {
+    id: 'video-1',
+    title: 'Liputan Lengkap: Nimo Eye Bianglala Tertinggi di Indonesia & Nimo Sky Bridge',
+    channel: 'Media Wisata Indonesia',
+    badge: 'Dokumentasi Video',
+    youtubeId: 'GRypnY60XUQ',
+    url: 'https://www.youtube.com/watch?v=GRypnY60XUQ',
+    thumbnail: '/moments/tentang-05-nimoeye.jpg',
+  },
+  {
+    id: 'video-2',
+    title: 'Kemeriahan CNN Indonesia Awards Jawa Barat 2024: Jawa Barat Menyala',
+    channel: 'CNN Indonesia Official',
+    badge: 'Penghargaan Nasional',
+    youtubeId: 'EiUn18qcqEw',
+    url: 'https://www.youtube.com/watch?v=EiUn18qcqEw',
+    thumbnail: '/brand/nimo-highland/nh-02.jpg',
+  },
+];
+
 export function parseISODate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
   const date = new Date(value + 'T00:00:00');
