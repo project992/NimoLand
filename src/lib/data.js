@@ -318,7 +318,7 @@ export function allRooms() {
 }
 
 export const HERO_SLIDES = [
-  { img:'/beranda-highlight.jpg', fb:'/beranda-highlight.jpg', alt:'' },
+  { img:'/beranda-highlight-v2.jpg', fb:'/beranda-highlight-v2.jpg', alt:'' },
 ];
 
 export const MOMENTS = [
