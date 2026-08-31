@@ -11,10 +11,6 @@ const brandSlug = (d.img || '').split('/')[2];
 const bestPhotos = brandSlug ? BEST_PHOTOS[brandSlug] : undefined;
 const video = FOOTAGE[d.id]?.aerial;
 const isVideo = video && /\.(mp4|mov|webm)/i.test(video);
-const isYouTube = video && /(youtube\.com|youtu\.be)/i.test(video);
-const embedUrl = isYouTube
-  ? (video.includes('/embed/') ? video : `https://www.youtube.com/embed/${video.split('v=')[1]?.split('&')[0] || video.split('/').pop()}`)
-  : video;
 
 /* Server-rendered detail view for /destinasi/[slug]. The `.view` + data-view
    contract lets the client Router keep navigating the whole app from here. */
@@ -26,19 +22,17 @@ const flagship = d.id === 'nimo-highland';
     
     <!-- Background Video / Media Overlay -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      {isVideo ? (
-        <video class="w-full h-full object-cover opacity-60 scale-105" src={video} playsinline muted loop autoplay
+      <!-- Instant high-res background image poster -->
+      <img src={d.img} alt="" class="absolute inset-0 w-full h-full object-cover opacity-50 scale-105" />
+
+      {isVideo && (
+        <video class="absolute inset-0 w-full h-full object-cover opacity-65 scale-105"
+               src={video} playsinline muted loop autoplay
                preload="metadata" aria-label={`Video Background ${d.name}`}></video>
-      ) : isYouTube ? (
-        <iframe class="w-full h-full object-cover opacity-60 pointer-events-none scale-125"
-                src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/').pop()}`}
-                title={`Video Background ${d.name}`} frameborder="0" allow="autoplay; encrypted-media"></iframe>
-      ) : (
-        <img src={d.img} alt="" class="w-full h-full object-cover opacity-45 scale-105" />
       )}
       <!-- High contrast dark gradients ensuring text readability -->
-      <div class="absolute inset-0 bg-gradient-to-t from-bark via-bark/75 to-bark/60"></div>
-      <div class="absolute inset-0 bg-bark/30"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-bark via-bark/80 to-bark/60"></div>
+      <div class="absolute inset-0 bg-bark/35"></div>
     </div>
 
     <!-- Foreground Text Content -->
