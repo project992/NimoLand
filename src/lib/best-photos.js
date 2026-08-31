@@ -83,10 +83,10 @@ export const BEST_PHOTOS = {
   ],
   "pinaru-park": [
     "/brand/pinaru-park/pinaru-park-02.png",
-    "/brand/pinaru-park/pinaru-park-01.png",
     "/brand/pinaru-park/pinaru-park-08.png",
     "/brand/pinaru-park/pinaru-park-06.jpg",
     "/brand/pinaru-park/pinaru-park-04.jpg",
+    "/brand/pinaru-park/pinaru-park-05.jpg",
     "/brand/pinaru-park/pinaru-park-07.jpg"
   ],
   "punceling-park": [

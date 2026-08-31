@@ -151,10 +151,10 @@ export const DESTINATIONS = [
     highlights:['Rainbow Slide','Water Slide','ATV','Luge Car','Jacuzzi','Aviary & Mini Zoo'],
     gallery:[
       '/brand/pinaru-park/pinaru-park-02.png',
-      '/brand/pinaru-park/pinaru-park-01.png',
       '/brand/pinaru-park/pinaru-park-08.png',
       '/brand/pinaru-park/pinaru-park-06.jpg',
       '/brand/pinaru-park/pinaru-park-04.jpg',
+      '/brand/pinaru-park/pinaru-park-05.jpg',
       '/brand/pinaru-park/pinaru-park-07.jpg'
     ] },
 
@@ -310,7 +310,6 @@ export const FOOTAGE = {
   'nimo-tea-resort':     { aerial: '/videos/nimo-tea-resort/aerial.mp4',     ad: '/videos/nimo-tea-resort/ad.mp4' },
   'nimo-resort-ciater':  { aerial: '/videos/nimo-resort-ciater/aerial.mp4',  ad: '/videos/nimo-resort-ciater/ad.mp4' },
   'savia-hotel-resort':  { aerial: '/videos/savia-hotel-resort/aerial.mp4' },
-  'pinaru-park':         { aerial: '/brand/pinaru-park/unnamed-1.jpg' },
   'punceling-park':      { aerial: '/brand/punceling-park/4320b925-e19f-458d-9c87-cd9f0036b6c4.jpg' },
   'nimo-ecomarine':      { aerial: ECO(1) },
   'nimo-kaldera-toba':   { aerial: '/brand/nimo-kaldera-toba/nimo-kaldera-toba-05.jpg' },
