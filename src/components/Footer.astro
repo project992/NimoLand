@@ -1,79 +1,78 @@
 ---
-import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
-import Building2 from '@lucide/astro/icons/building-2';
-import MapPin from '@lucide/astro/icons/map-pin';
-import Mail from '@lucide/astro/icons/mail';
-import { SITE } from '../lib/site.js';
-import { COMPANY } from '../lib/data.js';
-
-const t = key => Astro.locals.t(key);
+// SECTION 4: Footer corporate
+const currentYear = new Date().getFullYear();
 ---
-<footer class="bg-primary pt-16 pb-8 border-t border-accent/20">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+<footer class="bg-stone-950 text-stone-400 pt-20 pb-12 border-t border-stone-800 text-sm">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    
+    <!-- Top Row: Brand & Main Navigation -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-12 border-b border-stone-800/80">
       <div>
-        <a href="/" data-route="beranda" class="flex items-center gap-2 font-heading font-bold text-white text-xl mb-4">
-          NIMO <span class="text-accent text-sm font-medium tracking-widest uppercase">Land Group</span>
+        <h3 class="font-heading font-bold text-2xl text-white tracking-wide">
+          NIMO LAND GROUP
+        </h3>
+        <p class="text-xs text-accent uppercase tracking-widest mt-1 font-medium">
+          Integrated Tourism &amp; Hospitality
+        </p>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-3 text-xs tracking-wider uppercase text-stone-300 font-medium">
+        <a href="/destinasi" data-route="destinations" class="hover:text-white transition-colors">Destinations</a>
+        <a href="/penginapan" data-route="hotels" class="hover:text-white transition-colors">Hotels &amp; Resorts</a>
+        <a href="/tentang-kami" class="hover:text-white transition-colors">About Us</a>
+        <a href="/kontak#partnership" data-route="kontak" class="hover:text-white transition-colors">Partnership</a>
+        <a href="/#recognition-media" data-route="beranda" class="hover:text-white transition-colors">Media &amp; News</a>
+        <a href="/karir" class="hover:text-white transition-colors">Careers</a>
+        <a href="/kontak" data-route="kontak" class="hover:text-white transition-colors">Contact</a>
+      </nav>
+    </div>
+
+    <!-- Middle Row: Offices & Social Links -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 py-12 border-b border-stone-800/80">
+      
+      <!-- Bandung Office -->
+      <div class="md:col-span-4 space-y-2">
+        <p class="text-xs uppercase tracking-widest text-stone-200 font-semibold">Bandung Office</p>
+        <p class="text-stone-400 text-xs sm:text-sm font-light leading-relaxed">
+          Buahbatu Square Blk. A No.09, Cipagalo, Bojongsoang, Kabupaten Bandung 40267
+        </p>
+      </div>
+
+      <!-- Jakarta Office -->
+      <div class="md:col-span-4 space-y-2">
+        <p class="text-xs uppercase tracking-widest text-stone-200 font-semibold">Jakarta Office</p>
+        <p class="text-stone-400 text-xs sm:text-sm font-light leading-relaxed">
+          Sequis Center Lt. 8 Kav 814, Jl. Jendral Sudirman No. 71, Senayan, Jakarta Selatan
+        </p>
+      </div>
+
+      <!-- Social Media Outlines -->
+      <div class="md:col-span-4 flex md:justify-end items-start space-x-6 pt-2 md:pt-0">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-xs uppercase tracking-wider text-stone-400 hover:text-white border-b border-transparent hover:border-accent transition-all pb-0.5">
+          Instagram
         </a>
-        <p class="text-white/70 text-sm leading-relaxed max-w-xs">
-          {t('footer.desc')}
-        </p>
+        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="text-xs uppercase tracking-wider text-stone-400 hover:text-white border-b border-transparent hover:border-accent transition-all pb-0.5">
+          TikTok
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="text-xs uppercase tracking-wider text-stone-400 hover:text-white border-b border-transparent hover:border-accent transition-all pb-0.5">
+          YouTube
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-xs uppercase tracking-wider text-stone-400 hover:text-white border-b border-transparent hover:border-accent transition-all pb-0.5">
+          LinkedIn
+        </a>
       </div>
-      <div>
-        <p class="font-heading text-accent text-sm font-semibold uppercase tracking-widest mb-5">{t('footer.jelajah')}</p>
-        <ul class="space-y-3 text-sm text-white/70">
-          <li><a href="/" data-route="beranda" class="hover:text-accent transition-colors">{t('footer.beranda')}</a></li>
-          <li><a href="/destinasi" data-route="destinations" class="hover:text-accent transition-colors">{t('nav.destinations')}</a></li>
-          <li><a href="/penginapan" data-route="hotels" class="hover:text-accent transition-colors">{t('nav.hotels')} &amp; Resorts</a></li>
-          <li><a href="/galeri" data-route="galeri" class="hover:text-accent transition-colors">{t('nav.galeri')}</a></li>
-          <li><a href="/#berita" data-route="beranda" class="hover:text-accent transition-colors">{t('nav.berita')}</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="font-heading text-accent text-sm font-semibold uppercase tracking-widest mb-5">{t('footer.informasi')}</p>
-        <ul class="space-y-3 text-sm text-white/70">
-          <li><a href="/kontak" data-route="kontak" class="hover:text-accent transition-colors">{t('footer.kontak')}</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="font-heading text-accent text-sm font-semibold uppercase tracking-widest mb-5">{t('footer.legal')}</p>
-        <ul class="space-y-3 text-sm text-white/70">
-          <li><a href="/tentang-kami" class="hover:text-accent transition-colors">{t('footer.tentangKami')}</a></li>
-          <li><a href="/kebijakan-privasi" class="hover:text-accent transition-colors">{t('footer.kebijakanPrivasi')}</a></li>
-        </ul>
+
+    </div>
+
+    <!-- Bottom Row: Legal & Copyright -->
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 font-light">
+      <p>&copy; {currentYear} Nimo Land Group. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="/kebijakan-privasi" class="hover:text-stone-400 transition-colors">Privacy Policy</a>
+        <a href="/syarat-ketentuan" class="hover:text-stone-400 transition-colors">Terms of Service</a>
       </div>
     </div>
 
-    <div class="py-6 border-b border-white/10 grid sm:grid-cols-3 gap-6 text-sm">
-      <div>
-        <p class="font-heading text-accent/90 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-          <Building2 class="w-4 h-4" /> {t('footer.namaBadanHukum')}
-        </p>
-        <p class="text-white/90 text-xs leading-relaxed font-medium">
-          {COMPANY.legalName}
-        </p>
-      </div>
-      <div>
-        <p class="font-heading text-accent/90 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-          <MapPin class="w-4 h-4" /> {t('footer.alamatKantor')}
-        </p>
-        <p class="text-white/60 text-xs leading-relaxed">
-          Bandung: Buahbatu Square<br />
-          Jakarta: Sequis Center
-        </p>
-      </div>
-      <div>
-        <p class="font-heading text-accent/90 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-          <Mail class="w-4 h-4" /> {t('footer.emailResmi')}
-        </p>
-        <p class="text-white/60 text-xs leading-relaxed">
-          <a href={`mailto:${COMPANY.email}`} class="hover:text-accent transition-colors">{COMPANY.email}</a>
-        </p>
-      </div>
-    </div>
-
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-6 text-xs text-white/50 font-heading tracking-wide">
-      <span>&copy; 2026 Nimo Land Group. All rights reserved.</span>
-    </div>
   </div>
 </footer>

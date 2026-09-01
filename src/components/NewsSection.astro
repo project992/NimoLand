@@ -1,324 +1,62 @@
 ---
-import ExternalLink from '@lucide/astro/icons/external-link';
-import Play from '@lucide/astro/icons/play';
-import Trophy from '@lucide/astro/icons/trophy';
-import Newspaper from '@lucide/astro/icons/newspaper';
-import ChevronLeft from '@lucide/astro/icons/chevron-left';
-import ChevronRight from '@lucide/astro/icons/chevron-right';
-import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS } from '../lib/data.js';
-
-const locale = Astro.locals.locale ?? 'id';
+// SECTION 5: Recognition & Media
 ---
-<section id="berita" class="bg-background py-20 lg:py-28 border-t border-line-soft">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+<section id="recognition-media" class="bg-white text-stone-900 py-24 lg:py-32 border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
     
     <!-- Section Header -->
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
-      <div>
-        <p class="eyebrow text-primary mb-4">
-          <span class="w-6 h-px bg-primary"></span> {locale === 'en' ? 'Trusted & Media Coverage' : 'Liputan Media & Reputasi Terpercaya'}
-        </p>
-        <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-xl">
-          {locale === 'en' ? 'Nimo Land Group in National Spotlight' : 'Nimo Land Group dalam Sorotan Media Terpercaya'}
-        </h2>
-      </div>
-      <p class="text-muted text-sm sm:text-base max-w-md">
-        {locale === 'en'
-          ? 'Recognized by CNN Indonesia Awards 2024, MURI Records, and verified media coverage from Kompas.com, detikTravel, and national press.'
-          : 'Penghargaan resmi CNN Indonesia Awards 2024, Rekor MURI, dan liputan faktual terverifikasi dari Kompas.com, detikTravel, serta Detik Network.'}
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <p class="text-xs uppercase tracking-[0.25em] text-stone-500 font-semibold mb-3">
+        Validation & Endorsement
       </p>
+      <h2 class="font-heading font-serif text-3xl sm:text-4xl text-stone-900 font-normal tracking-tight">
+        Recognition & Media
+      </h2>
     </div>
 
-    <!-- SPOTLIGHT: CNN INDONESIA AWARDS 2024 -->
-    <div class="mb-14 reveal">
-      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1B4332] via-[#16382A] to-[#0F261C] text-white shadow-2xl border border-white/10">
-        <div class="grid lg:grid-cols-12 items-stretch">
-          
-          <!-- Left Content -->
-          <div class="lg:col-span-7 p-8 sm:p-10 lg:p-12 flex flex-col justify-between z-10">
-            <div>
-              <div class="flex flex-wrap items-center gap-3 mb-5">
-                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-accent/20 text-accent border border-accent/40 shadow-sm">
-                  <Trophy class="w-4 h-4 text-accent" />
-                  {NEWS_SPOTLIGHT.badge}
-                </span>
-                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#CC0000] text-white">
-                  {NEWS_SPOTLIGHT.source}
-                </span>
-                <span class="text-xs text-white/70">
-                  {NEWS_SPOTLIGHT.author} · {NEWS_SPOTLIGHT.date} ({NEWS_SPOTLIGHT.time}) · {NEWS_SPOTLIGHT.readTime}
-                </span>
-              </div>
-
-              <div class="inline-block px-3 py-1 rounded bg-white/10 text-xs font-medium text-white/90 mb-4 border border-white/10">
-                Kategori Resmi: <strong class="text-accent">{NEWS_SPOTLIGHT.award}</strong>
-              </div>
-
-              <h3 class="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-white leading-snug mb-4">
-                {NEWS_SPOTLIGHT.title}
-              </h3>
-
-              <p class="text-white/85 text-sm sm:text-base leading-relaxed mb-4">
-                {NEWS_SPOTLIGHT.lead}
-              </p>
-
-              <div class="p-4 rounded-xl bg-white/5 border border-white/10 mb-6 italic text-white/80 text-xs sm:text-sm leading-relaxed">
-                {NEWS_SPOTLIGHT.quote}
-              </div>
-            </div>
-
-            <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10">
-              <a href={NEWS_SPOTLIGHT.url} target="_blank" rel="noopener noreferrer"
-                 class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2">
-                <span>{locale === 'en' ? 'Read Full Coverage on CNN Indonesia' : 'Baca Liputan di CNN Indonesia'}</span>
-                <ExternalLink class="w-4 h-4" />
-              </a>
-              <span class="text-xs text-white/50">
-                Lokasi: {NEWS_SPOTLIGHT.location}
-              </span>
-            </div>
-          </div>
-
-          <!-- Right Image -->
-          <div class="lg:col-span-5 relative min-h-[320px] lg:min-h-full img-shell">
-            <img class="w-full h-full object-cover"
-                 src={NEWS_SPOTLIGHT.img} data-fallback={NEWS_SPOTLIGHT.fb}
-                 alt={NEWS_SPOTLIGHT.title} loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-primary via-primary/30 to-transparent"></div>
-            <div class="absolute bottom-4 right-4 bg-primary/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/15 text-[11px] text-white/95 shadow-lg">
-              <p class="font-semibold text-accent">CNN Indonesia Awards 2024</p>
-              <p class="text-[10px] text-white/70">Jawa Barat Menyala untuk Indonesia Maju</p>
-            </div>
-          </div>
-
-        </div>
+    <!-- Media / Institutional Logo Row (Grayscale to Color on Hover) -->
+    <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 lg:gap-20 py-8 border-y border-stone-200 mb-16">
+      
+      <!-- CNN Indonesia -->
+      <div class="group flex items-center justify-center h-10 px-4 cursor-default">
+        <span class="font-bold text-xl sm:text-2xl tracking-tighter text-stone-400 group-hover:text-[#CC0000] transition-colors duration-300">
+          CNN <span class="font-light text-base text-stone-400 group-hover:text-stone-800 transition-colors duration-300">INDONESIA</span>
+        </span>
       </div>
+
+      <!-- MURI -->
+      <div class="group flex items-center justify-center h-10 px-4 cursor-default">
+        <span class="font-serif font-black text-xl sm:text-2xl tracking-widest text-stone-400 group-hover:text-[#B8860B] transition-colors duration-300">
+          REKOR MURI
+        </span>
+      </div>
+
+      <!-- Kompas -->
+      <div class="group flex items-center justify-center h-10 px-4 cursor-default">
+        <span class="font-serif font-bold text-xl sm:text-2xl text-stone-400 group-hover:text-[#005BAC] transition-colors duration-300">
+          KOMPAS<span class="text-sm font-sans font-normal text-stone-400 group-hover:text-stone-700 transition-colors duration-300">.com</span>
+        </span>
+      </div>
+
+      <!-- detikcom -->
+      <div class="group flex items-center justify-center h-10 px-4 cursor-default">
+        <span class="font-bold text-xl sm:text-2xl text-stone-400 group-hover:text-[#0D47A1] transition-colors duration-300">
+          detik<span class="font-normal text-sm text-stone-400 group-hover:text-[#FF6F00] transition-colors duration-300">com</span>
+        </span>
+      </div>
+
     </div>
 
-    <!-- NATIONAL NEWS ARTICLES: 1 ITEM AT A TIME WITH NEXT CONTROLS -->
-    <div class="mb-16" id="newsShowcase">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 reveal">
-        <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2.5">
-          <Newspaper class="w-5 h-5 text-primary" />
-          {locale === 'en' ? 'Latest National News & Media Articles' : 'Pemberitaan Media Nasional Terkini'}
-        </h3>
-
-        <div class="flex items-center gap-2 text-xs text-muted font-heading">
-          <span class="font-semibold text-primary" id="newsCurrentIndex">1</span>
-          <span>/</span>
-          <span id="newsTotalCount">{NEWS_ARTICLES.length}</span>
-          <span>{locale === 'en' ? 'Articles' : 'Berita'}</span>
-        </div>
+    <!-- Large Recognition Feature Photo -->
+    <div class="max-w-4xl mx-auto">
+      <div class="aspect-[16/9] overflow-hidden bg-stone-100 border border-stone-200">
+        <!-- IMG: cnn-indonesia-awards-ceremony.jpg -->
+        <img src="/brand/cnn-awards-2024.png" alt="Momen Penerimaan CNN Indonesia Awards 2024" class="w-full h-full object-cover grayscale-[15%] hover:grayscale-0 transition duration-700 ease-out" loading="lazy" />
       </div>
-
-      <!-- Single Featured Active Card -->
-      <div class="relative bg-surface border border-line-soft rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm reveal">
-        <div id="newsSlidesWrapper" class="relative min-h-[300px]">
-          {NEWS_ARTICLES.map((art, idx) => (
-            <div class={`news-slide transition-all duration-300 ${idx === 0 ? 'block opacity-100' : 'hidden opacity-0'}`} data-news-idx={idx}>
-              <div class="grid lg:grid-cols-12 gap-8 items-center">
-                <!-- Image Side -->
-                <div class="lg:col-span-5 relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] rounded-2xl overflow-hidden img-shell">
-                  <img src={art.img} data-fallback={art.fb} alt={art.title} loading={idx === 0 ? 'eager' : 'lazy'}
-                       class="w-full h-full object-cover" />
-                  <span class="absolute top-3 left-3 bg-primary/90 backdrop-blur-xs text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
-                    {art.category}
-                  </span>
-                  <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-text-dark text-[11px] font-heading font-bold px-2.5 py-0.5 rounded shadow-sm">
-                    {art.source}
-                  </span>
-                </div>
-
-                <!-- Content Side -->
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                  <div>
-                    <div class="flex items-center gap-2 text-xs text-muted mb-3">
-                      <span class="font-semibold text-primary">{art.source}</span>
-                      <span>·</span>
-                      <span>{art.date}</span>
-                      <span>·</span>
-                      <span>{art.readTime}</span>
-                    </div>
-
-                    <h4 class="font-heading font-bold text-text-dark text-xl sm:text-2xl lg:text-3xl leading-snug hover:text-primary transition-colors mb-4">
-                      <a href={art.url} target="_blank" rel="noopener noreferrer">
-                        {art.title}
-                      </a>
-                    </h4>
-
-                    <p class="text-muted text-sm sm:text-base leading-relaxed mb-6">
-                      {art.lead}
-                    </p>
-                  </div>
-
-                  <div class="pt-4 border-t border-line-soft flex flex-wrap items-center justify-between gap-4">
-                    <a href={art.url} target="_blank" rel="noopener noreferrer"
-                       class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2 rounded-full">
-                      <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
-                      <ExternalLink class="w-4 h-4" />
-                    </a>
-                    <span class="text-xs text-muted">
-                      {locale === 'en' ? 'Official Media Coverage' : 'Liputan Resmi Media Nasional'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <!-- Controls Below the News Card -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-line-soft">
-          <!-- Dots Indicator -->
-          <div class="flex items-center gap-1.5" id="newsDotsContainer">
-            {NEWS_ARTICLES.map((_, idx) => (
-              <button type="button" aria-label={`Berita ${idx + 1}`} data-news-dot={idx}
-                      class={`h-2.5 rounded-full transition-all ${idx === 0 ? 'bg-primary w-7' : 'bg-line hover:bg-muted w-2.5'}`}></button>
-            ))}
-          </div>
-
-          <!-- Prev & Next Buttons -->
-          <div class="flex items-center gap-3">
-            <button type="button" id="newsPrevBtn" aria-label={locale === 'en' ? 'Previous article' : 'Berita sebelumnya'}
-                    class="w-10 h-10 rounded-full border border-line-soft flex items-center justify-center text-text-dark hover:bg-primary hover:text-white hover:border-primary transition-colors">
-              <ChevronLeft class="w-5 h-5" />
-            </button>
-            <button type="button" id="newsNextBtn"
-                    class="btn-primary px-5 py-2.5 text-sm font-heading font-semibold rounded-full inline-flex items-center gap-2 shadow-sm hover:scale-105 transition-all">
-              <span>{locale === 'en' ? 'Next Article' : 'Berita Selanjutnya'}</span>
-              <ChevronRight class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DOKUMENTASI & VIDEO RESMI YOUTUBE -->
-    <div>
-      <div class="flex items-center justify-between mb-6 reveal">
-        <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2">
-          <Play class="w-5 h-5 text-primary fill-primary/20" />
-          {locale === 'en' ? 'Official Video & Documentation' : 'Dokumentasi & Video Resmi Nimo Land Group'}
-        </h3>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
-        {MEDIA_VIDEOS.map(vid => (
-          <a href={vid.url} target="_blank" rel="noopener noreferrer"
-             class="group relative rounded-2xl overflow-hidden bg-primary text-white min-h-[320px] sm:min-h-[360px] shadow-xl reveal flex flex-col justify-end border border-white/10 hover:border-accent/40 transition-all">
-            <img class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-65 transition-opacity group-hover:scale-105 duration-700"
-                 src={vid.thumbnail} alt={vid.title} loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-black/30"></div>
-
-            <!-- YouTube Red Play Button Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-                <Play class="w-7 h-7 sm:w-8 sm:h-8 fill-white translate-x-0.5" />
-              </div>
-            </div>
-
-            <!-- Video Info Bottom Overlay -->
-            <div class="relative z-10 p-6 sm:p-7 w-full bg-gradient-to-t from-primary via-primary/90 to-transparent">
-              <div class="flex flex-wrap items-center gap-2 mb-2.5">
-                <span class="inline-block px-2.5 py-0.5 rounded bg-red-600 text-[11px] font-bold text-white shadow">
-                  YouTube
-                </span>
-                <span class="inline-block px-2.5 py-0.5 rounded bg-white/15 backdrop-blur-md text-[11px] font-semibold text-white/90">
-                  {vid.badge}
-                </span>
-                <span class="text-xs text-white/70">
-                  {vid.channel}
-                </span>
-              </div>
-              <h4 class="font-heading font-bold text-white text-lg sm:text-xl leading-snug group-hover:text-accent transition-colors mb-2">
-                {vid.title}
-              </h4>
-              <p class="text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-3">
-                {vid.desc}
-              </p>
-              <div class="inline-flex items-center gap-2 text-xs font-semibold text-accent group-hover:text-accent-hover">
-                <span>Tonton Video di YouTube</span>
-                <ExternalLink class="w-3.5 h-3.5" />
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+      <p class="mt-4 text-center text-xs sm:text-sm text-stone-500 font-light">
+        Penerimaan CNN Indonesia Awards 2024 — Inisiatif Inovasi Layanan Pariwisata Berkelanjutan Nasional.
+      </p>
     </div>
 
   </div>
 </section>
-
-<script>
-  function initNewsSlider() {
-    const container = document.getElementById('newsShowcase');
-    if (!container) return;
-
-    const slides = container.querySelectorAll<HTMLElement>('.news-slide');
-    const dots = container.querySelectorAll<HTMLElement>('[data-news-dot]');
-    const prevBtn = document.getElementById('newsPrevBtn');
-    const nextBtn = document.getElementById('newsNextBtn');
-    const currentIndexEl = document.getElementById('newsCurrentIndex');
-    
-    if (!slides.length) return;
-
-    let currentIndex = 0;
-    const total = slides.length;
-
-    function showSlide(idx: number) {
-      if (idx < 0) idx = total - 1;
-      if (idx >= total) idx = 0;
-      currentIndex = idx;
-
-      slides.forEach((slide, i) => {
-        if (i === currentIndex) {
-          slide.classList.remove('hidden', 'opacity-0');
-          slide.classList.add('block', 'opacity-100');
-        } else {
-          slide.classList.add('hidden', 'opacity-0');
-          slide.classList.remove('block', 'opacity-100');
-        }
-      });
-
-      dots.forEach((dot, i) => {
-        if (i === currentIndex) {
-          dot.className = 'h-2.5 rounded-full transition-all bg-primary w-7';
-        } else {
-          dot.className = 'h-2.5 rounded-full transition-all bg-line hover:bg-muted w-2.5';
-        }
-      });
-
-      if (currentIndexEl) {
-        currentIndexEl.textContent = String(currentIndex + 1);
-      }
-    }
-
-    if (prevBtn) {
-      prevBtn.onclick = (e) => {
-        e.preventDefault();
-        showSlide(currentIndex - 1);
-      };
-    }
-    if (nextBtn) {
-      nextBtn.onclick = (e) => {
-        e.preventDefault();
-        showSlide(currentIndex + 1);
-      };
-    }
-
-    dots.forEach((dot) => {
-      dot.onclick = (e) => {
-        e.preventDefault();
-        const idx = parseInt(dot.getAttribute('data-news-dot') || '0', 10);
-        showSlide(idx);
-      };
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNewsSlider);
-  } else {
-    initNewsSlider();
-  }
-  document.addEventListener('astro:page-load', initNewsSlider);
-</script>

@@ -1,11 +1,51 @@
 ---
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import NewsSection from '../NewsSection.astro';
-import { DESTINATIONS, HERO_SLIDES, MOMENTS, localSrc } from '../../lib/data.js';
+import { DESTINATIONS, localSrc } from '../../lib/data.js';
 
 const { class: cls = 'view' } = Astro.props;
 const locale = Astro.locals.locale ?? 'id';
 const t = key => Astro.locals.t(key);
+
+// 6 Flagship Destinations Showcase
+const FLAGSHIP_DESTINATIONS = [
+  {
+    name: 'Nimo Highland',
+    location: 'Pangalengan, Bandung',
+    url: '/destinasi/nimo-highland',
+    img: '/brand/nimo-highland/nh-01.jpg',
+  },
+  {
+    name: 'Nimo Kaldera',
+    location: 'Danau Toba, Sumatera Utara',
+    url: '/destinasi/nimo-kaldera',
+    img: '/brand/nimo-highland/nh-03.jpg',
+  },
+  {
+    name: 'Nimo Water Forest',
+    location: 'Purwakarta, Jawa Barat',
+    url: '/destinasi/nimo-water-forest',
+    img: '/brand/nimo-water-forest/nwf-01.jpg',
+  },
+  {
+    name: 'Malang Skyland',
+    location: 'Karangploso, Malang',
+    url: '/destinasi/malang-skyland',
+    img: '/brand/malang-skyland/malang-skyland-01.jpg',
+  },
+  {
+    name: 'Nimo Eye',
+    location: '1.400 MDPL Elevation',
+    url: '/destinasi/nimo-eye',
+    img: '/brand/nimo-highland/nh-02.jpg',
+  },
+  {
+    name: 'Nimo Resort',
+    location: 'Bandung & Ciater Clusters',
+    url: '/penginapan',
+    img: '/brand/nimo-tea-resort/nimo-tea-resort-02.jpg',
+  },
+];
 ---
 <div class={cls} data-view="beranda">
 
@@ -57,155 +97,159 @@ const t = key => Astro.locals.t(key);
     </div>
   </section>
 
-  <!-- ============ SECTION: NIMO IN NUMBERS ============ -->
-  <section id="nimo-in-numbers" class="bg-primary text-white py-16 lg:py-24 relative overflow-hidden border-y border-white/10">
-    <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C9A96A_1px,transparent_1px)] [background-size:24px_24px]"></div>
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 relative z-10">
+  <!-- ========================================================================== -->
+  <!-- 1. SECTION: Nimo in Numbers                                                -->
+  <!-- ========================================================================== -->
+  <section id="nimo-in-numbers" class="bg-stone-900 text-white py-20 lg:py-28 border-y border-stone-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
       
-      <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
-        <p class="eyebrow text-accent justify-center mb-3">
-          <span class="w-6 h-px bg-accent"></span> {t('numbers.eyebrow')} <span class="w-6 h-px bg-accent"></span>
+      <!-- Section Header (Subtle & Restrained) -->
+      <div class="mb-14 lg:mb-20">
+        <p class="text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-3">
+          Scale &amp; Track Record
         </p>
-        <h2 class="font-heading font-bold text-white text-3xl sm:text-4xl lg:text-5xl leading-tight">
-          {t('numbers.judul')}
+        <h2 class="font-heading text-2xl sm:text-3xl lg:text-4xl text-stone-100 font-bold tracking-tight">
+          Corporate Achievements at a Glance
         </h2>
-        <p class="text-white/80 text-sm sm:text-base leading-relaxed mt-4">
-          {t('numbers.desc')}
+      </div>
+
+      <!-- 5-Column Metric Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-12 gap-x-8 lg:gap-x-0" id="numbersGrid">
+        
+        <!-- Metric 1: 16 Destinations & Resorts -->
+        <div class="lg:pr-8 lg:border-r border-stone-800 flex flex-col justify-between">
+          <div>
+            <span class="block font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-accent tracking-tight leading-none">
+              <span class="count-up" data-target="16">16</span>
+            </span>
+            <p class="mt-4 text-sm font-semibold text-stone-200 uppercase tracking-wider">
+              Destinations &amp; Resorts
+            </p>
+          </div>
+          <p class="mt-2 text-xs text-stone-400">
+            Across key tourism hubs
+          </p>
+        </div>
+
+        <!-- Metric 2: 222 Rooms -->
+        <div class="lg:px-8 lg:border-r border-stone-800 flex flex-col justify-between">
+          <div>
+            <span class="block font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-accent tracking-tight leading-none">
+              <span class="count-up" data-target="222">222</span>
+            </span>
+            <p class="mt-4 text-sm font-semibold text-stone-200 uppercase tracking-wider">
+              Rooms
+            </p>
+          </div>
+          <p class="mt-2 text-xs text-stone-400">
+            Villas, cabins &amp; glamping units
+          </p>
+        </div>
+
+        <!-- Metric 3: 600+ Employees -->
+        <div class="lg:px-8 lg:border-r border-stone-800 flex flex-col justify-between">
+          <div>
+            <span class="block font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-accent tracking-tight leading-none flex items-baseline">
+              <span class="count-up" data-target="600">600</span>
+              <span class="text-accent text-3xl sm:text-4xl font-bold ml-1">+</span>
+            </span>
+            <p class="mt-4 text-sm font-semibold text-stone-200 uppercase tracking-wider">
+              Employees
+            </p>
+          </div>
+          <p class="mt-2 text-xs text-stone-400">
+            Trained local workforce
+          </p>
+        </div>
+
+        <!-- Metric 4: 100K+ Visitors / Month -->
+        <div class="lg:px-8 lg:border-r border-stone-800 flex flex-col justify-between">
+          <div>
+            <span class="block font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-accent tracking-tight leading-none flex items-baseline">
+              <span class="count-up" data-target="100000" data-format="locale">100K</span>
+              <span class="text-accent text-3xl sm:text-4xl font-bold ml-1">+</span>
+            </span>
+            <p class="mt-4 text-sm font-semibold text-stone-200 uppercase tracking-wider">
+              Visitors / Month
+            </p>
+          </div>
+          <p class="mt-2 text-xs text-stone-400">
+            Monthly visitor footfall
+          </p>
+        </div>
+
+        <!-- Metric 5: 5,000+ MSMEs Empowered -->
+        <div class="col-span-2 md:col-span-1 lg:pl-8 flex flex-col justify-between">
+          <div>
+            <span class="block font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-accent tracking-tight leading-none flex items-baseline">
+              <span class="count-up" data-target="5000" data-format="locale">5,000</span>
+              <span class="text-accent text-3xl sm:text-4xl font-bold ml-1">+</span>
+            </span>
+            <p class="mt-4 text-sm font-semibold text-stone-200 uppercase tracking-wider">
+              MSMEs Empowered
+            </p>
+          </div>
+          <p class="mt-2 text-xs text-stone-400">
+            Community ecosystem partners
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================== -->
+  <!-- 3. SECTION: Flagship Destinations (6 Destinasi Pilihan)                    -->
+  <!-- ========================================================================== -->
+  <section id="flagship-destinations" class="bg-stone-950 text-white py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-3">
+            Portfolio
+          </p>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+            Flagship Destinations
+          </h2>
+        </div>
+        <p class="text-stone-400 text-sm sm:text-base max-w-md font-light">
+          A curated showcase of our most recognizable theme parks, panoramic attractions, and resort complexes across Indonesia.
         </p>
       </div>
 
-      <!-- Stats Grid / Cards with Bold Figures & Count-Up Animation -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6" id="numbersGrid">
-        
-        <!-- Card 1: 16 Theme Park & Resort -->
-        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
-          <div>
-            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
-              <span class="count-up" data-target="16">16</span>
+      <!-- 6 Flagship Destinations Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {FLAGSHIP_DESTINATIONS.map((dest) => (
+          <a href={dest.url} data-route={dest.url.startsWith('/destinasi') ? 'destinations' : 'hotels'}
+             class="group relative block aspect-[4/5] overflow-hidden bg-stone-800 rounded-2xl">
+            <img src={dest.img} alt={dest.name} loading="lazy"
+                 class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+            <div class="absolute inset-x-0 bottom-0 p-8">
+              <p class="text-xs uppercase tracking-widest text-accent font-semibold mb-1">{dest.location}</p>
+              <h3 class="font-heading text-2xl text-white font-bold group-hover:text-accent transition-colors">{dest.name}</h3>
             </div>
-            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat1')}
-            </p>
-          </div>
-          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat1Sub')}
-          </p>
-        </div>
-
-        <!-- Card 2: 222 Rooms -->
-        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
-          <div>
-            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
-              <span class="count-up" data-target="222">222</span>
-            </div>
-            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat2')}
-            </p>
-          </div>
-          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat2Sub')}
-          </p>
-        </div>
-
-        <!-- Card 3: 100.000+ Visitors/bulan -->
-        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
-          <div>
-            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
-              <span class="count-up" data-target="100000" data-format="locale">100.000</span>
-              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
-            </div>
-            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat3')}
-            </p>
-          </div>
-          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat3Sub')}
-          </p>
-        </div>
-
-        <!-- Card 4: 600+ Employees -->
-        <div class="stat-card bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
-          <div>
-            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
-              <span class="count-up" data-target="600">600</span>
-              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
-            </div>
-            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat4')}
-            </p>
-          </div>
-          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat4Sub')}
-          </p>
-        </div>
-
-        <!-- Card 5: 5.000+ UMKM Diberdayakan -->
-        <div class="stat-card col-span-2 md:col-span-1 bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-xs rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 group">
-          <div>
-            <div class="text-accent text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight flex items-baseline">
-              <span class="count-up" data-target="5000" data-format="locale">5.000</span>
-              <span class="text-accent text-2xl sm:text-3xl font-bold ml-0.5">+</span>
-            </div>
-            <p class="font-heading font-bold text-white text-base sm:text-lg mt-3 leading-snug group-hover:text-accent transition-colors">
-              {t('numbers.stat5')}
-            </p>
-          </div>
-          <p class="text-[11px] sm:text-xs text-white/60 mt-2 font-medium">
-            {t('numbers.stat5Sub')}
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ TENTANG ============ -->
-  <section id="tentang" class="bg-background py-20 lg:py-28">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div>
-          <p class="eyebrow text-primary mb-4">
-            <span class="w-6 h-px bg-primary"></span> {t('tentang.eyebrow')}
-          </p>
-          <h2 class="font-heading font-bold text-text-dark text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-lg">
-            {t('tentang.judul')}
-          </h2>
-
-          <p class="text-muted text-sm sm:text-base leading-relaxed mt-6 max-w-lg">
-            {t('tentang.paragraf1')}
-          </p>
-          <p class="text-muted text-sm sm:text-base leading-relaxed mt-4 max-w-lg">
-            {t('tentang.paragraf2')}
-          </p>
-
-          <a href="/destinasi" data-route="destinations"
-             class="inline-flex items-center gap-2 font-heading font-semibold text-primary text-sm mt-8 border-b-2 border-accent pb-1 hover:gap-3 transition-all">
-            {t('tentang.selengkapnya')}
-            <ArrowRight class="w-4 h-4" />
           </a>
-        </div>
-
-        <div class="relative reveal">
-          <div id="momentSlider" class="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-2xl overflow-hidden img-shell">
-            {MOMENTS.map((m, i) => (
-              <div class:list={['moment-slide absolute inset-0 transition-opacity duration-500', i === 0 ? 'opacity-100' : 'opacity-0']}>
-                <img class="w-full h-full object-cover" alt=""
-                     src={localSrc(m.img)} data-fallback={localSrc(m.fb)} loading={i === 0 ? 'eager' : 'lazy'} />
-              </div>
-            ))}
-            <div class="absolute bottom-5 right-5 z-20 flex gap-2">
-              {MOMENTS.map((_, i) => (
-                <button type="button" aria-label={`Foto ${i + 1}`} data-mdot={i}
-                        class:list={['w-2 h-2 rounded-full transition-all', i === 0 ? 'bg-white' : 'bg-white/40']}></button>
-              ))}
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
+
+      <!-- Bottom Action Button -->
+      <div class="mt-16 lg:mt-20 text-center">
+        <a href="/destinasi" data-route="destinations"
+           class="inline-flex items-center gap-3 border border-stone-600 hover:border-accent text-stone-200 hover:text-white px-9 py-4 text-sm font-semibold tracking-wider uppercase rounded-full transition-all duration-300 hover:scale-105">
+          <span>Explore All Destinations</span>
+          <ArrowRight class="w-4 h-4 text-accent" />
+        </a>
+      </div>
+
     </div>
   </section>
 
-  <!-- ============ NEWS & NATIONAL MEDIA COVERAGE (HOMEPAGE) ============ -->
+  <!-- ========================================================================== -->
+  <!-- 5. SECTION: Recognition & Media                                            -->
+  <!-- ========================================================================== -->
   <NewsSection />
 
 </div>
