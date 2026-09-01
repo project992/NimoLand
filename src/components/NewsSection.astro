@@ -1,11 +1,19 @@
 ---
-// SECTION 5: Recognition & Media
+import ExternalLink from '@lucide/astro/icons/external-link';
+import Play from '@lucide/astro/icons/play';
+import Trophy from '@lucide/astro/icons/trophy';
+import Newspaper from '@lucide/astro/icons/newspaper';
+import ChevronLeft from '@lucide/astro/icons/chevron-left';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
+import { NEWS_SPOTLIGHT, NEWS_ARTICLES, MEDIA_VIDEOS } from '../lib/data.js';
+
+const locale = Astro.locals.locale ?? 'id';
 ---
 <section id="recognition-media" class="bg-surface text-text-dark py-20 lg:py-28 border-b border-line">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
     
-    <!-- Section Header -->
-    <div class="text-center max-w-2xl mx-auto mb-14">
+    <!-- ================= 1. RECOGNITION & MEDIA LOGOS ================= -->
+    <div class="text-center max-w-2xl mx-auto mb-12">
       <p class="text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-3">
         Validation &amp; Endorsement
       </p>
@@ -47,10 +55,9 @@
 
     </div>
 
-    <!-- Large Recognition Feature Photo -->
-    <div class="max-w-4xl mx-auto">
+    <!-- Large Recognition Feature Photo (CNN Indonesia Awards) -->
+    <div class="max-w-4xl mx-auto mb-20">
       <div class="aspect-[16/9] overflow-hidden bg-paper border border-line rounded-2xl shadow-soft">
-        <!-- IMG: cnn-indonesia-awards-ceremony.jpg -->
         <img src="/brand/cnn-awards-2024.png" alt="Momen Penerimaan CNN Indonesia Awards 2024" class="w-full h-full object-cover grayscale-[15%] hover:grayscale-0 transition duration-700 ease-out" loading="lazy" />
       </div>
       <p class="mt-4 text-center text-xs sm:text-sm text-muted font-medium">
@@ -58,5 +65,230 @@
       </p>
     </div>
 
+    <!-- ================= 2. NATIONAL NEWS ARTICLES (1 AT A TIME INTERACTIVE) ================= -->
+    <div class="mb-20" id="newsShowcase">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2.5">
+          <Newspaper class="w-5 h-5 text-primary" />
+          {locale === 'en' ? 'Latest National News & Media Articles' : 'Pemberitaan Media Nasional Terkini'}
+        </h3>
+
+        <div class="flex items-center gap-2 text-xs text-muted font-heading">
+          <span class="font-semibold text-primary" id="newsCurrentIndex">1</span>
+          <span>/</span>
+          <span id="newsTotalCount">{NEWS_ARTICLES.length}</span>
+          <span>{locale === 'en' ? 'Articles' : 'Berita'}</span>
+        </div>
+      </div>
+
+      <!-- Single Featured Active Card -->
+      <div class="relative bg-background border border-line rounded-3xl p-6 sm:p-8 lg:p-10 shadow-soft">
+        <div id="newsSlidesWrapper" class="relative min-h-[300px]">
+          {NEWS_ARTICLES.map((art, idx) => (
+            <div class={`news-slide transition-all duration-300 ${idx === 0 ? 'block opacity-100' : 'hidden opacity-0'}`} data-news-idx={idx}>
+              <div class="grid lg:grid-cols-12 gap-8 items-center">
+                <!-- Image Side -->
+                <div class="lg:col-span-5 relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] rounded-2xl overflow-hidden img-shell shadow-sm">
+                  <img src={art.img} data-fallback={art.fb} alt={art.title} loading={idx === 0 ? 'eager' : 'lazy'}
+                       class="w-full h-full object-cover" />
+                  <span class="absolute top-3 left-3 bg-primary/90 backdrop-blur-xs text-white text-[11px] font-heading font-semibold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                    {art.category}
+                  </span>
+                  <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-text-dark text-[11px] font-heading font-bold px-2.5 py-0.5 rounded shadow-sm">
+                    {art.source}
+                  </span>
+                </div>
+
+                <!-- Content Side -->
+                <div class="lg:col-span-7 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-2 text-xs text-muted mb-3">
+                      <span class="font-semibold text-primary">{art.source}</span>
+                      <span>·</span>
+                      <span>{art.date}</span>
+                      <span>·</span>
+                      <span>{art.readTime}</span>
+                    </div>
+
+                    <h4 class="font-heading font-bold text-text-dark text-xl sm:text-2xl lg:text-3xl leading-snug hover:text-primary transition-colors mb-4">
+                      <a href={art.url} target="_blank" rel="noopener noreferrer">
+                        {art.title}
+                      </a>
+                    </h4>
+
+                    <p class="text-muted text-sm sm:text-base leading-relaxed mb-6">
+                      {art.lead}
+                    </p>
+                  </div>
+
+                  <div class="pt-4 border-t border-line flex flex-wrap items-center justify-between gap-4">
+                    <a href={art.url} target="_blank" rel="noopener noreferrer"
+                       class="btn-accent px-6 py-3 text-sm font-semibold inline-flex items-center gap-2 rounded-full shadow-sm hover:scale-105 transition-transform">
+                      <span>{locale === 'en' ? 'Read full article' : 'Baca artikel lengkap'}</span>
+                      <ExternalLink class="w-4 h-4" />
+                    </a>
+                    <span class="text-xs text-muted font-medium">
+                      {locale === 'en' ? 'Official Media Coverage' : 'Liputan Resmi Media Nasional'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Controls Below the News Card -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-line">
+          <!-- Dots Indicator -->
+          <div class="flex items-center gap-1.5" id="newsDotsContainer">
+            {NEWS_ARTICLES.map((_, idx) => (
+              <button type="button" aria-label={`Berita ${idx + 1}`} data-news-dot={idx}
+                      class={`h-2.5 rounded-full transition-all ${idx === 0 ? 'bg-primary w-7' : 'bg-line hover:bg-muted w-2.5'}`}></button>
+            ))}
+          </div>
+
+          <!-- Prev & Next Buttons -->
+          <div class="flex items-center gap-3">
+            <button type="button" id="newsPrevBtn" aria-label={locale === 'en' ? 'Previous article' : 'Berita sebelumnya'}
+                    class="w-10 h-10 rounded-full border border-line bg-surface flex items-center justify-center text-text-dark hover:bg-primary hover:text-white hover:border-primary transition-colors shadow-xs">
+              <ChevronLeft class="w-5 h-5" />
+            </button>
+            <button type="button" id="newsNextBtn"
+                    class="btn-primary px-5 py-2.5 text-sm font-heading font-semibold rounded-full inline-flex items-center gap-2 shadow-sm hover:scale-105 transition-all">
+              <span>{locale === 'en' ? 'Next Article' : 'Berita Selanjutnya'}</span>
+              <ChevronRight class="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 3. DOKUMENTASI & VIDEO RESMI YOUTUBE ================= -->
+    <div>
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-heading font-bold text-text-dark text-xl sm:text-2xl flex items-center gap-2">
+          <Play class="w-5 h-5 text-primary fill-primary/20" />
+          {locale === 'en' ? 'Official Video & Documentation' : 'Dokumentasi & Video Resmi Nimo Land Group'}
+        </h3>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+        {MEDIA_VIDEOS.map(vid => (
+          <a href={vid.url} target="_blank" rel="noopener noreferrer"
+             class="group relative rounded-2xl overflow-hidden bg-primary text-white min-h-[320px] sm:min-h-[360px] shadow-xl flex flex-col justify-end border border-white/10 hover:border-accent/40 transition-all">
+            <img class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-65 transition-opacity group-hover:scale-105 duration-700"
+                 src={vid.thumbnail} alt={vid.title} loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-black/30"></div>
+
+            <!-- YouTube Red Play Button Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+                <Play class="w-7 h-7 sm:w-8 sm:h-8 fill-white translate-x-0.5" />
+              </div>
+            </div>
+
+            <!-- Video Info Bottom Overlay -->
+            <div class="relative z-10 p-6 sm:p-7 w-full bg-gradient-to-t from-primary via-primary/90 to-transparent">
+              <div class="flex flex-wrap items-center gap-2 mb-2.5">
+                <span class="inline-block px-2.5 py-0.5 rounded bg-red-600 text-[11px] font-bold text-white shadow">
+                  YouTube
+                </span>
+                <span class="inline-block px-2.5 py-0.5 rounded bg-white/15 backdrop-blur-md text-[11px] font-semibold text-white/90">
+                  {vid.badge}
+                </span>
+                <span class="text-xs text-white/70">
+                  {vid.channel}
+                </span>
+              </div>
+              <h4 class="font-heading font-bold text-white text-lg sm:text-xl leading-snug group-hover:text-accent transition-colors mb-2">
+                {vid.title}
+              </h4>
+              <p class="text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-3">
+                {vid.desc}
+              </p>
+              <div class="inline-flex items-center gap-2 text-xs font-semibold text-accent group-hover:text-accent-hover">
+                <span>Tonton Video di YouTube</span>
+                <ExternalLink class="w-3.5 h-3.5" />
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
   </div>
 </section>
+
+<script>
+  function initNewsSlider() {
+    const container = document.getElementById('newsShowcase');
+    if (!container) return;
+
+    const slides = container.querySelectorAll<HTMLElement>('.news-slide');
+    const dots = container.querySelectorAll<HTMLElement>('[data-news-dot]');
+    const prevBtn = document.getElementById('newsPrevBtn');
+    const nextBtn = document.getElementById('newsNextBtn');
+    const currentIndexEl = document.getElementById('newsCurrentIndex');
+    
+    if (!slides.length) return;
+
+    let currentIndex = 0;
+    const total = slides.length;
+
+    function showSlide(idx: number) {
+      if (idx < 0) idx = total - 1;
+      if (idx >= total) idx = 0;
+      currentIndex = idx;
+
+      slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+          slide.classList.remove('hidden', 'opacity-0');
+          slide.classList.add('block', 'opacity-100');
+        } else {
+          slide.classList.add('hidden', 'opacity-0');
+          slide.classList.remove('block', 'opacity-100');
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        if (i === currentIndex) {
+          dot.className = 'h-2.5 rounded-full transition-all bg-primary w-7';
+        } else {
+          dot.className = 'h-2.5 rounded-full transition-all bg-line hover:bg-muted w-2.5';
+        }
+      });
+
+      if (currentIndexEl) {
+        currentIndexEl.textContent = String(currentIndex + 1);
+      }
+    }
+
+    if (prevBtn) {
+      prevBtn.onclick = (e) => {
+        e.preventDefault();
+        showSlide(currentIndex - 1);
+      };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = (e) => {
+        e.preventDefault();
+        showSlide(currentIndex + 1);
+      };
+    }
+
+    dots.forEach((dot) => {
+      dot.onclick = (e) => {
+        e.preventDefault();
+        const idx = parseInt(dot.getAttribute('data-news-dot') || '0', 10);
+        showSlide(idx);
+      };
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNewsSlider);
+  } else {
+    initNewsSlider();
+  }
+  document.addEventListener('astro:page-load', initNewsSlider);
+</script>
